@@ -3,6 +3,9 @@ set -eu
 
 export APP_ENV="${APP_ENV:-production}"
 export APP_DEBUG="${APP_DEBUG:-false}"
+# Render already redirects public HTTP traffic to HTTPS and forwards it to this
+# container over HTTP. Laravel must not attempt to force HTTPS a second time.
+export REQUIRE_HTTPS=false
 export DB_CONNECTION="${DB_CONNECTION:-mysql}"
 export DB_HOST="${DB_HOST:-127.0.0.1}"
 export DB_PORT="${DB_PORT:-3306}"
