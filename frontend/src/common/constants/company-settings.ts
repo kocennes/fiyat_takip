@@ -9,7 +9,7 @@
  */
 
 import SmallLogo from '/logo180.png?url';
-import DefaultLogo from '../../resources/images/invoiceninja-logo@light.png';
+import DefaultLogo from '/brand/bisavunma-console.svg?url';
 
 export default {
   logo: DefaultLogo,

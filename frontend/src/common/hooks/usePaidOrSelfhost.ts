@@ -8,37 +8,14 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
-import dayjs from 'dayjs';
-import { isHosted, isSelfHosted } from '$app/common/helpers';
-import { enterprisePlan } from '../guards/guards/enterprise-plan';
-import { proPlan } from '../guards/guards/pro-plan';
-import { useCurrentAccount } from './useCurrentAccount';
-
 export function usePaidOrSelfHost() {
-  const account = useCurrentAccount();
-
-  const isPaidPlan =
-    dayjs(account?.plan_expires).endOf('day').isAfter(dayjs()) &&
-    (enterprisePlan() || proPlan());
-
-  return (isHosted() && isPaidPlan) || isSelfHosted();
+  return true;
 }
 
 export function useIsPaid() {
-  const account = useCurrentAccount();
-
-  const isPaidPlan =
-    dayjs(account?.plan_expires).endOf('day').isAfter(dayjs()) &&
-    (enterprisePlan() || proPlan());
-
-  return isPaidPlan;
+  return true;
 }
 
 export function useIsWhitelabelled() {
-  const account = useCurrentAccount();
-
-  return (
-    account?.plan_expires !== '' &&
-    !dayjs(account.plan_expires).isBefore(dayjs())
-  );
+  return true;
 }

@@ -17,7 +17,6 @@ import { useCompanyChanges } from '$app/common/hooks/useCompanyChanges';
 import { useCompanyVerifactu } from '$app/common/hooks/useCompanyVerifactu';
 import { useCurrentSettingsLevel } from '$app/common/hooks/useCurrentSettingsLevel';
 import { useInjectCompanyChanges } from '$app/common/hooks/useInjectCompanyChanges';
-import { usePaidOrSelfHost } from '$app/common/hooks/usePaidOrSelfhost';
 import { useTitle } from '$app/common/hooks/useTitle';
 import { updateChanges } from '$app/common/stores/slices/company-users';
 import { Divider } from '$app/components/cards/Divider';
@@ -51,7 +50,6 @@ export function TaxSettings() {
   useTitle('tax_settings');
 
   const colors = useColorScheme();
-  const isPaidOrSelfHost = usePaidOrSelfHost();
   const verifactuEnabled = useCompanyVerifactu();
 
   const calculateTaxesRegion = useCalculateTaxesRegion();
@@ -179,8 +177,7 @@ export function TaxSettings() {
               </Element>
             )}
 
-            {isPaidOrSelfHost &&
-              calculateTaxesRegion(companyChanges?.settings?.country_id) &&
+            {calculateTaxesRegion(companyChanges?.settings?.country_id) &&
               !verifactuEnabled && (
                 <>
                   <div className="px-4 sm:px-6 pt-4 pb-2">

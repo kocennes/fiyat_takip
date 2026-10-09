@@ -35,7 +35,6 @@ import { isShortcutRecordingActive } from '$app/common/hooks/useShortcutRecorder
 import { SearchRecord, SearchResponse } from '$app/common/interfaces/search';
 import { InputField } from '$app/components/forms';
 import { Entry } from '$app/components/forms/Combobox';
-import { ExternalLink } from '$app/components/icons/ExternalLink';
 import { Icon } from '$app/components/icons/Icon';
 import { OppositeArrows } from '$app/components/icons/OppositeArrows';
 import { Search as SearchIcon } from '$app/components/icons/Search';
@@ -456,20 +455,6 @@ export function Search$() {
               </div>
             </div>
 
-            <div
-              className="flex cursor-pointer items-center space-x-2 text-sm px-3"
-              onClick={() => {
-                window.open('https://invoiceninja.github.io', '_blank');
-              }}
-            >
-              <span className="mb-0.5" style={{ color: colors.$3 }}>
-                {t('view_documentation')}
-              </span>
-
-              <div>
-                <ExternalLink color={colors.$3} size="1.15rem" />
-              </div>
-            </div>
           </div>
         </div>
       </Modal>
