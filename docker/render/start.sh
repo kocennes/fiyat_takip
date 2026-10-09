@@ -63,7 +63,11 @@ rsync -a --exclude index.html /opt/bisavunma/ui/ /var/www/html/public/
 chown -R www-data:www-data /var/www/html/public /var/www/html/storage
 
 if [ -z "${APP_KEY:-}" ]; then
+    # Compatibility fallback for a service created outside the Blueprint.
     export APP_KEY="$(php artisan key:generate --show)"
+elif [ "${APP_KEY#base64:}" = "$APP_KEY" ]; then
+    # Render's generateValue is base64-encoded; Laravel expects its prefix.
+    export APP_KEY="base64:${APP_KEY}"
 fi
 
 runuser -u www-data -- php artisan migrate --force

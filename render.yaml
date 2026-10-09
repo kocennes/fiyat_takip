@@ -38,7 +38,8 @@ services:
       - key: MAIL_MAILER
         value: log
       - key: APP_KEY
-        sync: false
+        # Render keeps this generated secret in the Environment tab.
+        generateValue: true
       - key: APP_URL
         sync: false
       - key: IN_USER_EMAIL
