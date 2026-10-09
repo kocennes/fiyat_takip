@@ -102,12 +102,6 @@ export function useSettingsRoutes() {
       enabled: isAdmin || isOwner || false,
     },
     {
-      name: t('account_management'),
-      href: '/settings/account_management',
-      current: location.pathname.startsWith('/settings/account_management'),
-      enabled: ((isAdmin || isOwner) && isCompanySettingsActive) || false,
-    },
-    {
       name: t('backup_restore'),
       href: '/settings/backup_restore',
       current: location.pathname.startsWith('/settings/backup_restore'),
