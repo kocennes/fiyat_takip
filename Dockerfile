@@ -22,6 +22,10 @@ COPY backend/database/migrations/2026_10_09_000001_set_proforma_as_default_desig
 COPY backend/database/migrations/2026_10_09_000002_set_turkish_as_default_language.php /var/www/html/database/migrations/
 COPY backend/resources/views/pdf-designs/proforma.html /var/www/html/resources/views/pdf-designs/proforma.html
 COPY backend/public/images/fiyattakip-logo.svg /opt/bisavunma/fiyattakip-logo.svg
+# The Render entrypoint rebuilds the public asset directory at startup. Keep
+# Laravel's front controller outside that directory so it cannot be removed
+# while copying the branded frontend assets.
+RUN cp /tmp/public/index.php /opt/bisavunma/index.php
 COPY --from=frontend-build /frontend/dist /opt/bisavunma/ui
 COPY --from=frontend-build /frontend/dist/index.html /var/www/html/resources/views/react/index.blade.php
 COPY docker/app-init.sh /usr/local/bin/app-init.sh
