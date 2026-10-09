@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 80" role="img" aria-labelledby="title">
+  <title id="title">BİSAVUNMA fiyat istihbarat platformu</title>
+  <path fill="#2AAEE5" d="M2 10h30l22 30-22 30H2l20-30z"/>
+  <path fill="#F5FBFF" d="M20 23h12l12 17-12 17H20l12-17z"/>
+  <text x="70" y="37" fill="#F5FBFF" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" letter-spacing="3">BİSAVUNMA</text>
+  <text x="72" y="60" fill="#8DB4C9" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="2.4">FİYAT İSTİHBARAT PLATFORMU</text>
+</svg>

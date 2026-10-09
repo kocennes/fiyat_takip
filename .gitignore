@@ -1,0 +1,27 @@
+# Local and deployment secrets
+.env
+.env.*
+!.env.example
+
+# Runtime and dependencies
+**/node_modules/
+**/vendor/
+**/storage/
+**/bootstrap/cache/
+**/dist/
+**/tsconfig.tsbuildinfo
+
+# The application base image supplies its own public runtime assets. Keep only
+# the custom BISAVUNMA logo needed by the image build.
+/backend/public/*
+!/backend/public/images/
+/backend/public/images/*
+!/backend/public/images/fiyattakip-logo.svg
+
+# Generated API reference files are not needed at runtime.
+/backend/openapi/
+
+# Local tooling
+.idea/
+.vscode/
+*.log

@@ -1,0 +1,160 @@
+<style id="style">
+    @import url($font_url);
+
+    :root {
+        --navy: #1f3d66;
+        --blue: #2f70b7;
+        --slate: #52627a;
+        --line: #dbe3ed;
+        --soft-blue: #f5f8fc;
+        --soft-green: #effcf4;
+        --soft-orange: #fff9ef;
+    }
+
+    @page {
+        margin: 8mm 10mm 10mm;
+        size: $page_size $page_layout;
+    }
+
+    body {
+        color: #273447;
+        font-family: $font_name, Arial, sans-serif;
+        font-size: $font_size !important;
+        line-height: 1.35;
+        zoom: 82%;
+    }
+
+    table tr td, table tr, th { font-size: $font_size !important; }
+    table { border-collapse: collapse; width: 100%; }
+    p { margin: 0; }
+
+    .document-header {
+        border-bottom: 2px solid var(--navy);
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr 250px;
+        padding: 0 0 0.8rem;
+    }
+
+    .brand { color: var(--navy); font-size: 1.35rem; font-weight: 800; letter-spacing: .015em; text-transform: uppercase; }
+    .brand-subtitle { color: var(--slate); font-size: .8rem; font-weight: 700; margin-top: .15rem; }
+    .company-logo { height: 42px; margin-bottom: .5rem; max-width: 210px; }
+
+    .document-title { color: var(--blue); font-size: 1.85rem; font-weight: 800; letter-spacing: .04em; line-height: 1.04; text-align: right; }
+    .document-meta { color: var(--slate); line-height: 1.55; margin-top: .65rem; text-align: right; }
+    .document-meta strong { color: #344257; }
+
+    .party-grid { display: grid; gap: .8rem; grid-template-columns: 1fr 1fr; margin: 1rem 0; }
+    .party-card { background: var(--soft-blue); border: 1px solid var(--line); border-left: 4px solid var(--blue); min-height: 91px; padding: .72rem .85rem; }
+    .party-card.customer { border-left-color: #52627a; }
+    .party-card h3 { border-bottom: 1px solid #cbd6e2; color: var(--blue); font-size: .84rem; margin: 0 0 .45rem; padding-bottom: .33rem; text-transform: uppercase; }
+    .party-card.customer h3 { color: #405066; }
+    .party-name { color: #202b3b; font-size: .95rem; font-weight: 800; margin-bottom: .3rem; }
+    .party-card p { color: #4e5d72; font-size: .78rem; line-height: 1.32; }
+
+    [data-ref="table"] { margin-top: .75rem; table-layout: fixed; }
+    [data-ref="table"] > thead { background: var(--navy); color: white; }
+    [data-ref="table"] > thead > tr > th { border-right: 1px solid rgba(255,255,255,.22); font-size: .77rem; font-weight: 800; padding: .55rem .45rem; text-align: left; text-transform: uppercase; }
+    [data-ref="table"] > thead > tr > th:last-child { border-right: 0; text-align: right; }
+    [data-ref="table"] > tbody > tr > td { border-bottom: 1px solid var(--line); padding: .55rem .45rem; vertical-align: top; }
+    [data-ref="table"] > tbody > tr:nth-child(even) > td { background: #f8fafc; }
+    [data-ref*=".line_total-td"], .right-radius { text-align: right; white-space: nowrap; }
+
+    #table-totals { display: grid; gap: 2rem; grid-template-columns: 1.7fr 1fr; margin-top: .55rem; }
+    #table-totals .totals-table-right-side > * { display: grid; grid-template-columns: 1fr 1fr; }
+    #table-totals .totals-table-right-side > * > :first-child { font-weight: 700; padding: .34rem .55rem; text-align: right; }
+    #table-totals .totals-table-right-side > * > :last-child { padding: .34rem .55rem; text-align: right; white-space: nowrap; }
+    [data-ref="totals_table-outstanding-label"], [data-ref="totals_table-outstanding"] { background: #e9f5ff; border-bottom: 2px solid var(--navy); border-top: 2px solid var(--navy); color: var(--navy); font-size: 1.02rem; font-weight: 800; }
+
+    .notice { background: var(--soft-orange); border: 1px solid #f4ddb8; border-left: 3px solid #f17a23; margin-top: .9rem; padding: .55rem .7rem; }
+    .notice p { font-size: .77rem; line-height: 1.5; }
+    .notice strong { color: #344257; }
+
+    .bottom-grid { display: grid; gap: .8rem; grid-template-columns: .95fr 1.3fr; margin-top: .85rem; }
+    .terms, .bank { border-radius: 4px; padding: .65rem .75rem; }
+    .terms { background: #f7f4ff; border: 1px solid #e0daf4; }
+    .bank { background: var(--soft-green); border: 1px solid #bcebd0; }
+    .bottom-grid h3 { color: #315a95; font-size: .85rem; margin: 0 0 .35rem; text-transform: uppercase; }
+    .bank h3 { color: #26734b; }
+    .bottom-grid p { font-size: .76rem; line-height: 1.48; }
+
+    .signature-grid { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; margin-top: .9rem; }
+    .signature { border: 1px dashed #ccd6e3; min-height: 58px; padding: .55rem; text-align: center; }
+    .signature-title { color: #59677d; font-size: .75rem; font-weight: 700; }
+    .signature-name { color: var(--navy); font-size: .82rem; font-weight: 800; margin-top: 1.3rem; }
+
+    #footer { border-top: 1px solid var(--line); color: #74839a; font-size: .7rem; margin-top: 2rem; padding-top: .35rem; text-align: center; }
+    #footer p { font-size: .7rem; }
+    #task-table, #delivery-note-table, #statement-invoice-table, #statement-payment-table, #statement-credit-table, #statement-aging-table { display: none; }
+</style>
+
+<div id="header"></div>
+
+<div id="body">
+    <div class="document-header">
+        <div>
+            <img class="company-logo" src="$app_url/images/fiyattakip-logo.svg" alt="FiyatTakip logo">
+            <div class="brand">$company.name</div>
+            <div class="brand-subtitle">FİYAT TAKİP VE TEDARİK YÖNETİMİ</div>
+        </div>
+        <div>
+            <div class="document-title">PROFORMA<br>FATURA</div>
+            <div class="document-meta">
+                <strong>Proforma No:</strong> $number<br>
+                <strong>Tarih:</strong> $date<br>
+                <strong>Geçerlilik:</strong> $due_date
+            </div>
+        </div>
+    </div>
+
+    <div class="party-grid">
+        <section class="party-card">
+            <h3>Satıcı / Düzenleyen Firma</h3>
+            <div class="party-name">$company.name</div>
+            <p><strong>Adres:</strong> $company.address</p>
+            <p>$company.city_state_postal</p>
+            <p><strong>Vergi No:</strong> $company.vat_number</p>
+            <p><strong>Tel:</strong> $company.phone &nbsp; <strong>E-posta:</strong> $company.email</p>
+        </section>
+        <section class="party-card customer">
+            <h3>Alıcı / Müşteri Kurum</h3>
+            <div id="client-details"></div>
+        </section>
+    </div>
+
+    <table id="product-table" cellspacing="0" data-ref="table"></table>
+
+    <div id="table-totals">$status_logo</div>
+
+    <div class="notice">
+        <p><strong>Ürün Teslimat Bilgileri:</strong> $invoice.public_notes</p>
+        <p><strong>Açıklama / Not:</strong> Bu proforma, belirtilen geçerlilik süresi boyunca geçerlidir.</p>
+    </div>
+
+    <div class="bottom-grid">
+        <section class="terms">
+            <h3>Ticari ve Ödeme Koşulları</h3>
+            <p>$entity.terms</p>
+        </section>
+        <section class="bank">
+            <h3>Banka Hesap Bilgileri</h3>
+            <p><strong>Banka / IBAN:</strong> $user_iban</p>
+            <p><strong>Hesap Sahibi:</strong> $company.name</p>
+        </section>
+    </div>
+
+    <div class="signature-grid">
+        <div class="signature">
+            <div class="signature-title">Düzenleyen Firma Kaşe / İmza</div>
+            <div class="signature-name">$company.name</div>
+        </div>
+        <div class="signature">
+            <div class="signature-title">Müşteri Onayı / Kaşe İmza</div>
+            <div class="signature-name">$client_name</div>
+        </div>
+    </div>
+</div>
+
+<div id="footer">
+    <p>$company.name | VKN: $company.vat_number | $company.phone</p>
+</div>

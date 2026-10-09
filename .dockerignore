@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+**/node_modules
+**/vendor
+**/storage
+**/bootstrap/cache
+**/dist
+**/tsconfig.tsbuildinfo
+backend/public/*
+!backend/public/images/
+backend/public/images/*
+!backend/public/images/fiyattakip-logo.svg
+backend/openapi

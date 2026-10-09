@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 160" role="img" aria-labelledby="title desc">
+  <title id="title">FiyatTakip</title>
+  <desc id="desc">Fiyat etiketi ve yükselen fiyat grafiğinden oluşan FiyatTakip logosu</desc>
+  <defs>
+    <linearGradient id="tag" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2d75bd"/>
+      <stop offset="1" stop-color="#173d6a"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(10 12)">
+    <path d="M18 19c0-10 8-18 18-18h58l46 46v58c0 10-8 18-18 18H36c-10 0-18-8-18-18V19Z" fill="url(#tag)"/>
+    <circle cx="49" cy="33" r="10" fill="#c9ecff"/>
+    <path d="M38 92l23-23 18 14 28-35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="9"/>
+    <path d="m97 48 10 1-1 10" fill="none" stroke="#c9ecff" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+  </g>
+  <g transform="translate(172 0)">
+    <text x="0" y="78" fill="#203f69" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="800" letter-spacing="-2">Fiyat</text>
+    <text x="151" y="78" fill="#2d75bd" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="800" letter-spacing="-2">Takip</text>
+    <text x="3" y="111" fill="#60718a" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="4">TEDARİK VE FİYAT YÖNETİMİ</text>
+  </g>
+</svg>

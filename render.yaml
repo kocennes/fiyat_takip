@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: bisavunma-fiyat-takip-demo
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: REQUIRE_HTTPS
+        value: "true"
+      - key: PDF_GENERATOR
+        value: snappdf
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: 127.0.0.1
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_DATABASE
+        value: fiyattakip_demo
+      - key: DB_USERNAME
+        value: fiyattakip
+      - key: DB_PASSWORD
+        generateValue: true
+      - key: CACHE_DRIVER
+        value: file
+      - key: SESSION_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: FILESYSTEM_DISK
+        value: debian_docker
+      - key: MAIL_MAILER
+        value: log
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: IN_USER_EMAIL
+        sync: false
+      - key: IN_PASSWORD
+        sync: false
