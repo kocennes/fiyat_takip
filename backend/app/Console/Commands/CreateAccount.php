@@ -64,9 +64,9 @@ class CreateAccount extends Command
     {
         $settings = CompanySettings::defaults();
 
-        $settings->name = "Untitled Company";
+        $settings->name = "BISAVUNMA Fiyat Takip";
         $settings->currency_id = '1';
-        $settings->language_id = '1';
+        $settings->language_id = '25';
 
         $account = Account::factory()->create();
         $company = Company::factory()->create([

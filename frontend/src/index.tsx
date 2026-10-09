@@ -33,16 +33,20 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { Events } from './common/events';
 import { GoogleOAuth } from './components/GoogleOAuth';
 import { ReactQueryDevtoolsPanel } from './components/ReactQueryDevtoolsPanel';
-import en from './resources/lang/en/en.json';
+import tr from './resources/lang/tr_TR/tr_TR.json';
+import bisavunmaTurkish from './resources/lang/tr_TR/bisavunma.json';
 
 i18n.use(initReactI18next).init({
   resources: {
-    en: {
-      translation: en,
+    tr_TR: {
+      translation: {
+        ...tr,
+        ...bisavunmaTurkish,
+      },
     },
   },
-  lng: 'en',
-  fallbackLng: 'en',
+  lng: 'tr_TR',
+  fallbackLng: 'tr_TR',
   interpolation: {
     escapeValue: false,
   },

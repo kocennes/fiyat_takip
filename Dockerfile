@@ -15,9 +15,11 @@ USER root
 
 COPY backend/app/Factory/InvoiceFactory.php /var/www/html/app/Factory/InvoiceFactory.php
 COPY backend/app/Factory/QuoteFactory.php /var/www/html/app/Factory/QuoteFactory.php
+COPY backend/app/Console/Commands/CreateAccount.php /var/www/html/app/Console/Commands/CreateAccount.php
 COPY backend/database/seeders/DesignSeeder.php /var/www/html/database/seeders/DesignSeeder.php
 COPY backend/database/migrations/2026_10_09_000000_add_proforma_design.php /var/www/html/database/migrations/
 COPY backend/database/migrations/2026_10_09_000001_set_proforma_as_default_design.php /var/www/html/database/migrations/
+COPY backend/database/migrations/2026_10_09_000002_set_turkish_as_default_language.php /var/www/html/database/migrations/
 COPY backend/resources/views/pdf-designs/proforma.html /var/www/html/resources/views/pdf-designs/proforma.html
 COPY backend/public/images/fiyattakip-logo.svg /opt/bisavunma/fiyattakip-logo.svg
 COPY --from=frontend-build /frontend/dist /opt/bisavunma/ui
