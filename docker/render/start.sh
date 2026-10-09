@@ -8,12 +8,17 @@ export DB_HOST="${DB_HOST:-127.0.0.1}"
 export DB_PORT="${DB_PORT:-3306}"
 export DB_DATABASE="${DB_DATABASE:-fiyattakip_demo}"
 export DB_USERNAME="${DB_USERNAME:-fiyattakip}"
-export DB_PASSWORD="${DB_PASSWORD:?DB_PASSWORD must be set}"
+# Blueprint deployments receive DB_PASSWORD from render.yaml. Generate an
+# ephemeral value only for manually-created demo services where it is absent.
+if [ -z "${DB_PASSWORD:-}" ]; then
+    export DB_PASSWORD="$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32)"
+fi
 export CACHE_DRIVER="${CACHE_DRIVER:-file}"
 export SESSION_DRIVER="${SESSION_DRIVER:-file}"
 export QUEUE_CONNECTION="${QUEUE_CONNECTION:-sync}"
 export FILESYSTEM_DISK="${FILESYSTEM_DISK:-debian_docker}"
 export PORT="${PORT:-10000}"
+export APP_URL="${APP_URL:-${RENDER_EXTERNAL_URL:-http://localhost:${PORT}}}"
 
 if [ "$(dpkg --print-architecture)" = "amd64" ]; then
     export SNAPPDF_CHROMIUM_PATH=/usr/bin/google-chrome-stable
