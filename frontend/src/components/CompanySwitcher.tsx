@@ -236,7 +236,7 @@ export function CompanySwitcher() {
                               record.company.settings.company_logo ||
                               companySettings.smallLogo
                             }
-                            alt="Company logo"
+                            alt={t('company_logo')}
                             style={{
                               borderColor: colors.$5,
                               width: '2rem',
@@ -337,7 +337,7 @@ export function CompanySwitcher() {
             <img
               className="rounded-full border overflow-hidden aspect-square object-cover"
               src={logo}
-              alt="Company logo"
+              alt={t('company_logo')}
               style={{
                 borderColor: '#e5e7eb',
                 width: '1.66rem',
@@ -348,7 +348,7 @@ export function CompanySwitcher() {
               <img
                 className="rounded-full border overflow-hidden aspect-square object-cover flex-shrink-0"
                 src={logo}
-                alt="Company logo"
+                alt={t('company_logo')}
                 style={{
                   borderColor: '#e5e7eb',
                   width: '1.65rem',

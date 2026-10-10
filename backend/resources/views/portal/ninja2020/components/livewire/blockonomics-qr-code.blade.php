@@ -2,7 +2,7 @@
     @if ($error_message)
         <div class="error-message">{{ $error_message }}</div>
     @elseif ($is_loading)
-        <div class="loading-message">Loading QR code...</div>
+        <div class="loading-message">{{ ctrans('texts.bis_loading_qr_code') }}</div>
     @else
         <a href="bitcoin:{{ $btc_address }}?amount={{ $btc_amount }}" id="qr-code-link" target="_blank">
             <div id="qrcode-container">

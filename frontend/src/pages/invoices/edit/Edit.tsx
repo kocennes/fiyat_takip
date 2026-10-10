@@ -360,7 +360,6 @@ export default function Edit() {
               endpoint="/api/v1/live_preview?entity=:entity"
               observable={true}
               initiallyVisible={false}
-              withRemoveLogoCTA
             />
           )}
         </div>

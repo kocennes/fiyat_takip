@@ -143,7 +143,7 @@ export default function Projects() {
   }, [selectedColumns]);
 
   return (
-    <Default title={t('projects')} breadcrumbs={pages} docsLink="en/projects/">
+    <Default title={t('projects')} breadcrumbs={pages}>
       <DataTable
         resource="project"
         endpoint={route(

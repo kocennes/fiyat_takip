@@ -22,5 +22,5 @@ export default {
   [RecurringInvoicesFrequency.FREQUENCY_TWO_WEEKS]: 'freq_two_weeks',
   [RecurringInvoicesFrequency.FREQUENCY_TWO_YEARS]: 'freq_two_years',
   [RecurringInvoicesFrequency.FREQUENCY_WEEKLY]: 'freq_weekly',
-  [RecurringInvoicesFrequency.RECURS_INDEFINITELY]: 'freq_indefinetley',
+  [RecurringInvoicesFrequency.RECURS_INDEFINITELY]: 'freq_indefinitely',
 };

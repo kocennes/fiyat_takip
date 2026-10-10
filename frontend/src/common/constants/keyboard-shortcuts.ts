@@ -21,6 +21,26 @@ export interface ShortcutDefinition {
 
 export type ShortcutId = string;
 
+// The documents (e-signature) module is only routed when it is enabled, so its
+// shortcut is offered only then. Wrapped in try/catch because this module is
+// also imported outside Vite (e2e helpers), where `import.meta.env` is unset.
+function isDocumentsModuleEnabled(): boolean {
+  try {
+    return (
+      import.meta.env.VITE_IS_HOSTED === 'true' ||
+      import.meta.env.VITE_ENABLE_DOCUNINJA === 'true'
+    );
+  } catch {
+    return false;
+  }
+}
+
+const createDocumentShortcut: ShortcutDefinition = {
+  id: 'create_document',
+  labelKey: 'new_document',
+  action: { type: 'navigate', to: '/docuninja/create' },
+};
+
 const navigationShortcuts: ShortcutDefinition[] = [
   {
     id: 'create_client',
@@ -92,11 +112,7 @@ const navigationShortcuts: ShortcutDefinition[] = [
     labelKey: 'new_transaction',
     action: { type: 'navigate', to: '/transactions/create' },
   },
-  {
-    id: 'create_document',
-    labelKey: 'new_document',
-    action: { type: 'navigate', to: '/docuninja/create' },
-  },
+  ...(isDocumentsModuleEnabled() ? [createDocumentShortcut] : []),
 ];
 
 const generalShortcuts: ShortcutDefinition[] = [

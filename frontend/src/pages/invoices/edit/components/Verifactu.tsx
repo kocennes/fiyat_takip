@@ -311,14 +311,14 @@ export default function Verifactu() {
                   {t('invoice')} {invoice.backup?.parent_invoice_number}
                 </Link>
                 {invoice.backup?.notes
-                  ? `  Tipo: ${invoice.backup?.document_type} - Razón: ${invoice.backup?.notes}`
+                  ? `  ${t('type')}: ${invoice.backup?.document_type} - ${t('reason')}: ${invoice.backup?.notes}`
                   : ''}
               </Element>
             )}
 
             {invoice.backup?.child_invoice_ids &&
               invoice.backup?.child_invoice_ids?.length > 0 && (
-                <Element leftSide="Factura Rectificativa">
+                <Element leftSide={t('bis_rectifying_invoice')}>
                   <ul className="list-none space-y-4">
                     {invoice.backup?.child_invoice_ids.map((id) => (
                       <li key={id}>

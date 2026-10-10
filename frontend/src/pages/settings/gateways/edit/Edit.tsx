@@ -15,15 +15,12 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useColorScheme } from '$app/common/colors';
 import { route } from '$app/common/helpers/route';
-import { useAccentColor } from '$app/common/hooks/useAccentColor';
 import { useTitle } from '$app/common/hooks/useTitle';
 import { CompanyGateway } from '$app/common/interfaces/company-gateway';
 import { Gateway } from '$app/common/interfaces/statics';
 import { ValidationBag } from '$app/common/interfaces/validation-bag';
 import { useCompanyGatewayQuery } from '$app/common/queries/company-gateways';
 import { Card, Element } from '$app/components/cards';
-import { $help, HelpWidget } from '$app/components/HelpWidget';
-import { CircleQuestion } from '$app/components/icons/CircleQuestion';
 import { Settings } from '$app/components/layouts/Settings';
 import { ResourceActions } from '$app/components/ResourceActions';
 import { TabGroup } from '$app/components/TabGroup';
@@ -48,7 +45,6 @@ export function Edit() {
   const actions = useActions();
   const gateways = useGateways();
   const colors = useColorScheme();
-  const accentColor = useAccentColor();
 
   const { data } = useCompanyGatewayQuery({ id });
 
@@ -143,54 +139,12 @@ export function Edit() {
         )
       }
     >
-      <HelpWidget
-        id="gateways"
-        url="https://raw.githubusercontent.com/invoiceninja/invoiceninja.github.io/refs/heads/v5-rework/docs/user-guide/gateways.mdx"
-      />
-
       <Card
         title={t('edit_gateway')}
         className="shadow-sm"
         style={{ borderColor: colors.$24 }}
         withoutBodyPadding
         withoutHeaderBorder
-        topRight={
-          <>
-            {tabIndex === 1 && (
-              <button
-                style={{ color: accentColor }}
-                type="button"
-                onClick={() =>
-                  $help('gateways', {
-                    moveToHeading: 'Credentials',
-                  })
-                }
-                className="inline-flex items-center space-x-1 text-sm"
-              >
-                <CircleQuestion color={accentColor} size="1.3rem" />
-
-                <span>{t('documentation')}</span>
-              </button>
-            )}
-
-            {tabIndex === 3 && (
-              <button
-                style={{ color: accentColor }}
-                type="button"
-                onClick={() =>
-                  $help('gateways', {
-                    moveToHeading: 'Limits/Fees',
-                  })
-                }
-                className="inline-flex items-center space-x-1 text-sm"
-              >
-                <CircleQuestion color={accentColor} size="1.3rem" />
-
-                <span>{t('documentation')}</span>
-              </button>
-            )}
-          </>
-        }
       >
         <TabGroup
           tabs={tabs}

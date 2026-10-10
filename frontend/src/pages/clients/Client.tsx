@@ -87,7 +87,7 @@ export default function Client() {
   }, [data]);
 
   useEffect(() => {
-    setDocumentTitle(client?.display_name || 'edit_client');
+    setDocumentTitle(client?.display_name || t('edit_client'));
   }, [client]);
 
   useEffect(() => {

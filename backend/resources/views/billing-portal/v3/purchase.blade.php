@@ -4,7 +4,7 @@
         <div class="w-full p-10 lg:mt-24 md:max-w-xl mx-auto">
             <img
                 class="h-8"
-                src="{{ $this->subscription->company->present()->logo }}"
+                src="{{ \App\Http\ViewComposers\PortalBranding::logo($this->subscription->company) }}"
                 alt="{{ $this->subscription->company->present()->name }}"
             />
 

@@ -8,15 +8,7 @@
 
         <div class="grid grid-cols-12 px-6">
             <div class="col-span-12 md:col-start-4 md:col-span-6 mt-4 md:mt-10">
-                <h1 class="text-center text-2xl font-semibold">Invoice Ninja Setup</h1>
-                <p class="text-sm text-center">{{ ctrans('texts.if_you_need_help') }}
-                    <a 
-                        target="_blank" 
-                        href="https://forum.invoiceninja.com" 
-                        class="button-link underline">
-                        {{ ctrans('texts.support_forum') }}
-                    </a>
-                </p>
+                <h1 class="text-center text-2xl font-semibold">{{ ctrans('texts.bis_setup_title', ['name' => \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME]) }}</h1>
 
                 @if($errors->any())
                     <div class="alert alert-failure">
@@ -41,13 +33,13 @@
 
                     @if(isset($check['npm_status']) && !$check['npm_status'])
                     <div class="alert alert-success mt-4">
-                        <p>NPM Version => {{$check['npm_status']}}</p>
+                        <p>NPM {{ ctrans('texts.bis_version') }} => {{$check['npm_status']}}</p>
                     </div>
                     @endif
 
                     @if(isset($check['node_status']) && !$check['node_status'])
                     <div class="alert alert-success mt-4">
-                        <p>Node Version => {{$check['node_status']}}</p>
+                        <p>Node {{ ctrans('texts.bis_version') }} => {{$check['node_status']}}</p>
                     </div>
                     @endif
 
@@ -62,7 +54,11 @@
                                 <label for="terms_of_service">
                                     <input type="checkbox" class="form-checkbox mr-2" name="terms_of_service" id="terms_of_service" required>
                                     <span>{{ ctrans('texts.i_agree') }}
-                                        <a class="button-link text-blue-600" target="_blank" href="https://www.invoiceninja.com/self-hosting-terms-service/">{{ ctrans('texts.terms_of_service') }}</a>
+                                        @if(\App\Http\ViewComposers\PortalBranding::termsOfServiceUrl())
+                                        <a class="button-link text-blue-600" target="_blank" href="{{ \App\Http\ViewComposers\PortalBranding::termsOfServiceUrl() }}">{{ ctrans('texts.terms_of_service') }}</a>
+                                        @else
+                                        {{ ctrans('texts.terms_of_service') }}
+                                        @endif
                                     </span>
                                 </label>
                             </div>
@@ -70,7 +66,11 @@
                                 <label for="privacy_policy">
                                     <input type="checkbox" class="form-checkbox mr-2" name="privacy_policy" id="privacy_policy" required>
                                     <span>{{ ctrans('texts.i_agree') }}
-                                        <a class="button-link text-blue-600" target="_blank" href="https://www.invoiceninja.com/self-hosting-privacy-data-control/">{{ ctrans('texts.privacy_policy') }}</a>
+                                        @if(\App\Http\ViewComposers\PortalBranding::privacyPolicyUrl())
+                                        <a class="button-link text-blue-600" target="_blank" href="{{ \App\Http\ViewComposers\PortalBranding::privacyPolicyUrl() }}">{{ ctrans('texts.privacy_policy') }}</a>
+                                        @else
+                                        {{ ctrans('texts.privacy_policy') }}
+                                        @endif
                                     </span>
                                 </label>
                             </div>

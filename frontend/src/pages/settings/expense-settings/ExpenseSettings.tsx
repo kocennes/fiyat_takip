@@ -56,7 +56,6 @@ export function ExpenseSettings() {
       onCancelClick={onCancel}
       title={t('expense_settings')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#expense_settings"
       disableSaveButton={isFormBusy}
     >
       <Card

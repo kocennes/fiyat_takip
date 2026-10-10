@@ -481,11 +481,11 @@ export function Preview() {
         row
           .map((cell) => {
             if (cell.display_value.toString() === 'true') {
-              return 'Yes';
+              return t('yes');
             }
 
             if (cell.display_value.toString() === 'false') {
-              return 'No';
+              return t('no');
             }
 
             return `"${cell.display_value}"`;
@@ -500,7 +500,7 @@ export function Preview() {
     const url = URL.createObjectURL(blob);
 
     link.setAttribute('href', url);
-    link.setAttribute('download', 'example.csv');
+    link.setAttribute('download', `${t('report')}.csv`);
 
     link.click();
   };

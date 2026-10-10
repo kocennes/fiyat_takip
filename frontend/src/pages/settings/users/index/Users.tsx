@@ -60,7 +60,6 @@ export function Users() {
       <Settings
         title={t('user_details')}
         breadcrumbs={pages}
-        docsLink="/docs/advanced-settings/#user_management"
       >
         {!enterprisePlan() && isHosted() && <UsersPlanAlert />}
 

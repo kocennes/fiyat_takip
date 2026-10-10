@@ -20,7 +20,7 @@ import { toast } from '$app/common/helpers/toast/toast';
 import { useCurrentUser } from '$app/common/hooks/useCurrentUser';
 import { ValidationBag } from '$app/common/interfaces/validation-bag';
 import { resetChanges, updateUser } from '$app/common/stores/slices/user';
-import { Button, InputField, Link } from '$app/components/forms';
+import { Button, InputField } from '$app/components/forms';
 import { Modal } from '$app/components/Modal';
 import { QRCode } from '$app/components/QRCode';
 import { SmsVerificationModal } from '../../components/SmsVerificationModal';
@@ -224,13 +224,6 @@ export function TwoFactorAuthenticationModals(props: Props) {
         >
           {t('continue')}
         </Button>
-
-        <Link
-          external
-          to="https://github.com/antonioribeiro/google2fa#google-authenticator-apps"
-        >
-          {t('learn_more')}
-        </Link>
       </Modal>
 
       {setIsDisableModalOpen && typeof isDisableModalOpen === 'boolean' && (

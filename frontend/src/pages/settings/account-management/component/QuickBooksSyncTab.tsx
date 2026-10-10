@@ -187,7 +187,7 @@ export function QuickBooksSyncTab() {
 
         {quickbooksSettings.income_account_map &&
           quickbooksSettings.income_account_map.length > 0 && (
-            <Element leftSide="Income Accounts" noExternalPadding>
+            <Element leftSide={t('bis_income_accounts')} noExternalPadding>
               <div
                 className="grid grid-cols-2 gap-2 text-sm"
                 style={{ color: colors.$3 }}

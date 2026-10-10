@@ -32,7 +32,6 @@ import { InputField } from '../../components/forms/InputField';
 import { Link } from '../../components/forms/Link';
 import { RegisterValidation } from './common/ValidationInterface';
 import { Header } from './components/Header';
-import { HostedLinks } from './components/HostedLinks';
 import { OrDivider } from './components/OrDivider';
 import { SignInProviders } from './components/SignInProviders';
 import { TurnstileWidget } from './components/TurnstileWidget';
@@ -83,7 +82,9 @@ export function Register() {
       setIsFormBusy(false);
 
       setErrors({
-        password_confirmation: ['Password confirmation does not match.'],
+        password_confirmation: [
+          t('bis_password_confirmation_mismatch') as string,
+        ],
       });
 
       resetTurnstile();
@@ -223,10 +224,6 @@ export function Register() {
             <div className="flex justify-center">
               {isHosted() && <Link to="/login">{t('login')}</Link>}
             </div>
-          </div>
-
-          <div className="mx-4 max-w-md w-full rounded md:shadow-lg mt-4">
-            <HostedLinks />
           </div>
         </div>
       </div>

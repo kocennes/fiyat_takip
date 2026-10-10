@@ -156,7 +156,7 @@ export function ChangePlan({ plan, cycle, onSuccess }: ChangePlanProps) {
         <p className="my-5">{t('missing_payment_method')}</p>
       ) : (
         <div>
-          <p className="mb-3 my-5">Pay with</p>
+          <p className="mb-3 my-5">{t('pay_with')}</p>
 
           <form onSubmit={form.handleSubmit}>
             <Radio

@@ -54,6 +54,6 @@ class StatementController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Something went wrong. Please check logs.']);
+        return response()->json(['message' => ctrans('texts.something_went_wrong')]);
     }
 }

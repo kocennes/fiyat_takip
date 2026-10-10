@@ -52,10 +52,7 @@ export function CorpPassSuccess() {
           {t('peppol_successfully_configured')}
         </h1>
 
-        <p className="text-gray-600">
-          CorpPass verification completed successfully. Your Peppol registration
-          is being finalized.
-        </p>
+        <p className="text-gray-600">{t('bis_corppass_success_message')}</p>
 
         <Button
           behavior="button"

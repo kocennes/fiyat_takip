@@ -118,7 +118,7 @@ function SelectionStep({
   }> = [
     {
       id: 'invoice-ninja',
-      title: 'Invoice Ninja',
+      title: 'BISAVUNMA Fiyat Takip',
       description: t('invoice_ninja_template_description'),
       icon: <Icon element={FileText} size={32} />,
       onClick: onSelectInvoiceNinja,

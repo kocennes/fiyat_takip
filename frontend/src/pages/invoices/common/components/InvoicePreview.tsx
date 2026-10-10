@@ -16,7 +16,6 @@ import { Invoice } from '$app/common/interfaces/invoice';
 import { PurchaseOrder } from '$app/common/interfaces/purchase-order';
 import { Quote } from '$app/common/interfaces/quote';
 import { RecurringInvoice } from '$app/common/interfaces/recurring-invoice';
-import { RemoveLogoCTA } from '$app/components/RemoveLogoCTA';
 import { InvoiceViewer } from './InvoiceViewer';
 import { RelationType } from './ProductsTable';
 
@@ -42,7 +41,6 @@ interface Props {
     | '/api/v1/live_preview/purchase_order?entity=:entity';
   initiallyVisible?: boolean;
   observable?: boolean;
-  withRemoveLogoCTA?: boolean;
   debouncedTrigger?: number; // Increments on debounced changes
 }
 
@@ -170,8 +168,6 @@ export function InvoicePreview(props: Props) {
             enabled={props.observable ? isIntersecting : true}
           />
         </div>
-
-        {props.withRemoveLogoCTA && <RemoveLogoCTA />}
       </div>
     );
   }
@@ -197,8 +193,6 @@ export function InvoicePreview(props: Props) {
             enabled={props.observable ? isIntersecting : true}
           />
         </div>
-
-        {props.withRemoveLogoCTA && <RemoveLogoCTA />}
       </div>
     );
   }

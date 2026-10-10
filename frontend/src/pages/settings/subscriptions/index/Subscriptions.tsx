@@ -30,7 +30,6 @@ export function Subscriptions() {
   return (
     <Settings
       title={documentTitle}
-      docsLink="en/advanced-settings/#subscriptions"
       breadcrumbs={pages}
     >
       <AdvancedSettingsPlanAlert />

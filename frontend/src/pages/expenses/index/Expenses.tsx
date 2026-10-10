@@ -108,7 +108,7 @@ export default function Expenses() {
   } = useChangeTemplate();
 
   return (
-    <Default title={t('expenses')} breadcrumbs={pages} docsLink="en/expenses">
+    <Default title={t('expenses')} breadcrumbs={pages}>
       <DataTable
         resource="expense"
         endpoint={`/api/v1/expenses?include=client,vendor,category,project${

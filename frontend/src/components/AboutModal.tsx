@@ -10,18 +10,10 @@
 
 import dayjs from 'dayjs';
 import { Dispatch, SetStateAction, useState } from 'react';
-import {
-  Activity,
-  CheckCircle,
-  Instagram,
-  Linkedin,
-  Twitter,
-  Youtube,
-} from 'react-feather';
+import { Activity, CheckCircle } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { MdInfo, MdWarning } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { useColorScheme } from '$app/common/colors';
 import { endpoint, isSelfHosted } from '$app/common/helpers';
 import { request } from '$app/common/helpers/request';
@@ -69,12 +61,6 @@ interface Props {
   currentSystemInfo: SystemInfo | undefined;
 }
 
-const Div = styled.div`
-  background-color: ${(props) => props.theme.color};
-  &:hover {
-    background-color: ${(props) => props.theme.hoverColor};
-  }
-`;
 export function AboutModal(props: Props) {
   const [t] = useTranslation();
   const user = useCurrentUser();
@@ -82,11 +68,7 @@ export function AboutModal(props: Props) {
 
   const colors = useColorScheme();
 
-  const {
-    isAboutVisible,
-    setIsAboutVisible,
-    currentSystemInfo,
-  } = props;
+  const { isAboutVisible, setIsAboutVisible, currentSystemInfo } = props;
 
   const [isFormBusy, setIsFormBusy] = useState<boolean>(false);
   const [isHealthCheckModalOpen, setIsHealthCheckModalOpen] =
@@ -155,14 +137,25 @@ export function AboutModal(props: Props) {
         disableClosing={isHealthCheckModalOpen}
       >
         <div className="flex flex-col text-center">
-          <div className="flex flex-col">
-            <span className="text-gray-800">
+          <span
+            className="text-base font-semibold"
+            style={{ color: colors.$3 }}
+          >
+            BISAVUNMA Fiyat Takip
+          </span>
+
+          {currentSystemInfo?.api_version ? (
+            <span className="text-sm" style={{ color: colors.$17 }}>
+              v{currentSystemInfo.api_version}
+            </span>
+          ) : null}
+
+          <div className="flex flex-col mt-4">
+            <span style={{ color: colors.$3 }}>
               {user?.first_name} {user?.last_name}
             </span>
             <span>{user?.email}</span>
           </div>
-
-          <span className="mt-4">v{currentSystemInfo?.api_version}</span>
         </div>
 
         {isSelfHosted() && (
@@ -178,41 +171,15 @@ export function AboutModal(props: Props) {
           </Button>
         )}
 
-        <div className="flex flex-wrap justify-center items-center space-x-4 pt-6">
+        <div className="flex justify-center pt-6">
           <a
-            href="https://x.com/bisavunma"
+            href="https://bisavunma.com"
             target="_blank"
             rel="noreferrer"
-            aria-label="BISAVUNMA X"
+            className="text-sm font-medium hover:underline"
+            style={{ color: colors.$18 }}
           >
-            <Twitter />
-          </a>
-
-          <a
-            href="https://www.instagram.com/bisavunma/"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="BISAVUNMA Instagram"
-          >
-            <Instagram />
-          </a>
-
-          <a
-            href="https://www.youtube.com/@bisavunma"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="BISAVUNMA YouTube"
-          >
-            <Youtube />
-          </a>
-
-          <a
-            href="https://www.linkedin.com/company/bisavunma/"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="BISAVUNMA LinkedIn"
-          >
-            <Linkedin />
+            bisavunma.com
           </a>
         </div>
       </Modal>
@@ -269,12 +236,15 @@ export function AboutModal(props: Props) {
             <div className="flex flex-col">
               <span className="font-medium text-base mb-1">PHP</span>
               <span>
-                {t('web')}: {systemInfo?.php_version?.current_php_version}
+                {t('bis_web')}: {systemInfo?.php_version?.current_php_version}
               </span>
               <span>
-                {t('cli')}: {systemInfo?.php_version?.current_php_cli_version}
+                {t('bis_cli')}:{' '}
+                {systemInfo?.php_version?.current_php_cli_version}
               </span>
-              <span>Memory: {systemInfo?.php_version?.memory_limit}</span>
+              <span>
+                {t('bis_memory')}: {systemInfo?.php_version?.memory_limit}
+              </span>
               <span>API: {systemInfo?.api_version}</span>
             </div>
 
@@ -307,13 +277,7 @@ export function AboutModal(props: Props) {
           {(Boolean(!systemInfo?.env_writable) ||
             Boolean(systemInfo?.file_permissions !== 'Ok')) &&
             Boolean(!systemInfo?.is_docker) && (
-              <Div
-                className="flex justify-between items-center cursor-pointer py-1 px-3"
-                theme={{
-                  hoverColor: colors.$5,
-                }}
-                onClick={() => window.open('https://bisavunma.com', '_blank')}
-              >
+              <div className="flex justify-between items-center py-1 px-3">
                 <div className="flex flex-col">
                   <span className="font-medium text-base mb-1">
                     {t('permissions')}
@@ -329,17 +293,11 @@ export function AboutModal(props: Props) {
                 <div>
                   <Icon element={MdWarning} color="red" size={25} />
                 </div>
-              </Div>
+              </div>
             )}
 
           {systemInfo?.pdf_engine !== 'SnapPDF PDF Generator' && (
-            <Div
-              className="flex justify-between items-center cursor-pointer py-1 px-3"
-              theme={{
-                hoverColor: colors.$5,
-              }}
-                onClick={() => window.open('https://bisavunma.com', '_blank')}
-            >
+            <div className="flex justify-between items-center py-1 px-3">
               <div className="flex flex-col">
                 <span className="font-medium text-base mb-1">
                   {t('snappdf_not_enabled')}
@@ -351,17 +309,11 @@ export function AboutModal(props: Props) {
               <div>
                 <Icon element={MdInfo} size={25} />
               </div>
-            </Div>
+            </div>
           )}
 
           {Boolean(systemInfo?.exchange_rate_api_not_configured) && (
-            <Div
-              className="flex justify-between items-center cursor-pointer py-1 px-3"
-              theme={{
-                hoverColor: colors.$5,
-              }}
-                onClick={() => window.open('https://bisavunma.com', '_blank')}
-            >
+            <div className="flex justify-between items-center py-1 px-3">
               <div className="flex flex-col">
                 <span className="font-medium text-base mb-1">
                   {t('exchange_rate_not_enabled')}
@@ -373,7 +325,7 @@ export function AboutModal(props: Props) {
               <div>
                 <Icon element={MdInfo} size={25} />
               </div>
-            </Div>
+            </div>
           )}
         </div>
 
@@ -398,7 +350,6 @@ export function AboutModal(props: Props) {
           </Button>
         </div>
       </Modal>
-
     </>
   );
 }

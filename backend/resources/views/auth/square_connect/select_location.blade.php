@@ -10,12 +10,12 @@
         </svg>
     </div>
 
-    <h2 class="text-xl font-semibold mb-2">Select a Location</h2>
-    <p class="text-gray-600 mb-6">Choose which Square location to use for processing payments.</p>
+    <h2 class="text-xl font-semibold mb-2">{{ ctrans('texts.bis_square_select_location') }}</h2>
+    <p class="text-gray-600 mb-6">{{ ctrans('texts.bis_square_select_location_help') }}</p>
 
     @if(count($locations) === 0)
-        <p class="text-red-600">No locations were found on your Square account. Please create a location in your Square dashboard first.</p>
-        <span class="mt-4">Click <a class="font-semibold hover:underline" href="{{ url('/#/settings/company_gateways') }}">here</a> to go back.</span>
+        <p class="text-red-600">{{ ctrans('texts.bis_square_no_locations') }}</p>
+        <span class="mt-4"><a class="font-semibold hover:underline" href="{{ url('/#/settings/company_gateways') }}">{{ ctrans('texts.bis_click_to_go_back') }}</a></span>
     @else
         <form method="POST" action="{{ route('square.oauth.select_location') }}" class="w-full max-w-md">
             @csrf
@@ -47,7 +47,7 @@
             </div>
 
             <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                Continue
+                {{ ctrans('texts.continue') }}
             </button>
         </form>
     @endif

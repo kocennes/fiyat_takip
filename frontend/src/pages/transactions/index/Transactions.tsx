@@ -111,11 +111,7 @@ export default function Transactions() {
         />
       </Slider>
 
-      <Default
-        title={t('transactions')}
-        breadcrumbs={pages}
-        docsLink="en/transactions/"
-      >
+      <Default title={t('transactions')} breadcrumbs={pages}>
         <DataTable
           resource="transaction"
           endpoint={`/api/v1/bank_transactions?sort=id|desc&active_banks=true${

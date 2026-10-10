@@ -104,7 +104,6 @@ export default function RecurringExpenses() {
     <Default
       title={t('recurring_expenses')}
       breadcrumbs={pages}
-      docsLink="en/recurring-expenses"
     >
       <DataTable
         resource="recurring_expense"

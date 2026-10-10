@@ -37,10 +37,7 @@ export function CorpPassFailed() {
 
         <h1 className="text-2xl font-semibold">{t('error')}</h1>
 
-        <p className="text-gray-600">
-          CorpPass verification failed or was cancelled. Please try again from
-          the e-invoice settings page.
-        </p>
+        <p className="text-gray-600">{t('bis_corppass_failed_message')}</p>
 
         <Button
           behavior="button"

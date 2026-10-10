@@ -23,16 +23,10 @@ import { Element } from '$app/components/cards';
 import { Divider } from '$app/components/cards/Divider';
 import { Button, Link } from '$app/components/forms';
 import { Modal } from '$app/components/Modal';
-import { useHandleGoCardless } from '$app/pages/settings/gateways/create/hooks/useHandleGoCardless';
 import { useResolveConfigValue } from '$app/pages/settings/gateways/create/hooks/useResolveConfigValue';
-import { formatLabel } from '../helpers/format-label';
+import { useFormatGatewayFieldLabel } from '../helpers/format-label';
 import { useResolveInputField } from '../hooks/useResolveInputField';
-import { GoCardlessOAuth2 } from './gateways/GoCardlessOAuth2';
-import { PayPalPPCP } from './gateways/PayPalPPCP';
 import { Payware } from './gateways/Payware';
-import { SquareOAuth } from './gateways/SquareOAuth';
-import { StripeConnect } from './gateways/StripeConnect';
-import { WePay } from './gateways/WePay';
 
 interface Props {
   gateway: Gateway;
@@ -51,13 +45,13 @@ export function Credentials(props: Props) {
   const colors = useColorScheme();
   const accentColor = useAccentColor();
 
-  const handleGoCardless = useHandleGoCardless();
   const resolveInputField = useResolveInputField(
     props.companyGateway,
     props.setCompanyGateway
   );
 
   const config = useResolveConfigValue(props.companyGateway);
+  const formatLabel = useFormatGatewayFieldLabel();
 
   const STRIPE_CONNECT = 'd14dd26a47cecc30fdd65700bfb67b34';
   const WEPAY = '8fdeed552015b3c7b44ed6c8ebd9e992';
@@ -116,21 +110,6 @@ export function Credentials(props: Props) {
         </Element>
       )}
 
-      {props.gateway && props.gateway.key === STRIPE_CONNECT && (
-        <StripeConnect />
-      )}
-
-      {props.gateway && props.gateway.key === WEPAY && <WePay />}
-
-      {props.gateway && props.gateway.key === PAYPAL_PPCP && (
-        <PayPalPPCP
-          gateway={props.gateway}
-          companyGateway={props.companyGateway}
-          setCompanyGateway={props.setCompanyGateway}
-          errors={props.errors}
-        />
-      )}
-
       {props.gateway && props.gateway.key === PAYWARE && (
         <Payware
           gateway={props.gateway}
@@ -138,15 +117,6 @@ export function Credentials(props: Props) {
           setCompanyGateway={props.setCompanyGateway}
           errors={props.errors}
         />
-      )}
-
-      {props.gateway &&
-        props.gateway.key === GOCARDLESS &&
-        isHosted() &&
-        config('oauth2') === true && <GoCardlessOAuth2 />}
-
-      {props.gateway && props.gateway.key === SQUARE && isHosted() && (
-        <SquareOAuth companyGateway={props.companyGateway} />
       )}
 
       {props.gateway &&
@@ -160,17 +130,6 @@ export function Credentials(props: Props) {
             )}
           </Element>
         ))}
-
-      {props.gateway &&
-        props.gateway.key === GOCARDLESS &&
-        isHosted() &&
-        config('oauth2') !== true && (
-          <Element leftSide={t('OAuth 2.0')}>
-            <Button behavior="button" type="minimal" onClick={handleGoCardless}>
-              {t('connect')}
-            </Button>
-          </Element>
-        )}
 
       {!location.pathname.includes('/create') && (
         <>

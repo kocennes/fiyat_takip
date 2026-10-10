@@ -244,7 +244,7 @@ export function useActivityLabels(): Record<ActivityType, string> {
     [ACTIVITY_TYPES.EINVOICE_DELIVERY_FAILURE]: t('einvoice_delivery_failure'),
     [ACTIVITY_TYPES.E_EXPENSE_CREATED]: t('e_expense_created'),
     [ACTIVITY_TYPES.EMAIL_CREDIT]: t('sent_credit'),
-    [ACTIVITY_TYPES.ACCOUNT_DELETED]: t('account_deleted'),
+    [ACTIVITY_TYPES.ACCOUNT_DELETED]: t('bis_account_deleted'),
     [ACTIVITY_TYPES.MERGE_CLIENT]: t('merge_client'),
     [ACTIVITY_TYPES.MERGE_VENDOR]: t('merge_vendor'),
     [ACTIVITY_TYPES.PURGE_CLIENT]: t('purge_client'),

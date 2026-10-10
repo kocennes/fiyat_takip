@@ -8,12 +8,7 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
-import { useAtomValue } from 'jotai';
-import { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useEnabled } from '$app/common/guards/guards/enabled';
-import { useOpenFeedbackSlider } from '$app/common/hooks/useOpenFeedbackSlider';
-import { reactSettingsAtom } from '$app/common/hooks/useReactSettings';
 import { useTitle } from '$app/common/hooks/useTitle';
 import { Activity } from '$app/pages/dashboard/components/Activity';
 import { PastDueInvoices } from '$app/pages/dashboard/components/PastDueInvoices';
@@ -30,18 +25,7 @@ import { OperationsDeck } from './components/OperationsDeck';
 export default function Dashboard() {
   useTitle('dashboard');
 
-  const [t] = useTranslation();
   const enabled = useEnabled();
-  const openFeedbackSlider = useOpenFeedbackSlider();
-  // Try opening feedback once after settings hydrate.
-  const isReactSettingsHydrated = useAtomValue(reactSettingsAtom) !== null;
-  const feedbackTriedRef = useRef<boolean>(false);
-
-  useEffect(() => {
-    if (!isReactSettingsHydrated || feedbackTriedRef.current) return;
-    feedbackTriedRef.current = true;
-    openFeedbackSlider();
-  }, [isReactSettingsHydrated, openFeedbackSlider]);
 
   return (
     <Default title="Operasyon Merkezi" breadcrumbs={[]}>

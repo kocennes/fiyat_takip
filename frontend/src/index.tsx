@@ -17,7 +17,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { ScrollToTop } from '$app/components/ScrollToTop';
 import { App } from './App';
-import { initializeSentry } from './common/sentry';
 import { store } from './common/stores/store';
 
 import './resources/css/app.css';
@@ -91,13 +90,11 @@ loader.init().then(/* ... */);
 
 const container = document.getElementById('root') as HTMLElement;
 
-async function bootstrap() {
-  try {
-    await initializeSentry();
-  } catch (error) {
-    console.error('Sentry initialization failed.', error);
-  }
+export const emitter = mitt<Events>();
 
+// External error reporting (Sentry) is intentionally not initialised: this
+// self-hosted deployment must not send telemetry to third-party services.
+function bootstrap() {
   createRoot(container).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
@@ -116,6 +113,4 @@ async function bootstrap() {
   );
 }
 
-void bootstrap();
-
-export const emitter = mitt<Events>();
+bootstrap();

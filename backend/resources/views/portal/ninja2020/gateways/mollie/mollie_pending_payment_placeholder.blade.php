@@ -3,14 +3,10 @@
 
 @section('body')
     <div class="grid lg:grid-cols-3">
-        <div class="hidden lg:block col-span-1 bg-red-100 h-screen">
-            <img src="{{ asset('images/client-portal-new-image.jpg') }}"
-                 class="w-full h-screen object-cover"
-                 alt="Background image">
-        </div>
-
-        <div class="col-span-2 h-screen flex">
+        <div class="col-span-3 h-screen flex">
             <div class="m-auto md:w-1/2 lg:w-1/4 flex flex-col items-center">
+                <img src="{{ \App\Http\ViewComposers\PortalBranding::logo($company ?? null) }}"
+                     class="mx-auto border-b border-gray-100 h-18 pb-4 mb-4" alt="{{ isset($company) && !is_null($company) ? $company->present()->name() : \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
                 <span class="flex items-center text-2xl">
                     {{ ctrans('texts.mollie_payment_pending') }}
                  </span>

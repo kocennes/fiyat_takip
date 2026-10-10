@@ -90,7 +90,7 @@ export function Edit() {
             onFormSubmit={formik.handleSubmit}
             withSaveButton
           >
-            <Element leftSide="Status">
+            <Element leftSide={t('status')}>
               {!data.data.data.is_deleted && !data.data.data.archived_at && (
                 <Badge variant="primary">{t('active')}</Badge>
               )}

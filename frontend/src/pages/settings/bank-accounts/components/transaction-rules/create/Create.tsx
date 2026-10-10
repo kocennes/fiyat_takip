@@ -102,7 +102,6 @@ export function Create() {
     <Settings
       title={t('new_transaction_rule')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#create_transaction_rule"
       disableSaveButton={!transactionRule || isFormBusy}
       onSaveClick={handleSave}
     >

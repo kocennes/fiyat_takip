@@ -335,7 +335,7 @@ export function ProjectAnalytics({
             color: colors.$22,
           }}
         >
-          {t('no_project_analytics_data')}
+          {t('bis_no_project_analytics_data')}
         </div>
       )}
 

@@ -108,7 +108,7 @@ export default function Clients() {
   } = useChangeTemplate();
 
   return (
-    <Default breadcrumbs={pages} title={t('clients')} docsLink="en/clients">
+    <Default breadcrumbs={pages} title={t('clients')}>
       <DataTable
         resource="client"
         endpoint={`/api/v1/clients?include=group_settings${

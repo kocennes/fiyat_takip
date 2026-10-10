@@ -4,7 +4,7 @@
             {{ ctrans('texts.email_settings') }}
         </h3>
         <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
-            Let's configure e-mail settings.
+            {{ ctrans('texts.bis_setup_configure_email') }}
         </p>
     </div>
     <div>
@@ -15,7 +15,7 @@
                 </dt>
                 <dd class="text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
                     <select name="mail_driver" class="input w-full form-select" x-model="option">
-                        <option value="log">Log</option>
+                        <option value="log">{{ ctrans('texts.log') }}</option>
                         <option value="smtp">SMTP</option>
                         <option value="sendmail">Sendmail</option>
                     </select>

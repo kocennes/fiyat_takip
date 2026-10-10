@@ -3,25 +3,17 @@
 
 @section('body')
     <div class="grid lg:grid-cols-3 mx-6 md:mx-0">
-        @if(isset($account) && !$account->isPaid())
-            <div class="hidden lg:block col-span-1 bg-red-100 h-screen">
-                <img src="{{ asset('images/client-portal-new-image.jpg') }}"
-                     class="w-full h-screen object-cover"
-                     alt="Background image">
-            </div>
-        @endif
-
-        <div class="{{ isset($account) && !$account->isPaid() ? 'col-span-2' : 'col-span-3' }} h-screen flex">
+        <div class="col-span-3 h-screen flex">
             <div class="m-auto flex-col items-center">
-                @if(isset($account) && !$account->isPaid())
+                @if(isset($company) && !is_null($company))
                     <div>
-                        <img src="{{ asset('images/invoiceninja-black-logo-2.png') }}"
-                             class="border-b border-gray-100 h-18 pb-4" alt="Invoice Ninja logo">
+                        <img src="{{ \App\Http\ViewComposers\PortalBranding::logo($company) }}"
+                             class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ $company->present()->name() }}">
                     </div>
-                @elseif(isset($company) && !is_null($company))
+                @else
                     <div>
-                        <img src="{{ $company->present()->logo()  }}"
-                             class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ $company->present()->name() }} logo">
+                        <img src="{{ \App\Http\ViewComposers\PortalBranding::defaultLogo() }}"
+                             class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
                     </div>
                 @endif
             <div class="m-auto flex-col items-center mt-4">

@@ -119,7 +119,7 @@ export function DocumentPreview(props: Props) {
   }, [documents, documentIndex]);
 
   if (android) {
-    return <p>Unable to preview PDF. &nbsp;</p>;
+    return <p>{t('bis_unable_to_preview_pdf')} &nbsp;</p>;
   }
 
   return (

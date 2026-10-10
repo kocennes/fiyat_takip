@@ -3,22 +3,15 @@
 
 @section('body')
     <div class="grid lg:grid-cols-3">
-        @if($account && !$account->isPaid())
-        <div class="hidden lg:block col-span-1 bg-red-100 h-screen">
-            <img src="{{ asset('images/client-portal-new-image.jpg') }}"
-                 class="w-full h-screen object-cover"
-                 alt="Background image">
-        </div>
-        @endif
-        <div class="{{ $account && !$account->isPaid() ? 'col-span-2' : 'col-span-3' }} h-screen flex">
+        <div class="col-span-3 h-screen flex">
             <div class="m-auto w-1/2 md:w-1/3 lg:w-1/4">
-                @if($account && !$account->isPaid())
+                @if(isset($company) && !is_null($company))
                     <div>
-                        <img src="{{ asset('images/invoiceninja-black-logo-2.png') }}" class="border-b border-gray-100 h-18 pb-4" alt="Invoice Ninja logo">
+                        <img src="{{ \App\Http\ViewComposers\PortalBranding::logo($company) }}" class="h-14 mb-10" alt="{{ $company->present()->name() }}">
                     </div>
-                @elseif(isset($company) && !is_null($company))
+                @else
                     <div>
-                        <img src="{{ asset($company->present()->logo()) }}" class="h-14 mb-10" alt="{{ $company->present()->name() }} logo">
+                        <img src="{{ \App\Http\ViewComposers\PortalBranding::defaultLogo() }}" class="h-14 mb-10" alt="{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
                     </div>
                 @endif
                 <div class="flex flex-col">

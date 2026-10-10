@@ -37,11 +37,9 @@ export function apiEndpoint(): string {
     return import.meta.env.VITE_HOSTED_API_URL || 'https://invoicing.co';
   }
 
-  return (
-    import.meta.env.VITE_API_URL ||
-    window.location.origin ||
-    'https://invoicing.co'
-  );
+  // Self-hosted: never fall back to the upstream hosted API (it would receive
+  // this installation's API token); an empty base keeps requests same-origin.
+  return import.meta.env.VITE_API_URL || window.location.origin || '';
 }
 
 export function docuNinjaApiEndpoint(): string {

@@ -61,7 +61,7 @@ export function useBlankTransactionQuery() {
 
 const successMessages = {
   convert_matched: 'converted_transactions',
-  unlink: 'unlinked_payment',
+  unlink: 'unlinked_transaction',
 };
 
 export const useBulk = () => {
@@ -80,7 +80,7 @@ export const useBulk = () => {
     }).then(() => {
       const message =
         successMessages[action as keyof typeof successMessages] ||
-        `${action}d_invoice`;
+        `${action}d_transaction`;
 
       toast.success(message);
 

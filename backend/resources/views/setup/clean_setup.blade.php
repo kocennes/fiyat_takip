@@ -19,7 +19,7 @@
             </script>
             <noscript><p><img src="{{ $company->matomo_url }}/matomo.php?idsite={{ $company->matomo_id }}&amp;rec=1" style="border:0;" alt="" /></p></noscript>
         @elseif (config('services.analytics.tracking_id'))
-            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122229484-1"></script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.analytics.tracking_id') }}"></script>
             <script>
                 window.dataLayer = window.dataLayer || [];
 
@@ -42,7 +42,7 @@
         @endif
 
         <!-- Title -->
-        <title>@yield('meta_title', '') — {{ config('app.name') }}</title>
+        <title>@yield('meta_title', '') — {{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -81,6 +81,7 @@
         @endif
 
         <link rel="canonical" href="{{ config('ninja.app_url') }}/{{ request()->path() }}"/>
+        <link href="{{ asset('favicon.ico') }}" rel="icon" type="image/x-icon">
 
         {{-- Feel free to push anything to header using @push('header') --}}
         @stack('head')
@@ -116,12 +117,20 @@
                             "background": "#f1d600"
                         },
                     },
+                    @if(\App\Http\ViewComposers\PortalBranding::privacyPolicyUrl())
                     "content": {
-                        "href": "{{ config('ninja.privacy_policy_url.hosted') }}",
+                        "href": "{{ \App\Http\ViewComposers\PortalBranding::privacyPolicyUrl() }}",
                         "message": "{{ ctrans('texts.cookie_message')}}",
                         "dismiss": "{{ ctrans('texts.got_it')}}",
                         "link": "{{ ctrans('texts.learn_more')}}",
                     }
+                    @else
+                    "showLink": false,
+                    "content": {
+                        "message": "{{ ctrans('texts.cookie_message')}}",
+                        "dismiss": "{{ ctrans('texts.got_it')}}",
+                    }
+                    @endif
                 })}
             );
         </script>

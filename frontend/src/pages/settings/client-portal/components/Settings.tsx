@@ -30,7 +30,7 @@ import { SettingsLabel } from '$app/components/SettingsLabel';
 import { Spinner } from '$app/components/Spinner';
 import { useHandleCurrentCompanyChangeProperty } from '$app/pages/settings/common/hooks/useHandleCurrentCompanyChange';
 import { Element } from '../../../../components/cards';
-import { InputField, Link, SelectField } from '../../../../components/forms';
+import { InputField, SelectField } from '../../../../components/forms';
 import Toggle from '../../../../components/forms/Toggle';
 import { companySettingsErrorsAtom } from '../../common/atoms';
 
@@ -128,10 +128,7 @@ export function Settings() {
           )}
 
           {company?.portal_mode === 'domain' && (
-            <Element
-              leftSide={t('domain_url')}
-              leftSideHelp="custom domain info"
-            >
+            <Element leftSide={t('domain_url')}>
               <InputField
                 value={company?.portal_domain || ''}
                 onValueChange={(value) => handleChange('portal_domain', value)}
@@ -159,22 +156,6 @@ export function Settings() {
               <span>
                 {t('login')} {t('url')}
               </span>
-
-              {Boolean(isHosted() && company.portal_mode === 'domain') && (
-                <div className="flex items-center space-x-0.5">
-                  <span>(</span>
-
-                  <Link
-                    to="https://invoiceninja.github.io/docs/hosted/hosted-custom-domain#custom-domain-configuration"
-                    external
-                    withoutExternalIcon
-                  >
-                    {t('app_help_link')}
-                  </Link>
-
-                  <span>)</span>
-                </div>
-              )}
             </div>
           }
         >
@@ -190,13 +171,6 @@ export function Settings() {
               <CopyToClipboard
                 className="break-all"
                 text={`${company?.portal_domain}/client/login`}
-              />
-            )}
-
-            {Boolean(isHosted() && company.portal_mode === 'subdomain') && (
-              <CopyToClipboard
-                className="break-all"
-                text={`${company?.subdomain}.invoicing.co/client/login`}
               />
             )}
           </div>

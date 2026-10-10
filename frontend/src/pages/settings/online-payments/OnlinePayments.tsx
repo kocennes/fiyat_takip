@@ -87,7 +87,6 @@ export function OnlinePayments() {
     <Settings
       title={t('online_payments')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#online_payments"
       onSaveClick={onSave}
       onCancelClick={onCancel}
       disableSaveButton={isFormBusy}

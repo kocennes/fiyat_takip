@@ -41,12 +41,11 @@ export function CancelInvoiceModal({ visible, onClose, onConfirm }: Props) {
       <div className="flex items-center">
         <Icon element={MdOutlineWarning} color="red" size={48} />
         <span className="font-medium text-sm ml-2 text-red-500">
-          Esto cancelará la factura y creará una factura rectificativa por el
-          importe total de la factura
+          {t('bis_verifactu_cancel_warning')}
         </span>
       </div>
       <InputField
-        label="Motivo de la rectificación"
+        label={t('bis_rectification_reason')}
         value={cancellationReason}
         changeOverride={true}
         onValueChange={(value: string) => setCancellationReason(value)}

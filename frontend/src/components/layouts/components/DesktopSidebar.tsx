@@ -73,7 +73,7 @@ export function DesktopSidebar(props: Props) {
       >
         <div
           className={classNames(
-            'flex items-center flex-shrink-0 h-[5.5rem] border-b',
+            'flex items-center flex-shrink-0 min-h-[5.5rem] border-b',
             {
               'py-3': !isMiniSidebar,
               'justify-center': isMiniSidebar,
@@ -85,7 +85,7 @@ export function DesktopSidebar(props: Props) {
           }}
         >
           <div className="flex w-full flex-col gap-2">
-            <BrandLockup collapsed={isMiniSidebar} />
+            <BrandLockup collapsed={isMiniSidebar} background="dark" />
             {!isMiniSidebar && <CompanySwitcher />}
           </div>
         </div>

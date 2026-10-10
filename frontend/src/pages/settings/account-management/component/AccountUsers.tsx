@@ -48,7 +48,7 @@ export function AccountUsers() {
   const [t] = useTranslation();
   const colors = useColorScheme();
 
-  const noAccessLabel = 'No access';
+  const noAccessLabel = t('bis_no_access');
 
   const [selectedUser, setSelectedUser] = useState<AccountUser | null>(null);
 
@@ -170,7 +170,7 @@ export function AccountUsers() {
 
             {!selectedUser.companies.length && (
               <div className="text-sm" style={{ color: colors.$17 }}>
-                No company access
+                {t('bis_no_company_access')}
               </div>
             )}
 

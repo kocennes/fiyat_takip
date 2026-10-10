@@ -393,7 +393,7 @@ export function useInvoiceColumns(): DataTableColumns<Invoice> {
       id: 'auto_bill_enabled',
       label: t('auto_bill_enabled'),
       format: (value, invoice) =>
-        invoice.auto_bill_enabled ? t('Yes') : t('No'),
+        invoice.auto_bill_enabled ? t('yes') : t('no'),
     },
     {
       column: 'client_postal_code',

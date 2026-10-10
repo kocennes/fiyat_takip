@@ -8,6 +8,8 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
+import { t } from 'i18next';
+
 const MODIFIER_KEYS = new Set([
   'Control',
   'Shift',
@@ -150,7 +152,6 @@ export function eventMatchesBinding(
 }
 
 const PRINTABLE_KEY_LABELS: Record<string, string> = {
-  space: 'Space',
   enter: 'Enter',
   escape: 'Esc',
   arrowup: '↑',
@@ -183,6 +184,12 @@ function formatModifiers(parts: string[]) {
 }
 
 function formatKey(key: string) {
+  // Key caps such as Ctrl, Enter or Esc keep their printed names; the space
+  // bar has none, so it is shown with a translated word.
+  if (key === 'space') {
+    return t('bis_key_space');
+  }
+
   return (
     PRINTABLE_KEY_LABELS[key] ??
     (key.length === 1 ? key.toUpperCase() : capitalize(key))

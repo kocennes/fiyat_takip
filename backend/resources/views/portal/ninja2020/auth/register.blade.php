@@ -5,15 +5,15 @@
 
     <div class="grid lg:grid-cols-12 py-8">
         <div class="col-span-12 lg:col-span-8 lg:col-start-3 xl:col-span-6 xl:col-start-4 px-6">
-            @if($register_company->account && !$register_company->account->isPaid())
+            @if(isset($register_company) && !is_null($register_company))
             <div class="flex justify-center">
-                    <img src="{{ asset('images/invoiceninja-black-logo-2.png') }}"
-                         class="border-b border-gray-100 h-18 pb-4" alt="Invoice Ninja logo">
+                    <img src="{{ \App\Http\ViewComposers\PortalBranding::logo($register_company) }}"
+                         class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ $register_company->present()->name() }}">
                 </div>
-            @elseif(isset($register_company) && !is_null($register_company))
+            @else
             <div class="flex justify-center">
-                    <img src="{{ $register_company->present()->logo()  }}"
-                         class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ $register_company->present()->name() }} logo">
+                    <img src="{{ \App\Http\ViewComposers\PortalBranding::defaultLogo() }}"
+                         class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
                 </div>
             @endif
             <h1 class="text-center text-3xl mt-8">{{ ctrans('texts.register') }}</h1>
@@ -137,7 +137,7 @@
 
                 <div class="flex justify-between items-center mt-8">
 
-                    <a href="{{route('client.login')}}" class="button button-info bg-emerald-600 text-white">{{ ctrans('texts.login_label') }}</a>
+                    <a href="{{route('client.login')}}" class="button button-primary bg-emerald-600">{{ ctrans('texts.login_label') }}</a>
 
                     <span class="inline-flex items-center" x-data="{ terms_of_service: false, privacy_policy: false }">
                             @if(!empty($register_company->settings->client_portal_terms) || !empty($register_company->settings->client_portal_privacy_policy))

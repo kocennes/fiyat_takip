@@ -5,7 +5,9 @@
 
 # Runtime and dependencies
 **/node_modules/
-**/vendor/
+# Only Composer's dependency directory. A recursive "vendor" pattern also hides
+# source folders such as app/Events/Vendor on case-insensitive file systems.
+/backend/vendor/
 **/storage/
 **/bootstrap/cache/
 **/dist/

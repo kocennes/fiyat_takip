@@ -12,10 +12,7 @@ const propertyLabelAliases: Record<string, PropertyLabelAlias> = {
   stock_notification_threshold: {
     translationKey: 'notification_threshold',
   },
-  foreign_amount: {
-    translationKey: 'foreign_amount',
-    defaultValue: 'Foreign Amount',
-  },
+  foreign_amount: { translationKey: 'bis_foreign_amount' },
   tax_id: { translationKey: 'tax_category' },
   type_id: { translationKey: 'type' },
 };

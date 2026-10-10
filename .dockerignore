@@ -2,7 +2,7 @@
 .env
 .env.*
 **/node_modules
-**/vendor
+backend/vendor
 **/storage
 **/bootstrap/cache
 **/dist

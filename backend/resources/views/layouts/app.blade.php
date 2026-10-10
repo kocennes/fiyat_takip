@@ -7,7 +7,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}</title>
+    <link href="{{ asset('favicon.ico') }}" rel="icon" type="image/x-icon">
 
     <!-- Scripts -->
     @vite('resources/js/app.js')
@@ -35,20 +36,9 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}
                 </a>
-                @auth("user")
-                    You're a user!
-                @endauth
-
-                @auth("contact")
-                    You're a Contact!
-                @endauth
-
-                @guest
-                    You're not logged in!
-                @endguest
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ ctrans('texts.menu') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -63,11 +53,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ ctrans('texts.login') }}</a>
                             </li>
                             <li class="nav-item">
                                 @if (Route::has('register'))
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ ctrans('texts.register') }}</a>
                                 @endif
                             </li>
                         @else
@@ -80,7 +70,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ ctrans('texts.logout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

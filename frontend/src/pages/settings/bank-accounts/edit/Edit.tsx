@@ -103,7 +103,6 @@ export function Edit() {
     <Settings
       title={t('edit_bank_account')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#edit_bank_account"
       navigationTopRight={
         accountDetails && (
           <ResourceActions

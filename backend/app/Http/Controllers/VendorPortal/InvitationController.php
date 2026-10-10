@@ -44,7 +44,7 @@ class InvitationController extends Controller
                                     ->first();
 
         if (!$invitation) {
-            return abort(404, 'The resource is no longer available.');
+            return abort(404, ctrans('texts.entity_removed_title'));
         }
 
         if ($invitation->contact->trashed()) {
@@ -89,7 +89,7 @@ class InvitationController extends Controller
                             ->firstOrFail();
 
         if (!$invitation) {
-            return response()->json(["message" => "no record found"], 400);
+            return response()->json(["message" => ctrans('texts.record_not_found')], 400);
         }
 
         App::setLocale($invitation->contact->preferredLocale());

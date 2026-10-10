@@ -20,10 +20,8 @@ import { usePaidOrSelfHost } from '$app/common/hooks/usePaidOrSelfhost';
 import { Divider } from '$app/components/cards/Divider';
 import { ArrowRight } from '$app/components/icons/ArrowRight';
 import { ArrowsOppositeDirection } from '$app/components/icons/ArrowsOppositeDirection';
-import { BookOpen } from '$app/components/icons/BookOpen';
 import { ChartLine } from '$app/components/icons/ChartLine';
 import { CircleLock } from '$app/components/icons/CircleLock';
-import { ConnectedDots } from '$app/components/icons/ConnectedDots';
 import { QuickBooks } from './QuickBooks';
 
 interface BoxTheme {
@@ -101,28 +99,6 @@ export function Integrations() {
         </div>
       </Box>
 
-      <Box
-        className="flex justify-between items-center p-4 border shadow-sm w-full rounded-md cursor-pointer"
-        theme={{
-          backgroundColor: colors.$1,
-          hoverBackgroundColor: colors.$4,
-        }}
-        onClick={() => window.open('https://invoiceninja.github.io', '_blank')}
-        style={{ borderColor: colors.$24 }}
-      >
-        <div className="flex items-center space-x-2">
-          <BookOpen color={colors.$3} size="1.4rem" />
-
-          <span className="text-sm" style={{ color: colors.$3 }}>
-            {t('api_docs')}
-          </span>
-        </div>
-
-        <div>
-          <ArrowRight color={colors.$3} size="1.4rem" strokeWidth="1.5" />
-        </div>
-      </Box>
-
       <div className="py-4">
         <Divider
           className="border-dashed"
@@ -130,33 +106,6 @@ export function Integrations() {
           style={{ borderColor: colors.$20 }}
         />
       </div>
-
-      <Box
-        className="flex justify-between items-center p-4 border shadow-sm w-full rounded-md cursor-pointer"
-        theme={{
-          backgroundColor: colors.$1,
-          hoverBackgroundColor: colors.$4,
-        }}
-        onClick={() =>
-          window.open(
-            'https://zapier.com/apps/invoice-ninja/integrations',
-            '_blank'
-          )
-        }
-        style={{ borderColor: colors.$24 }}
-      >
-        <div className="flex items-center space-x-2">
-          <ConnectedDots color={colors.$3} size="1.4rem" />
-
-          <span className="text-sm" style={{ color: colors.$3 }}>
-            Zapier
-          </span>
-        </div>
-
-        <div>
-          <ArrowRight color={colors.$3} size="1.4rem" strokeWidth="1.5" />
-        </div>
-      </Box>
 
       <Box
         className="flex justify-between items-center p-4 border shadow-sm w-full rounded-md cursor-pointer"

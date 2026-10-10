@@ -23,8 +23,7 @@
         </svg>
     </div>
 
-    <p>We were unable to connect to GoCardless as access was denied.</p>
-    <span>Click <a class="font-semibold hover:underline" href="{{ url('/#/settings/company_gateways') }}">here</a> to
-        continue.</span>
+    <p>{{ ctrans('texts.bis_gateway_connect_denied', ['gateway' => 'GoCardless']) }}</p>
+    <span><a class="font-semibold hover:underline" href="{{ url('/#/settings/company_gateways') }}">{{ ctrans('texts.bis_click_to_continue') }}</a></span>
 </div>
 @endsection

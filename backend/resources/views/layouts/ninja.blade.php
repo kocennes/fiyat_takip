@@ -5,7 +5,7 @@
         <!-- Error: {{ session('error') }} -->
 
         @if (config('services.analytics.tracking_id'))
-            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122229484-1" async></script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.analytics.tracking_id') }}"></script>
             <script>
                 window.dataLayer = window.dataLayer || [];
 
@@ -29,13 +29,7 @@
 
 
         <!-- Title -->
-        @auth()
-            <title></title>
-        @endauth
-
-        @guest
-            <title>@yield('meta_title', '') — {{ config('app.name') }}</title>
-        @endguest
+        <title>@yield('meta_title', '') — {{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,6 +58,8 @@
 
         <!-- Styles -->
         @vite('resources/sass/app.scss')
+        <link href="{{ asset('favicon.ico') }}" rel="icon" type="image/x-icon">
+        <link href="{{ asset('brand/apple-touch-icon.png') }}" rel="apple-touch-icon">
         <link rel="canonical" href="{{ config('ninja.site_url') }}/{{ request()->path() }}"/>
 
 
@@ -102,12 +98,20 @@
                             "background": "#f1d600"
                         },
                     },
+                    @if(\App\Http\ViewComposers\PortalBranding::privacyPolicyUrl())
                     "content": {
-                        "href": "{{ config('ninja.privacy_policy_url.hosted') }}",
+                        "href": "{{ \App\Http\ViewComposers\PortalBranding::privacyPolicyUrl() }}",
                         "message": "{{ ctrans('texts.cookie_message')}}",
                         "dismiss": "{{ ctrans('texts.got_it')}}",
                         "link": "{{ ctrans('texts.learn_more')}}",
                     }
+                    @else
+                    "showLink": false,
+                    "content": {
+                        "message": "{{ ctrans('texts.cookie_message')}}",
+                        "dismiss": "{{ ctrans('texts.got_it')}}",
+                    }
+                    @endif
                 })}
             );
         </script>

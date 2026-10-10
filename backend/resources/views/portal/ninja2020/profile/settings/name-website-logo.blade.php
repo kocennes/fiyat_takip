@@ -48,7 +48,7 @@
                                 <div class="inline-flex items-center">
                                     <label for="client_website"
                                            class="input-label">{{ ctrans('texts.website') }}</label>
-                                    <span class="text-xs ml-2 text-gray-600">E.g. https://example.com</span>
+                                    <span class="text-xs ml-2 text-gray-600">{{ ctrans('texts.bis_website_example') }}</span>
                                 </div>
                                 <input id="client_website" class="input w-full" name="website"
                                        wire:model="website"/>

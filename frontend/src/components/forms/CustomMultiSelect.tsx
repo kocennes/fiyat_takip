@@ -273,6 +273,7 @@ function CustomSelect(props: any) {
 
   return (
     <Select
+      noOptionsMessage={() => t('bis_no_options')}
       {...restProps}
       options={options}
       value={restProps.value}

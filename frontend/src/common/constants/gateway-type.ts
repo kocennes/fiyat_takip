@@ -36,7 +36,7 @@ export default {
   [GatewayType.BACS]: 'bacs',
   [GatewayType.FPX]: 'fpx',
   [GatewayType.VENMO]: 'venmo',
-  [GatewayType.MERCADOPAGO]: 'mercadopago',
+  [GatewayType.MERCADOPAGO]: 'mercado_pago',
   [GatewayType.MYBANK]: 'mybank',
   [GatewayType.PAYLATER]: 'paylater',
   [GatewayType.PAYPAL_ADVANCED_CARDS]: 'paypal_advanced_cards',

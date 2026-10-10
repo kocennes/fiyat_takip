@@ -8,29 +8,7 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
-import { useTranslation } from 'react-i18next';
-import { useCurrentUser } from '$app/common/hooks/useCurrentUser';
-import { CopyToClipboard } from '$app/components/CopyToClipboard';
-import { Element } from '$app/components/cards';
-
+// Upstream referral programme: not offered in BISAVUNMA Fiyat Takip.
 export function ReferralProgram() {
-  const [t] = useTranslation();
-
-  const user = useCurrentUser();
-
-  return (
-    <>
-      <Element leftSide={t('referral_code')}>
-        <CopyToClipboard
-          text={`https://app.invoicing.co/#/register?rc=${user?.referral_code}`}
-        />
-      </Element>
-
-      <Element leftSide={t('free')}>{user?.referral_meta?.free || 0}</Element>
-      <Element leftSide={t('pro')}>{user?.referral_meta?.pro || 0}</Element>
-      <Element leftSide={t('enterprise')}>
-        {user?.referral_meta?.enterprise || 0}
-      </Element>
-    </>
-  );
+  return null;
 }

@@ -119,11 +119,13 @@ export function DocumentCreationDropZone({ onSelectFiles }: Props) {
       return;
     }
 
+    const untitledDocument = t('untitled_document') as string;
+
     formData.append(
       'description',
       acceptedFiles[0]
-        ? getDocumentNameFromFile(acceptedFiles[0])
-        : 'Untitled document'
+        ? getDocumentNameFromFile(acceptedFiles[0], untitledDocument)
+        : untitledDocument
     );
 
     handleCreateDocument(formData);

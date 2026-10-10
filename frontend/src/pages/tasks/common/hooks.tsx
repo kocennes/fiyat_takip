@@ -156,7 +156,7 @@ export function useTaskColumns() {
     const lastName = user?.last_name ?? '';
 
     if (firstName.length === 0 && lastName.length === 0)
-      return user?.email ?? 'Unknown User';
+      return user?.email ?? t('unknown');
 
     return `${firstName} ${lastName}`;
   };

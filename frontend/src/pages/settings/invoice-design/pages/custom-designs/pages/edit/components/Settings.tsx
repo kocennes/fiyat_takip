@@ -25,8 +25,6 @@ import { Divider } from '$app/components/cards/Divider';
 import { CreditSelector } from '$app/components/credit/CreditSelector';
 import { Checkbox, InputField, SelectField } from '$app/components/forms';
 import Toggle from '$app/components/forms/Toggle';
-import { ArrowRight } from '$app/components/icons/ArrowRight';
-import { BookOpen } from '$app/components/icons/BookOpen';
 import { Export } from '$app/components/icons/Export';
 import { Import as ImportIcon } from '$app/components/icons/Import';
 import { InvoiceSelector } from '$app/components/invoices/InvoiceSelector';
@@ -366,33 +364,6 @@ export default function Settings() {
         </div>
 
         <div className="flex flex-col space-y-4 px-4 sm:px-6">
-          <Box
-            className="flex justify-between items-center p-4 border shadow-sm w-full rounded-md cursor-pointer"
-            theme={{
-              backgroundColor: colors.$1,
-              hoverBackgroundColor: colors.$4,
-            }}
-            onClick={() =>
-              window.open(
-                'https://invoiceninja.github.io/docs/advanced-topics/custom-fields#custom-fields',
-                '_blank'
-              )
-            }
-            style={{ borderColor: colors.$24 }}
-          >
-            <div className="flex items-center space-x-2">
-              <BookOpen color={colors.$3} size="1.4rem" />
-
-              <span className="text-sm" style={{ color: colors.$3 }}>
-                {t('api_docs')}
-              </span>
-            </div>
-
-            <div>
-              <ArrowRight color={colors.$3} size="1.4rem" strokeWidth="1.5" />
-            </div>
-          </Box>
-
           <Box
             className="flex items-center p-4 border shadow-sm w-full rounded-md cursor-pointer space-x-2"
             theme={{

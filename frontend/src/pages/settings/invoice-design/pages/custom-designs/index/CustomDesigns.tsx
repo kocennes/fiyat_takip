@@ -8,6 +8,7 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
+import { useTranslation } from 'react-i18next';
 import { enterprisePlan } from '$app/common/guards/guards/enterprise-plan';
 import { proPlan } from '$app/common/guards/guards/pro-plan';
 import { AdvancedSettingsPlanAlert } from '$app/components/AdvancedSettingsPlanAlert';
@@ -17,6 +18,7 @@ import { Inline } from '$app/components/Inline';
 import { useActions } from '../../../common/hooks/useActions';
 
 export default function CustomDesigns() {
+  const [t] = useTranslation();
   const actions = useActions();
 
   return (
@@ -28,7 +30,7 @@ export default function CustomDesigns() {
         columns={[
           {
             id: 'name',
-            label: 'Name',
+            label: t('name'),
             format: (field, resource) => (
               <Inline>
                 <EntityStatus entity={resource} />

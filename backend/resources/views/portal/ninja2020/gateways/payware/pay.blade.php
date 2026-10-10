@@ -114,11 +114,11 @@
 
     <div id="payware-payment-container">
         @component('portal.ninja2020.components.general.card-element', ['title' => ctrans('texts.payment_type')])
-            payware
+            {{ ctrans('texts.mobile_payment') }}
         @endcomponent
 
         @component('portal.ninja2020.components.general.card-element', ['title' => ctrans('texts.payment') . ' ID'])
-            <span class="payware-payment-id" id="payware-payment-id" title="Click to copy">{{ substr($transaction_id, 0, 16) }}...</span>
+            <span class="payware-payment-id" id="payware-payment-id" title="{{ ctrans('texts.bis_click_to_copy') }}">{{ substr($transaction_id, 0, 16) }}...</span>
             <button type="button" class="payware-copy-btn" onclick="paywareCopyId()">{{ ctrans('texts.copy') }}</button>
         @endcomponent
 
@@ -129,7 +129,7 @@
         <div class="payware-qr-container" id="payware-qr-container" style="flex-direction: column; align-items: center; padding: 1rem;"></div>
 
         <div class="payware-deeplink-container" id="payware-deeplink-container" style="flex-direction: column; align-items: center; padding: 1rem;">
-            <a href="payware://{{ $transaction_id }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background-color: #059669; color: #ffffff; font-weight: 600; font-size: 1rem; border-radius: 0.5rem; text-decoration: none;">
+            <a href="payware://{{ $transaction_id }}" class="button button-primary leading-normal" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background-color: #059669; color: #ffffff; font-weight: 600; font-size: 1rem; border-radius: 0.5rem; text-decoration: none;">
                 {{ ctrans('texts.pay_now') }}
             </a>
         </div>
@@ -145,7 +145,7 @@
     <div id="payware-expired-container" style="display: none;">
         @component('portal.ninja2020.components.general.card-element-single')
             <div class="payware-status failed">
-                <span>{{ ctrans('texts.payment') }} expired. Please go back and try again.</span>
+                <span>{{ ctrans('texts.payment_expired') }}</span>
             </div>
         @endcomponent
     </div>
@@ -256,7 +256,7 @@
                         document.getElementById('payware-payment-container').style.display = 'none';
                         document.getElementById('payware-error-container').style.display = 'block';
                         document.getElementById('payware-error-text').textContent =
-                            data.message || 'Payment was not completed. Please try again.';
+                            data.message || @json(ctrans('texts.payment_was_not_completed'));
                     }
                 })
                 .catch(function() {

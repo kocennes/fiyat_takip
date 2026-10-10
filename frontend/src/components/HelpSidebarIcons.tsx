@@ -18,7 +18,6 @@ import { useDispatch } from 'react-redux';
 import { useColorScheme } from '$app/common/colors';
 import { endpoint, isSelfHosted } from '$app/common/helpers';
 import { request } from '$app/common/helpers/request';
-import { toast } from '$app/common/helpers/toast/toast';
 import { useCurrentAccount } from '$app/common/hooks/useCurrentAccount';
 import { useHandleCollapseExpandSidebar } from '$app/common/hooks/useHandleCollapseExpandSidebar';
 import { useHandleDarkLightMode } from '$app/common/hooks/useHandleDarkLightMode';
@@ -32,7 +31,6 @@ import { Button } from './forms';
 import { CircleInfo } from './icons/CircleInfo';
 import { CircleWarning } from './icons/CircleWarning';
 import { CloseNavbarArrow } from './icons/CloseNavbarArrow';
-import { Icon } from './icons/Icon';
 import { MoonStars } from './icons/MoonStars';
 import { OpenNavbarArrow } from './icons/OpenNavbarArrow';
 import { Sun } from './icons/Sun';
@@ -97,16 +95,6 @@ export function HelpSidebarIcons(props: Props) {
         visible={cronsNotEnabledModal}
         onClose={setCronsNotEnabledModal}
       >
-        <Button
-          onClick={() => {
-            window.open(
-              'https://bisavunma.com',
-              '_blank'
-            );
-          }}
-        >
-          {t('learn_more')}
-        </Button>
         <Button disabled={disabledButton} onClick={refreshData}>
           {t('refresh_data')}
         </Button>

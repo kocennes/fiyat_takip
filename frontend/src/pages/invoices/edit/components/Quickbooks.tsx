@@ -42,22 +42,31 @@ import {
 import type { Context } from '../Edit';
 
 const actionLabels: Record<QuickbooksInvoiceAction, string> = {
-  check_record: 'Check Record',
-  force_link: 'Force Link',
-  force_pull: 'Force Pull',
-  force_push: 'Force Push',
+  check_record: 'bis_qb_check_record',
+  force_link: 'bis_qb_force_link',
+  force_pull: 'bis_qb_force_pull',
+  force_push: 'bis_qb_force_push',
 };
 
 const recommendedActionLabels: Record<QuickbooksCheckAction, string> = {
-  force_link: 'Force Link',
-  force_pull: 'Force Pull',
-  force_push: 'Force Push',
-  change_invoice_number: 'Change Invoice Number',
-  verify_quickbooks_invoice: 'Verify QuickBooks Invoice',
+  force_link: 'bis_qb_force_link',
+  force_pull: 'bis_qb_force_pull',
+  force_push: 'bis_qb_force_push',
+  change_invoice_number: 'bis_qb_change_invoice_number',
+  verify_quickbooks_invoice: 'bis_qb_verify_invoice',
 };
 
-const amountMismatchGuidance =
-  'Same invoice number found in QuickBooks with a different amount. Update the amount or rename the invoice before retrying.';
+const statusLabels: Record<string, string> = {
+  synced: 'bis_qb_status_synced',
+  syncable: 'bis_qb_status_syncable',
+  linkable: 'bis_qb_status_linkable',
+  amount_mismatch: 'bis_qb_status_amount_mismatch',
+  data_mismatch: 'bis_qb_status_data_mismatch',
+  not_found: 'bis_qb_status_not_found',
+  voided: 'voided',
+};
+
+const amountMismatchGuidance = 'bis_qb_amount_mismatch_help';
 
 export default function Quickbooks() {
   const [t] = useTranslation();
@@ -111,7 +120,15 @@ export default function Quickbooks() {
   const status = invoice?.sync?.qb_status;
   const message =
     invoice?.sync?.qb_status_message ||
-    (status === 'amount_mismatch' ? amountMismatchGuidance : '');
+    (status === 'amount_mismatch' ? t(amountMismatchGuidance) : '');
+
+  const statusLabel = (value: string | null | undefined) => {
+    if (!value) {
+      return t('unknown');
+    }
+
+    return statusLabels[value] ? t(statusLabels[value]) : formatStatus(value);
+  };
 
   const handleAction = (action: QuickbooksInvoiceAction) => {
     if (!invoice || processingAction) {
@@ -191,9 +208,7 @@ export default function Quickbooks() {
       return;
     }
 
-    toast.info(
-      'Inspect the corresponding invoice in QuickBooks, then run Check Record again.'
-    );
+    toast.info('bis_qb_inspect_invoice_help');
   };
 
   return (
@@ -207,7 +222,7 @@ export default function Quickbooks() {
         <div className="flex justify-center w-full pb-10 pt-2">
           <div className="grid grid-cols-12 gap-4 px-6 w-full xl:w-2/3">
             <div className="col-span-12 space-y-2">
-              <Element leftSide="QuickBooks ID" noExternalPadding>
+              <Element leftSide={t('bis_qb_id')} noExternalPadding>
                 <span className="text-sm" style={{ color: colors.$3 }}>
                   {invoice?.sync?.qb_id || t('unknown')}
                 </span>
@@ -215,7 +230,7 @@ export default function Quickbooks() {
 
               <Element leftSide={t('status')} noExternalPadding>
                 <Badge variant={statusVariant(status)}>
-                  {formatStatus(status || t('unknown'))}
+                  {statusLabel(status)}
                 </Badge>
               </Element>
 
@@ -243,7 +258,7 @@ export default function Quickbooks() {
                         disabled={Boolean(processingAction)}
                         disableWithoutIcon={processingAction !== action}
                       >
-                        {actionLabels[action]}
+                        {t(actionLabels[action])}
                       </Button>
                     ))}
                   </div>
@@ -258,22 +273,22 @@ export default function Quickbooks() {
         <div
           ref={checkResultRef}
           role="region"
-          aria-label="QuickBooks check results"
+          aria-label={t('bis_qb_check_results')}
           tabIndex={-1}
           className="rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         >
           <div className="sr-only" aria-live="polite">
-            QuickBooks check complete: {checkResult.message}
+            {t('bis_qb_check_complete')} {checkResult.message}
           </div>
 
           <Card
-            title="QuickBooks Check"
+            title={t('bis_qb_check')}
             className="shadow-sm"
             style={{ borderColor: colors.$24 }}
             headerStyle={{ borderColor: colors.$20 }}
             topRight={
               <Badge variant={checkOutcomeVariant(checkResult.outcome)}>
-                {formatStatus(checkResult.outcome)}
+                {statusLabel(checkResult.outcome)}
               </Badge>
             }
           >
@@ -282,25 +297,27 @@ export default function Quickbooks() {
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <CheckMetadata
-                  label="Checked"
+                  label={t('bis_qb_checked_at')}
                   value={dateTime(checkResult.checked_at)}
                 />
                 <CheckMetadata
-                  label="Connection"
-                  value={checkResult.linked ? 'Linked' : 'Not linked'}
+                  label={t('bis_qb_connection')}
+                  value={
+                    checkResult.linked ? t('bis_qb_linked') : t('bis_qb_not_linked')
+                  }
                 />
                 {checkResult.quickbooks && (
                   <>
                     <CheckMetadata
-                      label="QuickBooks ID"
+                      label={t('bis_qb_id')}
                       value={checkResult.quickbooks.id}
                     />
                     <CheckMetadata
-                      label="QuickBooks status"
+                      label={t('bis_qb_status')}
                       value={checkResult.quickbooks.status}
                     />
                     <CheckMetadata
-                      label="QuickBooks balance"
+                      label={t('bis_qb_balance')}
                       value={String(
                         formatMoney(
                           checkResult.quickbooks.balance,
@@ -310,7 +327,7 @@ export default function Quickbooks() {
                       )}
                     />
                     <CheckMetadata
-                      label="QuickBooks last updated"
+                      label={t('bis_qb_last_updated')}
                       value={dateTime(checkResult.quickbooks.last_updated_at)}
                     />
                   </>
@@ -321,7 +338,7 @@ export default function Quickbooks() {
                 <div className="overflow-x-auto">
                   <table
                     className="w-full min-w-[40rem] text-sm"
-                    aria-label="QuickBooks invoice comparison"
+                    aria-label={t('bis_qb_invoice_comparison')}
                   >
                     <thead>
                       <tr
@@ -329,22 +346,22 @@ export default function Quickbooks() {
                         style={{ borderColor: colors.$20 }}
                       >
                         <th scope="col" className="py-2 text-left font-medium">
-                          Field
+                          {t('field')}
                         </th>
                         <th scope="col" className="py-2 text-left font-medium">
-                          Invoice Ninja
+                          BISAVUNMA Fiyat Takip
                         </th>
                         <th scope="col" className="py-2 text-left font-medium">
                           QuickBooks
                         </th>
                         <th scope="col" className="py-2 text-left font-medium">
-                          Result
+                          {t('bis_qb_result')}
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <ComparisonRow
-                        label="Number"
+                        label={t('number')}
                         invoiceNinja={
                           checkResult.comparison.number.invoice_ninja
                         }
@@ -353,7 +370,7 @@ export default function Quickbooks() {
                         borderColor={colors.$20}
                       />
                       <ComparisonRow
-                        label="Total"
+                        label={t('total')}
                         invoiceNinja={formatMoney(
                           checkResult.comparison.total.invoice_ninja,
                           invoice?.client?.country_id,
@@ -383,7 +400,7 @@ export default function Quickbooks() {
                       disabled={Boolean(processingAction)}
                       disableWithoutIcon={processingAction !== action}
                     >
-                      {recommendedActionLabels[action]}
+                      {t(recommendedActionLabels[action])}
                     </Button>
                   ))}
                 </div>
@@ -430,6 +447,8 @@ function ComparisonRow({
   matches: boolean;
   borderColor: string;
 }) {
+  const [t] = useTranslation();
+
   return (
     <tr className="border-t" style={{ borderColor }}>
       <th scope="row" className="py-3 text-left font-medium">
@@ -439,7 +458,7 @@ function ComparisonRow({
       <td className="py-3">{quickbooks}</td>
       <td className="py-3">
         <Badge variant={matches ? 'green' : 'red'}>
-          {matches ? 'Matches' : 'Different'}
+          {matches ? t('bis_qb_matches') : t('bis_qb_different')}
         </Badge>
       </td>
     </tr>

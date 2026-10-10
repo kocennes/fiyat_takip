@@ -56,7 +56,6 @@ import {
 } from '../common/hooks/useShowReportField';
 import { proPlan } from '$app/common/guards/guards/pro-plan';
 import { enterprisePlan } from '$app/common/guards/guards/enterprise-plan';
-import { ReportsPlanAlert } from '../common/components/ReportsPlanAlert';
 import { extractTextFromHTML } from '$app/common/helpers/html-string';
 import { sanitizeHTML } from '$app/common/helpers/html-string';
 import { cloneDeep } from 'lodash';
@@ -552,8 +551,6 @@ export default function Reports() {
         </Dropdown>
       }
     >
-      <ReportsPlanAlert />
-
       <div
         className="grid grid-cols-12 gap-4"
         style={{ borderColor: colors.$4 }}

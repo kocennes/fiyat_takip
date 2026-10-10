@@ -76,7 +76,7 @@ export function SignatorySelector({
 
 function transformToContact(client: Client) {
   if (client.contacts.length === 0) {
-    toast.error('Error: Client has no contacts. Please add a contact first.');
+    toast.error('bis_client_has_no_contacts');
 
     return null;
   }

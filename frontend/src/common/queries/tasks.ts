@@ -104,7 +104,9 @@ export const useBulk = () => {
       ...(action === 'bulk_update' && { new_value }),
     }).then(() => {
       if (action !== 'start' && action !== 'stop') {
-        toast.success(`${action}d_task`);
+        toast.success(
+          action === 'bulk_update' ? 'updated_records' : `${action}d_task`
+        );
       }
 
       if (action === 'start') {

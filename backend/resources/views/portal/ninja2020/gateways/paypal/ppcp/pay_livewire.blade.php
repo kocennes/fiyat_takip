@@ -55,7 +55,7 @@
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
+                    throw new Error(@json(ctrans('texts.bis_network_response_error')) + ' ' + response.statusText);
                 }
                 return response.json();
             })
@@ -78,7 +78,7 @@
             .catch(error => {
                 console.error('Error:', error);
 
-                document.getElementById('errors').textContent = `Sorry, your transaction could not be processed...\n\n${error.message}`;
+                document.getElementById('errors').textContent = @json(ctrans('texts.bis_transaction_not_processed')) + `\n\n${error.message}`;
                 document.getElementById('errors').hidden = false;
             });
 

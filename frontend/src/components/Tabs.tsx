@@ -10,6 +10,7 @@
 
 import classNames from 'classnames';
 import { MouseEvent, ReactNode, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Link,
   Params,
@@ -57,6 +58,7 @@ const StyledLink = styled(Link)`
 `;
 
 export function Tabs(props: Props) {
+  const [t] = useTranslation();
   const navigate = useNavigate();
 
   const {
@@ -121,7 +123,7 @@ export function Tabs(props: Props) {
         })}
       >
         <label htmlFor="tabs" className="sr-only">
-          Select a tab
+          {t('bis_select_a_tab')}
         </label>
 
         {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
@@ -154,7 +156,7 @@ export function Tabs(props: Props) {
               'flex flex-1 relative scroll-smooth overflow-x-auto',
               tabBarClassName
             )}
-            aria-label="Tabs"
+            aria-label={t('bis_tabs')}
           >
             {withHorizontalPadding && (
               <div

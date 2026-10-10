@@ -8,50 +8,14 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
-import { useTranslation } from 'react-i18next';
-import { MdInfoOutline } from 'react-icons/md';
-import { route } from '$app/common/helpers/route';
-import { useCurrentUser } from '$app/common/hooks/useCurrentUser';
-import { useShouldDisableAdvanceSettings } from '$app/common/hooks/useShouldDisableAdvanceSettings';
 import CommonProps from '../common/interfaces/common-props.interface';
-import { Alert } from './Alert';
-import { Link } from './forms';
-import { Icon } from './icons/Icon';
 
 interface Props extends CommonProps {
   message?: string;
 }
 
-export function AdvancedSettingsPlanAlert(props: Props) {
-  const [t] = useTranslation();
-
-  const user = useCurrentUser();
-
-  const showPlanAlert = useShouldDisableAdvanceSettings();
-
-  if (!showPlanAlert) {
-    return <></>;
-  }
-
-  return (
-    <div className={props.className}>
-      <Alert className="mb-4" type="warning" disableClosing>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Icon element={MdInfoOutline} size={20} />
-
-            <span>
-              {props.message ? props.message : t('start_free_trial_message')}
-            </span>
-          </div>
-
-          {user?.company_user && (
-            <Link to={route('/settings/account_management')}>
-              {t('plan_change')}
-            </Link>
-          )}
-        </div>
-      </Alert>
-    </div>
-  );
+// Every feature is available in this deployment, so the plan/trial upsell
+// alert never renders. The props are kept so existing call sites compile.
+export function AdvancedSettingsPlanAlert(_props: Props) {
+  return null;
 }

@@ -37,6 +37,18 @@ başlatma, uykuya alma veya yeniden dağıtım sonrasında silinebilir. Gerçek 
 verisi veya üretim kullanımı için kalıcı MySQL, Redis, dosya depolama ve yedekleme
 kullanılmalıdır.
 
+## Altyapı sürümü ve marka dosyaları
+
+`backend/` klasörü, açık kaynaklı fatura altyapısının 5.13.47 sürümünün kaynak
+kodunu ve BISAVUNMA değişikliklerini içerir. `Dockerfile` içindeki taban imaj da
+aynı sürüme sabitlenmiştir; backend'in PHP kodu, Blade şablonları ve dil
+dosyaları bu imajın üzerine kopyalanır. Sürüm yükseltirken kaynak kod ile imaj
+etiketi birlikte güncellenmeli ve yeni gelen metinler Türkçeye çevrilmelidir.
+
+Logo, ikon ve favicon dosyaları `frontend/public/brand/` klasöründedir.
+`docker/branding/public/` altındaki görseller, imajdaki eski logo dosyalarının
+yerine yayımlanır.
+
 ## Roller
 
 - **Yönetici:** tüm kullanıcıların hareketlerini, kayıtları ve ayarları görür.

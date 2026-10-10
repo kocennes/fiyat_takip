@@ -414,7 +414,7 @@ function PaymentSchedule() {
             setScheduleErrors(e.response.data);
             toast.dismiss();
           } else {
-            toast.error('error_occurred');
+            toast.error('an_error_occurred');
           }
         })
         .finally(() => {

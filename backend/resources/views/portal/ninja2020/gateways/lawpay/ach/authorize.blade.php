@@ -100,12 +100,12 @@
             var acceptTerms = document.getElementById('accept-terms');
 
             if (!accountHolderName.trim()) {
-                document.getElementById('lawpay_errors').innerHTML = '<div class="alert alert-failure mb-4"><ul><li>Account holder name is required.</li></ul></div>';
+                document.getElementById('lawpay_errors').innerHTML = '<div class="alert alert-failure mb-4"><ul><li>' + @json(ctrans('texts.missing_account_holder_name')) + '</li></ul></div>';
                 return;
             }
 
             if (!acceptTerms.checked) {
-                document.getElementById('lawpay_errors').innerHTML = '<div class="alert alert-failure mb-4"><ul><li>You must accept the ACH authorization terms.</li></ul></div>';
+                document.getElementById('lawpay_errors').innerHTML = '<div class="alert alert-failure mb-4"><ul><li>' + @json(ctrans('texts.bis_accept_ach_terms_required')) + '</li></ul></div>';
                 return;
             }
 
@@ -123,7 +123,7 @@
                 document.getElementById('last_4').value = result.last_four || '';
                 document.getElementById('form_btn').click();
             }).catch(function(error) {
-                var errors = '<div class="alert alert-failure mb-4"><ul><li>' + (error.message || 'Tokenization failed') + '</li></ul></div>';
+                var errors = '<div class="alert alert-failure mb-4"><ul><li>' + (error.message || @json(ctrans('texts.bis_tokenization_failed'))) + '</li></ul></div>';
                 document.getElementById('lawpay_errors').innerHTML = errors;
                 button.disabled = false;
                 button.querySelector('svg').classList.add('hidden');

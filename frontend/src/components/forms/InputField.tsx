@@ -11,6 +11,7 @@
 import classNames from 'classnames';
 import { useMemo, useState } from 'react';
 import { DebounceInput } from 'react-debounce-input';
+import { useTranslation } from 'react-i18next';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { MdClose } from 'react-icons/md';
 import { useColorScheme } from '$app/common/colors';
@@ -46,6 +47,7 @@ interface Props extends CommonProps {
 }
 
 export function InputField(props: Props) {
+  const [t] = useTranslation();
   const colors = useColorScheme();
   const reactSettings = useReactSettings();
 
@@ -187,7 +189,7 @@ export function InputField(props: Props) {
               }
             )}
             onClick={() => props.onValueChange?.('')}
-            aria-label="Clear input"
+            aria-label={t('clear')}
           >
             <MdClose size={14} />
           </button>

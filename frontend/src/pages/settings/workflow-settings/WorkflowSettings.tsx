@@ -49,7 +49,6 @@ export function WorkflowSettings() {
       onCancelClick={onCancel}
       title={t('workflow_settings')}
       breadcrumbs={pages}
-      docsLink="en/advanced-settings/#workflow_settings"
       disableSaveButton={isFormBusy}
     >
       <Card

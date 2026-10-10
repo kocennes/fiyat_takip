@@ -21,9 +21,8 @@ if [ "$*" = 'supervisord -c /etc/supervisor/supervisord.conf' ]; then
         rm -rf /tmp/public/.htaccess /tmp/public/.well-known /tmp/public/*
     fi
 
-    mkdir -p /var/www/html/public/images
-    cp /opt/bisavunma/fiyattakip-logo.svg /var/www/html/public/images/fiyattakip-logo.svg
     rsync -a --exclude index.html /opt/bisavunma/ui/ /var/www/html/public/
+    rsync -a /opt/bisavunma/public/ /var/www/html/public/
 
     chown -R www-data:www-data /var/www/html/public /var/www/html/storage
     find /var/www/html/public /var/www/html/storage -type f -exec chmod 644 {} \;

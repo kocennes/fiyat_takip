@@ -245,10 +245,10 @@
                 </dd>
 
                 <dt class="text-sm font-medium leading-5 text-gray-500">
-                    Network
+                    {{ ctrans('texts.bis_network') }}
                 </dt>
                 <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-                    ACH / Domestic Wire US
+                    {{ ctrans('texts.bis_ach_domestic_wire_us') }}
                 </dd>
 
                 <dt class="text-sm font-medium leading-5 text-gray-500">

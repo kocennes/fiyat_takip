@@ -41,6 +41,6 @@ class ShowPlanSwitchRequest extends FormRequest
 
     protected function failedAuthorization()
     {
-        throw new ClientPortalAuthorizationException('Unable to change plans due to a restriction on this product.', 400);
+        throw new ClientPortalAuthorizationException(ctrans('texts.bis_plan_change_restricted'), 400);
     }
 }

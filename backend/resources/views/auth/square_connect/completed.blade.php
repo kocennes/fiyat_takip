@@ -10,8 +10,7 @@
         </svg>
     </div>
 
-    <p>Connecting your account using Square has been successfully completed.</p>
-    <span>Click <a class="font-semibold hover:underline" href="{{ url($url ?? '/#/settings/company_gateways') }}">here</a> to
-        continue.</span>
+    <p>{{ ctrans('texts.bis_gateway_connect_completed', ['gateway' => 'Square']) }}</p>
+    <span><a class="font-semibold hover:underline" href="{{ url($url ?? '/#/settings/company_gateways') }}">{{ ctrans('texts.bis_click_to_continue') }}</a></span>
 </div>
 @endsection

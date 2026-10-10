@@ -9,25 +9,42 @@ ENV VITE_IS_HOSTED=false \
     VITE_ENABLE_DOCUNINJA=false
 RUN npm run build
 
-FROM invoiceninja/invoiceninja-debian:latest AS app
+# backend/ is the upstream 5.13.47 release source plus the BISAVUNMA changes.
+# The base image must stay on exactly that release: the overlaid PHP, Blade and
+# language files below rely on the vendor libraries and compiled assets that
+# ship inside the image. Upgrade both together.
+FROM invoiceninja/invoiceninja-debian:5.13.47 AS app
 
 USER root
 
-COPY backend/app/Factory/InvoiceFactory.php /var/www/html/app/Factory/InvoiceFactory.php
-COPY backend/app/Factory/QuoteFactory.php /var/www/html/app/Factory/QuoteFactory.php
-COPY backend/app/Console/Commands/CreateAccount.php /var/www/html/app/Console/Commands/CreateAccount.php
-COPY backend/database/seeders/DesignSeeder.php /var/www/html/database/seeders/DesignSeeder.php
-COPY backend/database/migrations/2026_10_09_000000_add_proforma_design.php /var/www/html/database/migrations/
-COPY backend/database/migrations/2026_10_09_000001_set_proforma_as_default_design.php /var/www/html/database/migrations/
-COPY backend/database/migrations/2026_10_09_000002_set_turkish_as_default_language.php /var/www/html/database/migrations/
-COPY backend/resources/views/pdf-designs/proforma.html /var/www/html/resources/views/pdf-designs/proforma.html
-COPY backend/public/images/fiyattakip-logo.svg /opt/bisavunma/fiyattakip-logo.svg
-# The Render entrypoint rebuilds the public asset directory at startup. Keep
-# Laravel's front controller outside that directory so it cannot be removed
-# while copying the branded frontend assets.
-RUN cp /tmp/public/index.php /opt/bisavunma/index.php
+ENV APP_NAME="BISAVUNMA Fiyat Takip" \
+    DEFAULT_LOCALE=tr_TR \
+    MAIL_FROM_NAME="BISAVUNMA Fiyat Takip"
+
+COPY --chown=www-data:www-data backend/app/ /var/www/html/app/
+COPY --chown=www-data:www-data backend/config/ /var/www/html/config/
+COPY --chown=www-data:www-data backend/database/ /var/www/html/database/
+COPY --chown=www-data:www-data backend/lang/ /var/www/html/lang/
+COPY --chown=www-data:www-data backend/resources/views/ /var/www/html/resources/views/
+COPY --chown=www-data:www-data backend/routes/ /var/www/html/routes/
+# Windows checkouts use CRLF line endings; keep the overlay byte-identical to a
+# Linux checkout so local and Render builds behave the same.
+RUN find /var/www/html/app /var/www/html/config /var/www/html/database \
+        /var/www/html/lang /var/www/html/resources/views /var/www/html/routes \
+        -type f \( -name '*.php' -o -name '*.html' -o -name '*.json' -o -name '*.js' \
+        -o -name '*.css' -o -name '*.xml' -o -name '*.xsd' -o -name '*.xsl' \
+        -o -name '*.xslt' -o -name '*.sch' -o -name '*.txt' \) \
+        -exec sed -i 's/\r$//' {} +
+
+# The entrypoints rebuild the public asset directory at startup. Keep Laravel's
+# front controller and the branded assets outside that directory so they cannot
+# be removed while it is refreshed.
+RUN mkdir -p /opt/bisavunma && cp /tmp/public/index.php /opt/bisavunma/index.php
 COPY --from=frontend-build /frontend/dist /opt/bisavunma/ui
-COPY --from=frontend-build /frontend/dist/index.html /var/www/html/resources/views/react/index.blade.php
+COPY --from=frontend-build --chown=www-data:www-data /frontend/dist/index.html /var/www/html/resources/views/react/index.blade.php
+# BISAVUNMA images published under the upstream file names, so any remaining
+# reference to an upstream logo or badge shows the BISAVUNMA brand instead.
+COPY docker/branding/public/ /opt/bisavunma/public/
 COPY docker/app-init.sh /usr/local/bin/app-init.sh
 RUN sed -i 's/\r$//' /usr/local/bin/app-init.sh && chmod 0755 /usr/local/bin/app-init.sh
 

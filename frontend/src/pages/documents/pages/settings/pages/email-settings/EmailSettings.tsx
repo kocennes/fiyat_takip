@@ -102,7 +102,7 @@ function EmailSettings() {
             <div className="flex flex-col">
               <span className="text-sm font-medium">{t('from_name')}</span>
               <span className="text-xs text-gray-500">
-                Custom sender name for outgoing document emails.
+                {t('from_name_help')}
               </span>
             </div>
           }
@@ -111,7 +111,7 @@ function EmailSettings() {
             value={emailFromName}
             onValueChange={setEmailFromName}
             disabled={isFormBusy}
-            placeholder="Your Company Name"
+            placeholder={t('company_name')}
           />
         </Element>
 
@@ -120,7 +120,7 @@ function EmailSettings() {
             <div className="flex flex-col">
               <span className="text-sm font-medium">{t('reply_to_email')}</span>
               <span className="text-xs text-gray-500">
-                Custom reply-to email address for outgoing document emails.
+                {t('reply_to_email_help')}
               </span>
             </div>
           }
@@ -129,7 +129,6 @@ function EmailSettings() {
             value={replyToEmail}
             onValueChange={setReplyToEmail}
             disabled={isFormBusy}
-            placeholder="reply@yourdomain.com"
           />
         </Element>
       </Card>

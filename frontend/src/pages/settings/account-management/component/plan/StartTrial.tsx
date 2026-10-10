@@ -65,10 +65,6 @@ export function StartTrial({ visible, onClose }: PopupProps) {
         <div>
           <p className="text-lg font-bold">{t('free_trial')}</p>
           <p className="text-sm">{t('trial_message')}</p>
-          <p className="text-sm py-2">
-            At the end of your 14 day trial your card will be charged $14/month.
-            Cancel anytime.
-          </p>
         </div>
 
         {methods?.length === 0 ? (

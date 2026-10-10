@@ -113,7 +113,7 @@ export default function Credits() {
   });
 
   return (
-    <Default title={t('credits')} breadcrumbs={pages} docsLink="en/credits/">
+    <Default title={t('credits')} breadcrumbs={pages}>
       <DataTable
         resource="credit"
         endpoint={`/api/v1/credits?include=client${

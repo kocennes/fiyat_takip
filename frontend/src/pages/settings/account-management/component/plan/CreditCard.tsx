@@ -127,7 +127,7 @@ export function CreditCard({ gateway, onDelete }: CreditCardProps) {
 
           <div className="flex items-center gap-2">
             {gateway.is_default ? (
-              <Badge variant="primary">Default</Badge>
+              <Badge variant="primary">{t('default')}</Badge>
             ) : (
               <button
                 type="button"

@@ -15,18 +15,24 @@ import { useCurrentCompany } from './useCurrentCompany';
 
 interface Params {
   fallbackSmallLogo?: boolean;
+  // Use the white BISAVUNMA logo as the fallback (for dark backgrounds).
+  darkBackground?: boolean;
 }
 
 export function useLogo(props?: Params) {
-  const { fallbackSmallLogo } = props || {};
+  const { fallbackSmallLogo, darkBackground } = props || {};
 
   const companyChanges = useCompanyChanges();
   const currentCompany = useCurrentCompany();
 
+  const defaultLogo = darkBackground
+    ? companySettings.logoWhite
+    : companySettings.logo;
+
   return (
     companyChanges?.settings?.company_logo ||
     currentCompany?.settings?.company_logo ||
-    (fallbackSmallLogo ? companySettings.smallLogo : companySettings.logo)
+    (fallbackSmallLogo ? companySettings.smallLogo : defaultLogo)
   );
 }
 

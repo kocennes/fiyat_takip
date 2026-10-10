@@ -13,23 +13,20 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { useFormik } from 'formik';
 import { useAtomValue } from 'jotai';
 import { get } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdRefresh } from 'react-icons/md';
 import { useColorScheme } from '$app/common/colors';
 import { endpoint, isHosted, isSelfHosted } from '$app/common/helpers';
 import { request } from '$app/common/helpers/request';
 import { toast } from '$app/common/helpers/toast/toast';
-import { useAccentColor } from '$app/common/hooks/useAccentColor';
 import { useCurrentAccount } from '$app/common/hooks/useCurrentAccount';
 import { useCurrentCompany } from '$app/common/hooks/useCurrentCompany';
 import { useRefreshCompanyUsers } from '$app/common/hooks/useRefreshCompanyUsers';
 import { ValidationBag } from '$app/common/interfaces/validation-bag';
-import { useStaticsQuery } from '$app/common/queries/statics';
 import { Card, Element } from '$app/components/cards';
-import { Button, InputField, Link } from '$app/components/forms';
+import { Button, InputField } from '$app/components/forms';
 import Toggle from '$app/components/forms/Toggle';
-import { Modal } from '$app/components/Modal';
 import { companySettingsErrorsAtom } from '../../common/atoms';
 import { useHandleCurrentCompanyChangeProperty } from '../../common/hooks/useHandleCurrentCompanyChange';
 import { Disconnect } from './Onboarding';
@@ -40,10 +37,8 @@ export function Preferences() {
   const queryClient = useQueryClient();
 
   const colors = useColorScheme();
-  const statics = useStaticsQuery();
   const company = useCurrentCompany();
   const account = useCurrentAccount();
-  const accentColor = useAccentColor();
 
   const handleChange = useHandleCurrentCompanyChangeProperty();
   const errors = useAtomValue(companySettingsErrorsAtom);
@@ -104,66 +99,8 @@ export function Preferences() {
     },
   });
 
-  const [creditsModalVisible, setCreditsModalVisible] = useState(false);
-
-  const [isLicensePresent] = useState(
-    statics.data?.license_key !== undefined && statics.data?.license_key !== ''
-  );
-
-  useEffect(() => {
-    if (isSelfHosted() && !isLicensePresent && creditsModalVisible) {
-      toast.error(t('white_label_license_not_present')!);
-    }
-  }, [creditsModalVisible]);
-
   return (
     <>
-      <Modal
-        title={t('buy_credits')}
-        visible={creditsModalVisible}
-        onClose={() => setCreditsModalVisible(false)}
-      >
-        <p>{t('peppol_credits_info')}</p>
-
-        <div className="py-2 flex gap-2 flex-col">
-          {isHosted() ? (
-            <Link
-              to={`https://invoiceninja.invoicing.co/client/subscriptions/WJxboqNegw/purchase?account_key=${account?.key}`}
-              external
-            >
-              {t('buy')} (PEPPOL 500)
-            </Link>
-          ) : null}
-
-          {isSelfHosted() && isLicensePresent ? (
-            <Link
-              to={`https://invoiceninja.invoicing.co/client/subscriptions/WJxboqNegw/purchase?license_key=${statics.data?.license_key}`}
-              external
-            >
-              {t('buy')} (PEPPOL 500)
-            </Link>
-          ) : null}
-
-          {isHosted() ? (
-            <Link
-              to={`https://invoiceninja.invoicing.co/client/subscriptions/k8mep0reMy/purchase?account_key=${account?.key}`}
-              external
-            >
-              {t('buy')} (PEPPOL 1000)
-            </Link>
-          ) : null}
-
-          {isSelfHosted() && isLicensePresent ? (
-            <Link
-              to={`https://invoiceninja.invoicing.co/client/subscriptions/k8mep0reMy/purchase?license_key=${statics.data?.license_key}`}
-              external
-            >
-              {t('buy')} (PEPPOL 1000)
-            </Link>
-          ) : null}
-        </div>
-      </Modal>
-
       <Card
         title={`PEPPOL: ${t('preferences')}`}
         className="shadow-sm"
@@ -275,16 +212,6 @@ export function Preferences() {
               <p>{t('total_credits_amount')}:</p>
               <Quota />
             </div>
-
-            <button
-              type="button"
-              onClick={() => setCreditsModalVisible(true)}
-              style={{
-                color: accentColor,
-              }}
-            >
-              {t('buy_credits')}
-            </button>
           </Element>
         )}
       </Card>

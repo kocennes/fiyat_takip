@@ -970,7 +970,7 @@ export function TipTapEditor({
   label,
   disabled,
   parentBoxClassName,
-  placeholder = 'Start typing...',
+  placeholder,
   minHeight = '12.5rem',
 }: TipTapEditorProps) {
   const [t] = useTranslation();
@@ -996,7 +996,7 @@ export function TipTapEditor({
       }),
       CustomParagraph,
       Placeholder.configure({
-        placeholder,
+        placeholder: placeholder ?? t('bis_start_typing'),
       }),
       CustomLink.configure({
         openOnClick: false,
@@ -1187,12 +1187,12 @@ export function TipTapEditor({
   if (!editor) return null;
 
   function getFormatLabel(): string {
-    if (editor.isActive('heading', { level: 1 })) return 'Heading 1';
-    if (editor.isActive('heading', { level: 2 })) return 'Heading 2';
-    if (editor.isActive('heading', { level: 3 })) return 'Heading 3';
-    if (editor.isActive('heading', { level: 4 })) return 'Heading 4';
-    if (editor.isActive('codeBlock')) return 'Preformatted';
-    return 'Paragraph';
+    if (editor.isActive('heading', { level: 1 })) return t('bis_heading_1');
+    if (editor.isActive('heading', { level: 2 })) return t('bis_heading_2');
+    if (editor.isActive('heading', { level: 3 })) return t('bis_heading_3');
+    if (editor.isActive('heading', { level: 4 })) return t('bis_heading_4');
+    if (editor.isActive('codeBlock')) return t('bis_preformatted');
+    return t('bis_paragraph');
   }
 
   const theme: ThemeProps = {
@@ -1215,32 +1215,32 @@ export function TipTapEditor({
 
   const formatItems: DropdownItem[] = [
     {
-      label: t('paragraph'),
+      label: t('bis_paragraph'),
       value: 'paragraph',
       onClick: () => editor.chain().focus().setParagraph().run(),
     },
     {
-      label: t('heading1'),
+      label: t('bis_heading_1'),
       value: 'h1',
       onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
     },
     {
-      label: t('heading2'),
+      label: t('bis_heading_2'),
       value: 'h2',
       onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
     },
     {
-      label: t('heading3'),
+      label: t('bis_heading_3'),
       value: 'h3',
       onClick: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
     },
     {
-      label: t('heading4'),
+      label: t('bis_heading_4'),
       value: 'h4',
       onClick: () => editor.chain().focus().toggleHeading({ level: 4 }).run(),
     },
     {
-      label: t('preformatted'),
+      label: t('bis_preformatted'),
       value: 'pre',
       onClick: () => editor.chain().focus().setCodeBlock().run(),
     },
@@ -1294,43 +1294,43 @@ export function TipTapEditor({
 
   const tableItems: DropdownItem[] = [
     {
-      label: 'Insert table',
+      label: t('bis_insert_table'),
       value: 'insert',
       onClick: () =>
         editor.chain().focus().insertTable({ rows: 3, cols: 3 }).run(),
     },
     {
-      label: 'Add column before',
+      label: t('bis_add_column_before'),
       value: 'addColumnBefore',
       onClick: () => editor.chain().focus().addColumnBefore().run(),
     },
     {
-      label: 'Add column after',
+      label: t('bis_add_column_after'),
       value: 'addColumnAfter',
       onClick: () => editor.chain().focus().addColumnAfter().run(),
     },
     {
-      label: 'Delete column',
+      label: t('bis_delete_column'),
       value: 'deleteColumn',
       onClick: () => editor.chain().focus().deleteColumn().run(),
     },
     {
-      label: 'Add row before',
+      label: t('bis_add_row_before'),
       value: 'addRowBefore',
       onClick: () => editor.chain().focus().addRowBefore().run(),
     },
     {
-      label: 'Add row after',
+      label: t('bis_add_row_after'),
       value: 'addRowAfter',
       onClick: () => editor.chain().focus().addRowAfter().run(),
     },
     {
-      label: 'Delete row',
+      label: t('bis_delete_row'),
       value: 'deleteRow',
       onClick: () => editor.chain().focus().deleteRow().run(),
     },
     {
-      label: 'Delete table',
+      label: t('bis_delete_table'),
       value: 'deleteTable',
       onClick: () => editor.chain().focus().deleteTable().run(),
     },
@@ -1386,7 +1386,7 @@ export function TipTapEditor({
 
         <ToolbarSection>
           <DropdownComponent
-            label="Font"
+            label={t('bis_font')}
             icon={
               <Icon element={FaFont} size={14} style={{ color: colors.$3 }} />
             }
@@ -1644,7 +1644,7 @@ export function TipTapEditor({
       </EditorWrapper>
 
       <Modal
-        title={t('insert_link')}
+        title={t('bis_insert_link')}
         visible={linkModal}
         onClose={() => setLinkModal(false)}
       >

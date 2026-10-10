@@ -8,8 +8,13 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
+import { useTranslation } from 'react-i18next';
 import { RegionComponent } from './RegionComponent';
 
 export function AndorraRegions() {
-  return <RegionComponent regionCode="AD" regionName="Andorra" />;
+  const [t] = useTranslation();
+
+  return (
+    <RegionComponent regionCode="AD" regionName={t('bis_region_andorra')} />
+  );
 }

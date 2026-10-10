@@ -1,5 +1,4 @@
 import { ArrowUpRight, FileText, Package, Plus, Radio, TrendingDown, TrendingUp, Users } from 'react-feather';
-import { BrandLockup } from '$app/components/brand/BrandLockup';
 
 const priceRows = [
   { product: 'RF güç modülü', supplier: 'Anka Elektronik', previous: '₺18.450', current: '₺17.980', trend: 'down', change: '%2,5 düşüş' },
@@ -12,7 +11,11 @@ export function Preview() {
     <div className="min-h-screen bg-[#edf3f7] text-[#071726]">
       <header className="border-b border-white/10 bg-[#071726]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <BrandLockup />
+          <img
+            src="/brand/bisavunma-logo-white.png"
+            alt="BISAVUNMA Fiyat Takip"
+            className="h-10 w-auto"
+          />
           <span className="rounded-full border border-sky-300/25 bg-sky-400/10 px-3 py-1 text-[10px] font-bold tracking-[0.16em] text-sky-200">
             YEREL ÖNİZLEME
           </span>

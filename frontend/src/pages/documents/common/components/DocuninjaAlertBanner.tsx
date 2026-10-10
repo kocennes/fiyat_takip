@@ -8,47 +8,10 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useAtomValue } from 'jotai';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Alert } from '$app/components/Alert';
-import { Button } from '$app/components/forms';
-import { isPaidDocuninjaUserAtom } from '$app/pages/documents/atoms';
-import { UpgradeModal } from './UpgradeModal';
-
+/**
+ * "Upgrade your account" banner of the e-signature module.
+ * Upgrade prompts are not shown in this installation, so it renders nothing.
+ */
 export function DocuninjaAlertBanner() {
-  const [t] = useTranslation();
-
-  const queryClient = useQueryClient();
-
-  const isPaidUser = useAtomValue(isPaidDocuninjaUserAtom);
-
-  const [showUpgradeModal, setShowUpgradeModal] = useState<boolean>(false);
-
-  return (
-    <>
-      {!isPaidUser && (
-        <Alert type="warning" className="mb-4">
-          <div className="flex justify-between items-center">
-            <span>{t('upgrade_account_message')}</span>
-
-            <Button onClick={() => setShowUpgradeModal(true)} behavior="button">
-              {t('upgrade_now')}
-            </Button>
-          </div>
-        </Alert>
-      )}
-      <UpgradeModal
-        visible={showUpgradeModal}
-        onClose={() => setShowUpgradeModal(false)}
-        onPaymentComplete={() => {
-          queryClient.invalidateQueries({
-            queryKey: ['/api/docuninja/login'],
-          });
-          setShowUpgradeModal(false);
-        }}
-      />
-    </>
-  );
+  return null;
 }

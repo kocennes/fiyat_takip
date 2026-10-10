@@ -50,10 +50,12 @@ export default function Create() {
     },
   ];
 
+  const untitledDocument = t('untitled_document') as string;
+
   const [isFormBusy, setIsFormBusy] = useState<boolean>(false);
   const [errors, setErrors] = useState<ValidationBag | undefined>(undefined);
   const [payload, setPayload] = useState<Payload>({
-    description: 'Untitled document',
+    description: untitledDocument,
     'files[]': [],
   });
 
@@ -137,9 +139,9 @@ export default function Create() {
                   ...payload,
                   'files[]': f,
                   description:
-                    payload.description === 'Untitled document'
+                    payload.description === untitledDocument
                       ? f[0]
-                        ? getDocumentNameFromFile(f[0])
+                        ? getDocumentNameFromFile(f[0], untitledDocument)
                         : payload.description
                       : payload.description,
                 })
@@ -158,7 +160,7 @@ export default function Create() {
                         type="button"
                         onClick={() => handleRemoveFile(index)}
                         className="hover:opacity-70 transition-opacity"
-                        aria-label={`Remove ${file.name}`}
+                        aria-label={`${t('remove')} ${file.name}`}
                       >
                         <X size={14} />
                       </button>

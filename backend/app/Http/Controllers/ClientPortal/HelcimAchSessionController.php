@@ -53,7 +53,7 @@ class HelcimAchSessionController extends Controller
             report($e);
 
             return response()->json([
-                'message' => 'Failed to initialize the Helcim ACH checkout. Please try again.',
+                'message' => ctrans('texts.bis_helcim_ach_init_failed'),
             ], 502);
         }
 

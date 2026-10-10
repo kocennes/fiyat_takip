@@ -1,11 +1,20 @@
 {
   "short_name": "BISAVUNMA",
   "name": "BISAVUNMA Fiyat Takip",
+  "description": "BISAVUNMA Fiyat Takip: fiyat, tedarik ve proforma yönetim platformu.",
+  "lang": "tr",
   "icons": [
     {
-      "src": "brand/bisavunma-console.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "brand/bisavunma-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "brand/bisavunma-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "start_url": ".",

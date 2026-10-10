@@ -119,7 +119,7 @@ export function Analytics() {
               <div className="flex">
                 <span>(</span>
                 <Link
-                  to="https://support.google.com/analytics/answer/1037249?hl=en"
+                  to="https://support.google.com/analytics/answer/1037249?hl=tr"
                   external
                   withoutExternalIcon
                 >

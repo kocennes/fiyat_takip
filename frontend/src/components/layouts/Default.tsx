@@ -35,7 +35,6 @@ import { ActivateCompany } from '../banners/ActivateCompany';
 import { EInvoiceCredits } from '../banners/EInvoiceCredits';
 import { VerifyEmail } from '../banners/VerifyEmail';
 import { VerifyPhone } from '../banners/VerifyPhone';
-import { Feedback } from '../Feedback';
 import { Notifications } from '../Notifications';
 import { useNavigation } from './common/navigation';
 import { DesktopSidebar } from './components/DesktopSidebar';
@@ -146,7 +145,7 @@ export function Default(props: Props) {
             className="px-4 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
             onClick={() => setSidebarOpen(true)}
           >
-            <span className="sr-only">Open sidebar</span>
+            <span className="sr-only">{t('show_menu')}</span>
             <MenuIcon color={colors.$3} />
           </button>
 
@@ -262,8 +261,6 @@ export function Default(props: Props) {
           </div>
         </main>
       </div>
-
-      <Feedback />
     </div>
   );
 }

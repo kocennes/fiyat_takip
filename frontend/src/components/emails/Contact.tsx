@@ -111,7 +111,7 @@ export function Contact(props: Props) {
       </Element>
 
       {ccContacts.length > 0 && (
-        <Element leftSide={t('cc')}>
+        <Element leftSide={t('bis_cc')}>
           <div>
             {ccContacts.map((contact, index) => (
               <ContactLine key={index} contact={contact} />

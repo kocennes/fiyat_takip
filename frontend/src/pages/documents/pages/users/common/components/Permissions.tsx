@@ -281,7 +281,12 @@ export default function Permissions(props?: DocuninjaUserProps) {
       </Element>
 
       {Object.values(MODELS).map((model) => (
-        <Element key={model.name} leftSide={t(model.name)}>
+        <Element
+          key={model.name}
+          leftSide={t(
+            model.name === 'blueprints' ? 'bis_blueprints' : model.name
+          )}
+        >
           <div className="grid grid-cols-5">
             {basicPermissionTypes.map((permissionId) => (
               <div

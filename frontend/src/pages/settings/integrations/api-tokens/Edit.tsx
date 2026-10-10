@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useColorScheme } from '$app/common/colors';
-import { date, endpoint, isHosted } from '$app/common/helpers';
+import { date, endpoint } from '$app/common/helpers';
 import { request } from '$app/common/helpers/request';
 import { route } from '$app/common/helpers/route';
 import { toast } from '$app/common/helpers/toast/toast';
@@ -137,7 +137,7 @@ export function Edit() {
             style={{ borderColor: colors.$24 }}
             headerStyle={{ borderColor: colors.$20 }}
           >
-            <Element leftSide="Status">
+            <Element leftSide={t('status')}>
               {!apiToken.is_deleted && !apiToken.archived_at && (
                 <Badge variant="primary">{t('active')}</Badge>
               )}
@@ -170,15 +170,6 @@ export function Edit() {
             <Element leftSide={t('created_on')}>
               {date(apiToken.created_at, dateFormat)}
             </Element>
-
-            {isHosted() && (
-              <Element leftSide={t('endpoint')}>
-                <CopyToClipboard
-                  className="break-all"
-                  text="https://invoicing.co"
-                />
-              </Element>
-            )}
           </Card>
         )}
       </Settings>

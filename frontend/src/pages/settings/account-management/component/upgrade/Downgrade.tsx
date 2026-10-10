@@ -25,10 +25,6 @@ export function Downgrade({ docuninja_num_users = 0 }: Props) {
     const account = useCurrentAccount();
     const refresh = useRefreshCompanyUsers();
 
-    const openContactModal = () => {
-        window.dispatchEvent(new CustomEvent('open-contact-modal'));
-    };
-
     async function handleDowngradeConfirm() {
         setIsLoading(true);
         
@@ -112,15 +108,6 @@ export function Downgrade({ docuninja_num_users = 0 }: Props) {
                         <p className="text-white hover:text-red-600">{t('change_docuninja_plan')}</p>
                     </button>
                 )}
-            </div>
-            <div className="flex flex-col text-center justify-between mt-6">
-                <button
-                    type="button"
-                    className="text-sm underline cursor-pointer hover:text-gray-600"
-                    onClick={openContactModal}
-                >
-                    Need help? Please use the in app message feature to raise a support request.
-                </button>
             </div>
         </div>
 

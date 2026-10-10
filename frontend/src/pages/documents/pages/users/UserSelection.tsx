@@ -37,7 +37,7 @@ interface UserWithDocuNinjaStatus extends InvoiceNinjaUser {
 }
 
 export default function UserSelection() {
-  useTitle('grant_docuninja_access');
+  useTitle('add_user');
   const [t] = useTranslation();
   const navigate = useNavigate();
 
@@ -259,14 +259,6 @@ export default function UserSelection() {
               ) : availableUsers.length === 0 ? (
                 <div className="px-6 py-10 text-center">
                   <div className="text-gray-500">{t('max_users_reached')}</div>
-                  <div className="text-center py-4 space-x-2">
-                    <span>{t('user_limit_reached')}</span>
-                    <span className="text-blue-500">
-                      <Link to="/settings/account_management">
-                        {t('upgrade')}
-                      </Link>
-                    </span>
-                  </div>
                 </div>
               ) : (
                 <div className="divide-y">

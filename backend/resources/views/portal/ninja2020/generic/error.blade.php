@@ -7,20 +7,15 @@
         <div class="m-auto md:w-1/3 lg:w-1/2">
             <div class="flex flex-col items-center">
 
-                @if($account && !$account->isPaid())
+                @if($company)
                     <div>
-                        <img src="{{ asset('images/invoiceninja-black-logo-2.png') }}"
-                             class="border-b border-gray-100 h-18 pb-4" alt="Invoice Ninja logo">
-                    </div>
-                @elseif($company)
-                    <div>
-                        <img src="{{ $company->present()->logo()  }}"
-                             class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ $company->present()->name() }} logo">
+                        <img src="{{ \App\Http\ViewComposers\PortalBranding::logo($company) }}"
+                             class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ $company->present()->name() }}">
                     </div>
                 @else
                     <div>
-                        <img src="{{ asset('images/invoiceninja-black-logo-2.png') }}"
-                             class="mx-auto border-b border-gray-100 h-18 pb-4" alt="Invoice Ninja logo">
+                        <img src="{{ \App\Http\ViewComposers\PortalBranding::defaultLogo() }}"
+                             class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
                     </div>
                 @endif
 

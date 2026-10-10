@@ -525,7 +525,7 @@ export default function Calendar() {
                                 className="text-[10px] text-right"
                                 style={{ color: colors.$17 }}
                               >
-                                +{overflowCount} {t('more_count')}
+                                +{overflowCount} {t('more')}
                               </div>
                             </Tippy>
                           )}

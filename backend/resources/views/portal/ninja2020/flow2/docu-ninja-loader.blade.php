@@ -29,9 +29,9 @@
             <div class="text-center space-y-2">
                 <div class="flex items-center justify-center space-x-2">
                     <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span class="text-lg font-medium text-gray-900">Loading DocuNinja...</span>
+                    <span class="text-lg font-medium text-gray-900">{{ ctrans('texts.bis_signing_loading') }}</span>
                 </div>
-                <p class="text-sm text-gray-500">Preparing document for signing</p>
+                <p class="text-sm text-gray-500">{{ ctrans('texts.bis_signing_preparing') }}</p>
             </div>
             
         </div>
@@ -49,8 +49,8 @@
                 </div>
                 
                 <div class="text-center">
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">DocuNinja Ready!</h3>
-                    <p class="text-sm text-gray-600">Switching to DocuNinja component...</p>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">{{ ctrans('texts.bis_signing_ready') }}</h3>
+                    <p class="text-sm text-gray-600">{{ ctrans('texts.bis_signing_opening') }}</p>
                 </div>
                 
                 {{-- Loading indicator for transition --}}

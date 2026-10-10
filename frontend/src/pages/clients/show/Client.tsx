@@ -125,7 +125,7 @@ export default function Client() {
   };
 
   useEffect(() => {
-    setDocumentTitle(client?.display_name || 'view_client');
+    setDocumentTitle(client?.display_name || t('view_client'));
 
     return () => {
       setIsPurgeOrMergeActionCalled(false);

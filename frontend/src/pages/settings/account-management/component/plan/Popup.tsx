@@ -146,7 +146,7 @@ export function Popup({ visible, onClose }: PopupProps) {
   return (
     <>
       <Modal
-        title="Change plan"
+        title={t('change_plan')}
         visible={changePlanVisible}
         onClose={() => setChangePlanVisible(false)}
         size="regular"
@@ -483,19 +483,6 @@ export function Popup({ visible, onClose }: PopupProps) {
                       {t('upgrade_popup_premium_business_plus_pricing')}
                     </h2>
                   </div>
-                </div>
-
-                <div className="flex flex-col space-y-3">
-                  <a
-                    href="mailto:concierge@invoiceninja.com"
-                    type="button"
-                    className="border py-3 px-4 rounded text-center"
-                    style={{ backgroundColor: accentColor, color: colors.$1 }}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {t('contact_us')}!
-                  </a>
                 </div>
               </div>
 

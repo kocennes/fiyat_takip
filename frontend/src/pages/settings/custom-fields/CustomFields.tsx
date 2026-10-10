@@ -60,7 +60,6 @@ export function CustomFields() {
     <Settings
       title={t('custom_fields')}
       breadcrumbs={pages}
-      docsLink="en/advanced-settings/#custom_fields"
       onSaveClick={save}
       onCancelClick={cancel}
       disableSaveButton={isFormBusy}

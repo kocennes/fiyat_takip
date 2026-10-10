@@ -201,7 +201,6 @@ interface StepProps {
 function PlanCheck({ onContinue }: StepProps) {
   const account = useCurrentAccount();
   const isWhitelabelled = useIsWhitelabelled();
-  const accentColor = useAccentColor();
 
   const { t } = useTranslation();
 
@@ -237,10 +236,6 @@ function PlanCheck({ onContinue }: StepProps) {
     },
   });
 
-  const buyWhitelabelUrl =
-    import.meta.env.VITE_WHITELABEL_INVOICE_URL ||
-    'https://invoiceninja.invoicing.co/client/subscriptions/O5xe7Rwd7r/purchase';
-
   return (
     <div className="space-y-5">
       <p className="text-lg">{isSelfHosted() ? t('license') : t('plan')}</p>
@@ -249,27 +244,11 @@ function PlanCheck({ onContinue }: StepProps) {
         <div>
           {t('peppol_whitelabel_warning')} <br /> <br />
           {t('add_license_to_env')}
-          &nbsp;
-          <a
-            href="https://invoiceninja.github.io/docs/self-host/env-variables/"
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: accentColor }}
-          >
-            {t('learn_more')}
-          </a>
           <form
             className="mt-4"
             id="checkLicenseForm"
             onSubmit={form.handleSubmit}
           ></form>
-          {!isWhitelabelled ? (
-            <div className="mt-2">
-              <Link to={buyWhitelabelUrl} external>
-                {t('purchase_license')}
-              </Link>
-            </div>
-          ) : null}
         </div>
       ) : null}
 
@@ -362,40 +341,13 @@ function Token({ onContinue }: StepProps) {
 
 function BuyCredits({ onContinue }: StepProps) {
   const { t } = useTranslation();
-  const colors = useColorScheme();
 
   return (
     <div>
       <p className="text-lg">{t('credits')}</p>
       <p>{t('peppol_credits_info')}</p>
 
-      <div className="my-3 space-y-2">
-        <a
-          href="https://invoiceninja.invoicing.co/client/subscriptions/WJxboqNegw/purchase"
-          target="_blank"
-          rel="noreferrer"
-          className="rounded w-full p-3 text-left border flex justify-between items-center hover:underline"
-          style={{
-            backgroundColor: colors.$1,
-          }}
-        >
-          {t('buy')} (PEPPOL 500)
-        </a>
-
-        <a
-          href="https://invoiceninja.invoicing.co/client/subscriptions/k8mep0reMy/purchase"
-          target="_blank"
-          rel="noreferrer"
-          className="rounded w-full p-3 text-left border flex justify-between items-center hover:underline"
-          style={{
-            backgroundColor: colors.$1,
-          }}
-        >
-          {t('buy')} (PEPPOL 1000)
-        </a>
-      </div>
-
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-3">
         <Button behavior="button" type="primary" onClick={() => onContinue()}>
           {t('continue')}
         </Button>
@@ -452,7 +404,7 @@ function Form({ onContinue, businessType, isSingapore }: FormProps) {
           const corppassUrl = response.data?.corppass_url;
 
           if (corppassUrl) {
-            toast.success('Redirecting to CorpPass for verification...');
+            toast.success('bis_redirecting_to_corppass');
             window.location.href = corppassUrl;
             return;
           }
@@ -513,9 +465,9 @@ function Form({ onContinue, businessType, isSingapore }: FormProps) {
             <InputField
               value={form.values.id_number}
               onChange={form.handleChange}
-              label="UEN (Unique Entity Number)"
+              label={t('bis_uen_label')}
               id="id_number"
-              placeholder="e.g. 12345678A"
+              placeholder={t('bis_uen_placeholder')}
               errorMessage={get(errors, 'errors.id_number')}
             />
 
@@ -651,7 +603,7 @@ function VatCheck({
   if (isSingapore) {
     return (
       <div>
-        <p className="text-lg">Select your entity classification</p>
+        <p className="text-lg">{t('bis_select_entity_classification')}</p>
 
         <div className="my-5 space-y-2">
           <button
@@ -712,7 +664,7 @@ function VatCheck({
 
   return (
     <div>
-      <p className="text-lg">Are you registered for VAT?</p>
+      <p className="text-lg">{t('bis_registered_for_vat_question')}</p>
 
       <div className="my-5 space-y-2">
         <button
@@ -723,7 +675,7 @@ function VatCheck({
           }}
           onClick={() => setBusinessType('business')}
         >
-          <p>Yes, I have a VAT number</p>
+          <p>{t('bis_yes_have_vat_number')}</p>
 
           <Check
             size={18}
@@ -743,7 +695,7 @@ function VatCheck({
           }}
           onClick={() => setBusinessType('individual')}
         >
-          <p>No, I am an individual</p>
+          <p>{t('bis_no_i_am_individual')}</p>
 
           <Check
             size={18}

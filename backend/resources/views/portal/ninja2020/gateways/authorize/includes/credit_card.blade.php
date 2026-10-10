@@ -5,7 +5,7 @@
             placeholder="{{ ctrans('texts.name')}}">
         <input type="text" class="input w-full" id="number" placeholder="0000 0000 0000 0000" name="card_number" />
         <div class="flex items-center gap-2">
-        <input type="text" class="input w-1/2" id="date" placeholder="MM/YY">
+        <input type="text" class="input w-1/2" id="date" placeholder="{{ ctrans('texts.bis_expiry_placeholder') }}">
         <input type="text" class="input w-1/2" id="cvv" placeholder="000">
         </div>
 

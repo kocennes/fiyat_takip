@@ -93,7 +93,7 @@ class RegisterRequest extends FormRequest
             $company = Account::query()->first()->default_company;
 
             if (! $company->client_can_register) {
-                abort(403, 'This page is restricted');
+                abort(403, ctrans('texts.bis_page_restricted'));
             }
 
             return $company;
@@ -121,6 +121,6 @@ class RegisterRequest extends FormRequest
             }
         }
 
-        abort(400, 'Register request not found.');
+        abort(400, ctrans('texts.bis_register_request_not_found'));
     }
 }

@@ -14,11 +14,8 @@ import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { useColorScheme } from '$app/common/colors';
 import { endpoint, isHosted, isSelfHosted } from '$app/common/helpers';
 import { request } from '$app/common/helpers/request';
-import { route } from '$app/common/helpers/route';
 import { toast } from '$app/common/helpers/toast/toast';
 import { useCurrentCompany } from '$app/common/hooks/useCurrentCompany';
 import { useInjectCompanyChanges } from '$app/common/hooks/useInjectCompanyChanges';
@@ -32,7 +29,6 @@ import { Button, InputField } from '$app/components/forms';
 import { LanguageSelector } from '$app/components/LanguageSelector';
 import { Modal } from '$app/components/Modal';
 import { Spinner } from '$app/components/Spinner';
-import { GatewayTypeIcon } from '$app/pages/clients/show/components/GatewayTypeIcon';
 import { useHandleCurrentCompanyChangeProperty } from '../../common/hooks/useHandleCurrentCompanyChange';
 import { Logo } from '../components';
 
@@ -41,18 +37,11 @@ interface Props {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Div = styled.div`
-  &:hover {
-    background-color: ${(props) => props.theme.hoverColor};
-  }: 
-`;
-
 export function CompanyEdit(props: Props) {
   const [t] = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const colors = useColorScheme();
   const company = useCurrentCompany();
   const companyChanges = useInjectCompanyChanges();
 
@@ -125,33 +114,6 @@ export function CompanyEdit(props: Props) {
       .finally(() => setIsFormBusy(false));
   };
 
-  const handleConnectPaymentGateway = (
-    gateway: 'stripe_connect' | 'paypal_ppcp'
-  ) => {
-    toast.processing();
-
-    request('POST', endpoint('/api/v1/one_time_token'), {
-      context: gateway,
-    }).then((response) => {
-      let url = 'stripe/signup/:token';
-
-      if (gateway === 'paypal_ppcp') {
-        url = 'paypal?hash=:token';
-      }
-
-      window
-        .open(
-          route(`https://invoicing.co/${url}`, {
-            token: response.data.hash,
-          }),
-          '_blank'
-        )
-        ?.focus();
-
-      toast.dismiss();
-    });
-  };
-
   const handleSave = async (isWizard: boolean) => {
     if (!isFormBusy) {
       if (isEqual(company, companyChanges)) {
@@ -174,7 +136,7 @@ export function CompanyEdit(props: Props) {
       title={
         stepIndex !== 1
           ? stepIndex === 0
-            ? t('welcome_to_invoice_ninja')
+            ? t('bis_welcome_to_app')
             : t('accept_payments_online')
           : ''
       }
@@ -238,29 +200,6 @@ export function CompanyEdit(props: Props) {
 
         {stepIndex === 2 && (
           <div className="flex flex-col items-center">
-            <Div
-              className="flex w-full justify-center h-28 cursor-pointer"
-              theme={{ hoverColor: colors.$5 }}
-              onClick={() => handleConnectPaymentGateway('stripe_connect')}
-            >
-              <GatewayTypeIcon name="stripe" style={{ width: '64%' }} />
-            </Div>
-
-            <Div
-              className="flex w-full justify-center h-28 cursor-pointer"
-              theme={{ hoverColor: colors.$5 }}
-              onClick={() => handleConnectPaymentGateway('paypal_ppcp')}
-            >
-              <GatewayTypeIcon
-                name="paypal_ppcp"
-                style={{
-                  width: '38%',
-                  transform: 'scale(1.7)',
-                  pointerEvents: 'none',
-                }}
-              />
-            </Div>
-
             <Button
               behavior="button"
               className="w-full mt-4"

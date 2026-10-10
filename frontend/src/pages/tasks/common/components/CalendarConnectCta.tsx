@@ -11,7 +11,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaCalendarCheck, FaGoogle, FaMicrosoft } from 'react-icons/fa';
-import { MdInfoOutline } from 'react-icons/md';
 import { useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useColorScheme } from '$app/common/colors';
@@ -20,7 +19,6 @@ import {
   isDevCalendarEnabled,
   isHosted,
 } from '$app/common/helpers';
-import { route } from '$app/common/helpers/route';
 import { toast } from '$app/common/helpers/toast/toast';
 import { useCurrentUser } from '$app/common/hooks/useCurrentUser';
 import { useIsPaid } from '$app/common/hooks/usePaidOrSelfhost';
@@ -31,11 +29,9 @@ import {
   useDisconnectCalendar,
 } from '$app/common/queries/calendar';
 import { updateUser } from '$app/common/stores/slices/user';
-import { Alert } from '$app/components/Alert';
 import { Dropdown } from '$app/components/dropdown/Dropdown';
 import { DropdownElement } from '$app/components/dropdown/DropdownElement';
-import { Button, Link } from '$app/components/forms';
-import { Icon } from '$app/components/icons/Icon';
+import { Button } from '$app/components/forms';
 import { Modal } from '$app/components/Modal';
 
 export function CalendarConnectCta() {
@@ -167,29 +163,11 @@ export function CalendarConnectCta() {
 
   if (showPlanAlert) {
     return (
-      <div className="flex flex-col space-y-3">
-        <Alert type="warning" disableClosing>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Icon element={MdInfoOutline} size={20} />
-
-              <span>{t('start_free_trial_message')}</span>
-            </div>
-
-            {user?.company_user && (
-              <Link to={route('/settings/account_management')}>
-                {t('plan_change')}
-              </Link>
-            )}
-          </div>
-        </Alert>
-
-        <Dropdown
-          disabled
-          label={t('connect_calendar') as string}
-          labelButtonBorderColor={colors.$5}
-        />
-      </div>
+      <Dropdown
+        disabled
+        label={t('connect_calendar') as string}
+        labelButtonBorderColor={colors.$5}
+      />
     );
   }
 

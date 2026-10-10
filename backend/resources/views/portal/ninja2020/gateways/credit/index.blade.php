@@ -44,7 +44,7 @@
                                 </dd>
                             </div>
                         <div class="bg-white px-4 py-5 flex justify-end">
-                            <button form="credit-payment" class="button button-primary bg-primary inline-flex items-center">Pay with credit</button>
+                            <button form="credit-payment" class="button button-primary bg-primary inline-flex items-center">{{ ctrans('texts.pay_with_credit') }}</button>
                         </div>
                 </div>
             </div>

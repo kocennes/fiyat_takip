@@ -80,7 +80,7 @@
             var expYear = document.getElementById('lawpay_exp_year').value.replace(/[^\d]/g, '');
 
             if (!expMonth || !expYear) {
-                document.getElementById('lawpay_errors').innerHTML = '<div class="alert alert-failure mb-4"><ul><li>Please enter a valid expiration date.</li></ul></div>';
+                document.getElementById('lawpay_errors').innerHTML = '<div class="alert alert-failure mb-4"><ul><li>' + @json(ctrans('texts.invalid_expiry')) + '</li></ul></div>';
                 return;
             }
 
@@ -102,7 +102,7 @@
                 document.getElementById('card_brand').value = result.card_type || '';
                 document.getElementById('form_btn').click();
             }).catch(function(error) {
-                var errors = '<div class="alert alert-failure mb-4"><ul><li>' + (error.message || 'Tokenization failed') + '</li></ul></div>';
+                var errors = '<div class="alert alert-failure mb-4"><ul><li>' + (error.message || @json(ctrans('texts.bis_tokenization_failed'))) + '</li></ul></div>';
                 document.getElementById('lawpay_errors').innerHTML = errors;
                 button.disabled = false;
                 button.querySelector('svg').classList.add('hidden');

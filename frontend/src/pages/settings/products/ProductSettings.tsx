@@ -67,7 +67,6 @@ export function ProductSettings() {
       onCancelClick={onCancel}
       title={t('product_settings')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#product_settings"
       disableSaveButton={isFormBusy}
     >
       <Card

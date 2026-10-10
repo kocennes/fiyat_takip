@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { ShortcutId } from '$app/common/constants/keyboard-shortcuts';
 import { useEnabled } from '$app/common/guards/guards/enabled';
 import { formatBinding } from '$app/common/helpers/keyboard-shortcuts';
-import { isHosted } from '$app/common/helpers';
 import { useHasPermission } from '$app/common/hooks/permissions/useHasPermission';
 import { useCurrentCompany } from '$app/common/hooks/useCurrentCompany';
 import { useCurrentCompanyUser } from '$app/common/hooks/useCurrentCompanyUser';
@@ -34,6 +33,11 @@ import { NavigationItem } from '../components/DesktopSidebar';
 
 const $cache = atom<NavigationItem[] | null>(null);
 const $navigationLanguage = atom<string | null>(null);
+
+// The e-signature documents module is an opt-in add-on; keep it out of the
+// navigation unless the build explicitly enables it.
+const isDocumentSigningEnabled =
+  import.meta.env.VITE_ENABLE_DOCUNINJA === 'true';
 
 export function useNavigation() {
   const [t, i18n] = useTranslation();
@@ -308,10 +312,10 @@ export function useNavigation() {
         icon: Plus,
         to: '/docuninja/create',
         label: t('new_document'),
-        visible: isHosted() || import.meta.env.VITE_ENABLE_DOCUNINJA === 'true',
+        visible: isDocumentSigningEnabled,
         tooltipLabel: tooltipFor('create_document'),
       },
-      visible: isHosted() || import.meta.env.VITE_ENABLE_DOCUNINJA === 'true',
+      visible: isDocumentSigningEnabled,
       subOptions: [
         {
           name: t('templates'),

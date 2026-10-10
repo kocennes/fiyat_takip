@@ -117,15 +117,15 @@ export function SystemLog() {
     { id: 321, name: t('gocardless') },
     { id: 322, name: `Razorpay` },
     { id: 323, name: t('paypal') },
-    { id: 400, name: `Quota exceeded` },
-    { id: 401, name: `Upstream failure` },
-    { id: 500, name: `Webhook response` },
-    { id: 600, name: `PDF Failure` },
-    { id: 601, name: `PDF Sucess` },
-    { id: 701, name: `Modified` },
-    { id: 702, name: `Deleted` },
-    { id: 800, name: `Login Success` },
-    { id: 801, name: `Login Failure` },
+    { id: 400, name: t('quota_exceeded') },
+    { id: 401, name: t('bis_external_service_failure') },
+    { id: 500, name: t('webhook_response') },
+    { id: 600, name: t('bis_pdf_failure') },
+    { id: 601, name: t('pdf_success') },
+    { id: 701, name: t('modified') },
+    { id: 702, name: t('deleted') },
+    { id: 800, name: t('login_success') },
+    { id: 801, name: t('login_failure') },
   ];
 
   const getCategory = (id: number | undefined) => {
@@ -133,19 +133,19 @@ export function SystemLog() {
       (category: Category) => category.id === id
     );
 
-    return category ? category.name : 'Undefined Category';
+    return category ? category.name : t('unknown');
   };
 
   const getEvent = (id: number | undefined) => {
     const event = events.find((event: Category) => event.id === id);
 
-    return event ? event.name : 'Undefined Event';
+    return event ? event.name : t('unknown');
   };
 
   const getType = (id: number | undefined) => {
     const type = types.find((type: any) => type.id === id);
 
-    return type ? type.name : 'Undefined Type';
+    return type ? type.name : t('unknown');
   };
 
   const getLog = (src: string) => {

@@ -119,6 +119,8 @@ export function ProjectSlider() {
     currentProject && currentProject.budgeted_hours > 0
   );
 
+  const hoursUnit = t('bis_hours_short');
+
   const onClose = () => {
     setIsSliderVisible(false);
     setProject(null);
@@ -184,14 +186,18 @@ export function ProjectSlider() {
             <div className="grid grid-cols-2 gap-3 px-6">
               <StatCard
                 label={t('logged')}
-                value={`${formatNumber(currentProject.current_hours || 0)} h`}
+                value={`${formatNumber(
+                  currentProject.current_hours || 0
+                )} ${hoursUnit}`}
               />
 
               <StatCard
                 label={t('budgeted')}
                 value={
                   hasBudget
-                    ? `${formatNumber(currentProject.budgeted_hours)} h`
+                    ? `${formatNumber(
+                        currentProject.budgeted_hours
+                      )} ${hoursUnit}`
                     : '—'
                 }
               />
@@ -203,12 +209,12 @@ export function ProjectSlider() {
                     ? `${formatNumber(
                         currentProject.budgeted_hours -
                           (currentProject.current_hours || 0)
-                      )} h`
+                      )} ${hoursUnit}`
                     : '—'
                 }
               />
 
-              <StatCard label={t('projected')} value="—" />
+              <StatCard label={t('forecast')} value="—" />
             </div>
 
             <Divider withoutPadding borderColor={colors.$20} />

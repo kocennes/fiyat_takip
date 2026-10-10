@@ -213,11 +213,11 @@ export function EnhancedPreview({
             const displayStr = String(cell.display_value || '');
 
             if (displayStr === 'true') {
-              return 'Yes';
+              return t('yes');
             }
 
             if (displayStr === 'false') {
-              return 'No';
+              return t('no');
             }
 
             return `"${displayStr || ''}"`;
@@ -232,7 +232,7 @@ export function EnhancedPreview({
     const url = URL.createObjectURL(blob);
 
     link.setAttribute('href', url);
-    link.setAttribute('download', 'report.csv');
+    link.setAttribute('download', `${t('report')}.csv`);
     link.click();
   };
 
@@ -248,7 +248,7 @@ export function EnhancedPreview({
       elements.push(
         <Tr key={`group-${groupName}`} style={{ backgroundColor: colors.$5 }}>
           <Td colSpan={preview.columns.length}>
-            <strong>{groupName}</strong> ({rows.length} items)
+            <strong>{groupName}</strong> ({rows.length} {t('items')})
           </Td>
         </Tr>
       );
@@ -296,10 +296,10 @@ export function EnhancedPreview({
               value={groupByColumn || ''}
               onChange={(e) => setGroupByColumn(e.target.value || null)}
             >
-              <option value="">No grouping</option>
+              <option value="">{t('none')}</option>
               {preview.columns.map((col) => (
                 <option key={col.identifier} value={col.identifier}>
-                  Group by {col.display_value}
+                  {t('group_by')}: {col.display_value}
                 </option>
               ))}
             </select>

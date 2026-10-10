@@ -4,7 +4,7 @@ ctrans('texts.preferences')) @section('body')
     <div class="m-auto md:w-1/3 lg:w-1/5">
         <div class="flex flex-col items-center">
             <img
-                src="{{ $company->present()->logo() }}"
+                src="{{ \App\Http\ViewComposers\PortalBranding::logo($company) }}"
                 class="border-gray-100 h-18 pb-4"
                 alt="{{ $company->present()->name() }}"
             />

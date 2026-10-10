@@ -11,6 +11,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { t } from 'i18next';
 
 export type TimeLogType = [number, number, string, boolean];
 export type TimeLogsType = TimeLogType[];
@@ -62,7 +63,7 @@ export function calculateHours(log: string, includeRunning = false) {
       .padStart(2, '0')}:${totalSecondsRemaining.toString().padStart(2, '0')}`;
   }
 
-  return `${totalHours}h`;
+  return `${totalHours} ${t('bis_hours_short')}`;
 }
 
 interface CalculateTimeOptions {

@@ -11,6 +11,7 @@
 import classNames from 'classnames';
 import { merge } from 'lodash';
 import React, { CSSProperties, isValidElement, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import Select, { StylesConfig } from 'react-select';
 import { useColorScheme } from '$app/common/colors';
 import CommonProps from '../../common/interfaces/common-props.interface';
@@ -44,6 +45,7 @@ export interface SelectProps extends CommonProps {
 }
 
 export function SelectField(props: SelectProps) {
+  const [t] = useTranslation();
   const colors = useColorScheme();
 
   const {
@@ -183,7 +185,8 @@ export function SelectField(props: SelectProps) {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           options={$entries}
-          placeholder={props.placeholder}
+          placeholder={props.placeholder ?? t('bis_select_placeholder')}
+          noOptionsMessage={() => t('bis_no_options')}
           defaultValue={defaultEntry}
           value={clearAfterSelection ? { label: '', value: '' } : selectedEntry}
           onChange={(v) => {

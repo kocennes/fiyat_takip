@@ -24,28 +24,19 @@
 
     <div class="alert alert-failure mb-4" hidden id="errors"></div>
     @component('portal.ninja2020.components.general.card-element-single', ['title' => 'SEPA', 'show_title' => false])
-    <p>By clicking submit, you accept this Agreement and authorize {{ $company->present()->name() }} to debit the
-        specified bank account for any amount owed for charges arising from the use of services and/or purchase of
-        products.</p>
+    <p>{{ ctrans('texts.bis_acss_pad_1', ['company' => $company->present()->name()]) }}</p>
     <br>
-    <p>Payments will be debited from the specified account when an invoice becomes due.</p>
+    <p>{{ ctrans('texts.bis_acss_pad_2') }}</p>
     <br>
-    <p>Where a scheduled debit date is not a business day, {{ $company->present()->name() }} will debit on the next
-        business day.</p>
+    <p>{{ ctrans('texts.bis_acss_pad_3', ['company' => $company->present()->name()]) }}</p>
     <br>
-    <p>You agree that any payments due will be debited from your account immediately upon acceptance of this Agreement
-        and that confirmation of this Agreement may be sent within 5 (five) days of acceptance of this Agreement. You
-        further agree to be notified of upcoming debits up to 1 (one) day before payments are collected.</p>
+    <p>{{ ctrans('texts.bis_acss_pad_4') }}</p>
     <br>
-    <p>You have certain recourse rights if any debit does not comply with this agreement. For example, you have the
-        right to receive reimbursement for any debit that is not authorized or is not consistent with this PAD
-        Agreement. To obtain more information on your recourse rights, contact your financial institution.</p>
+    <p>{{ ctrans('texts.bis_acss_pad_5') }}</p>
     <br>
-    <p>You may amend or cancel this authorization at any time by providing the merchant with thirty (30) days notice at
-        {{ $company->owner()->email }}. To obtain a sample cancellation form, or further information on cancelling a PAD
-        agreement, please contact your financial institution.</p>
+    <p>{{ ctrans('texts.bis_acss_pad_6', ['email' => $company->owner()->email]) }}</p>
     <br>
-    <p>{{ $company->present()->name() }} partners with Stripe to provide payment processing.</p>
+    <p>{{ ctrans('texts.bis_acss_pad_7', ['company' => $company->present()->name()]) }}</p>
 
 
     <div>

@@ -11,6 +11,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { X } from 'react-feather';
+import { useTranslation } from 'react-i18next';
 import { useColorScheme } from '$app/common/colors';
 import { useReactSettings } from '$app/common/hooks/useReactSettings';
 import { CompanySwitcher } from '$app/components/CompanySwitcher';
@@ -26,6 +27,7 @@ interface Props {
 }
 
 export function MobileSidebar(props: Props) {
+  const [t] = useTranslation();
   const colors = useColorScheme();
   const reactSettings = useReactSettings();
 
@@ -77,14 +79,14 @@ export function MobileSidebar(props: Props) {
                   className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                   onClick={() => props.setSidebarOpen(false)}
                 >
-                  <span className="sr-only">Close sidebar</span>
+                  <span className="sr-only">{t('hide_menu')}</span>
                   <X className="text-white" />
                 </button>
               </div>
             </Transition.Child>
 
             <div className="flex-shrink-0 flex flex-col gap-2 px-0 py-3 border-b min-h-[5.5rem]" style={{ borderColor: 'rgba(141, 180, 201, 0.22)', color: colors.$3 }}>
-              <BrandLockup collapsed={isMiniSidebar} />
+              <BrandLockup collapsed={isMiniSidebar} background="dark" />
               {!isMiniSidebar && <CompanySwitcher />}
             </div>
 

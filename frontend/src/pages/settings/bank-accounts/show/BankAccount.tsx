@@ -50,7 +50,6 @@ export function BankAccount() {
     <Settings
       title={t('bank_account')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#bank_account_details"
       navigationTopRight={
         accountDetails && (
           <ResourceActions

@@ -15,7 +15,7 @@
         <!-- Error: {{ session('error') }} -->
 
         @if (config('services.analytics.tracking_id'))
-            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122229484-1"></script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.analytics.tracking_id') }}"></script>
             <script>
                 window.dataLayer = window.dataLayer || [];
 
@@ -39,11 +39,11 @@
 
         <!-- Title -->
         @auth('contact')
-            <title>@yield('meta_title', '') — {{ auth()->guard('contact')->user()->user->account->isPaid() ? auth()->guard('contact')->user()->company->present()->name() : 'Invoice Ninja' }}</title>
+            <title>@yield('meta_title', '') — {{ auth()->guard('contact')->user()->company->present()->name() }}</title>
         @endauth
 
         @guest
-            <title>@yield('meta_title', '') — {{ config('app.name') }}</title>
+            <title>@yield('meta_title', '') — {{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}</title>
         @endguest
 
         <meta charset="utf-8">
@@ -74,9 +74,8 @@
 
         <!-- Styles -->
         @vite('resources/sass/app.scss')
-        @if(auth()->guard('contact')->user() && !auth()->guard('contact')->user()->user->account->isPaid())
-        {{-- <link href="{{ mix('favicon.png') }}" rel="shortcut icon" type="image/png"> --}}
-        @endif
+        <link href="{{ asset('favicon.ico') }}" rel="icon" type="image/x-icon">
+        <link href="{{ asset('brand/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
         <link rel="canonical" href="{{ config('ninja.app_url') }}/{{ request()->path() }}"/>
 
@@ -121,12 +120,20 @@
                             "background": "#f1d600"
                         },
                     },
+                    @if(\App\Http\ViewComposers\PortalBranding::privacyPolicyUrl())
                     "content": {
-                        "href": "{{ config('ninja.privacy_policy_url.hosted') }}",
+                        "href": "{{ \App\Http\ViewComposers\PortalBranding::privacyPolicyUrl() }}",
                         "message": "{{ ctrans('texts.cookie_message')}}",
                         "dismiss": "{{ ctrans('texts.got_it')}}",
                         "link": "{{ ctrans('texts.learn_more')}}",
                     }
+                    @else
+                    "showLink": false,
+                    "content": {
+                        "message": "{{ ctrans('texts.cookie_message')}}",
+                        "dismiss": "{{ ctrans('texts.got_it')}}",
+                    }
+                    @endif
                 })}
             );
         </script>

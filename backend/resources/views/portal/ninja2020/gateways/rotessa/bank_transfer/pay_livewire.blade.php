@@ -24,7 +24,7 @@
                 <input type="radio" data-token="{{ $token->token }}" name="payment-type"
                             class="form-radio cursor-pointer toggle-payment-with-token" />
                         <span class="ml-1">
-                            {{ App\Models\GatewayType::getAlias($token->gateway_type_id) }} ({{ $token->meta->brand ?? 'Bank Transfer' }})
+                            {{ App\Models\GatewayType::getAlias($token->gateway_type_id) }} ({{ $token->meta->brand ?? ctrans('texts.bank_transfer') }})
                              &nbsp; {{ ctrans('texts.account_number') }}#: {{ $token->meta?->last4 ?? '' }}
                         </span>
                     </label>

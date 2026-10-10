@@ -80,7 +80,7 @@ class InvitationController extends Controller
     private function genericRouter(string $entity, string $invitation_key)
     {
         if (!in_array($entity, ['invoice', 'credit', 'quote', 'recurring_invoice'])) {
-            return response()->json(['message' => 'Invalid resource request']);
+            return response()->json(['message' => ctrans('texts.bis_invalid_resource_request')]);
         }
 
         $is_silent = 'false';
@@ -197,7 +197,7 @@ class InvitationController extends Controller
     private function returnRawPdf(string $entity, string $invitation_key)
     {
         if (!in_array($entity, ['invoice', 'credit', 'quote', 'recurring_invoice'])) {
-            return response()->json(['message' => 'Invalid resource request']);
+            return response()->json(['message' => ctrans('texts.bis_invalid_resource_request')]);
         }
 
         $key = $entity . '_id';
@@ -210,7 +210,7 @@ class InvitationController extends Controller
                                     ->firstOrFail();
 
         if (!$invitation) {
-            return response()->json(["message" => "no record found"], 400);
+            return response()->json(["message" => ctrans('texts.record_not_found')], 400);
         }
 
         $file_name = $invitation->{$entity}->numberFormatter() . '.pdf';
@@ -411,7 +411,7 @@ class InvitationController extends Controller
             return redirect()->route('client.invoice.show', ['invoice' => $this->encodePrimaryKey($invitation->invoice_id)]);
         }
 
-        abort(404, "Invoice not found");
+        abort(404, ctrans('texts.invoice_not_found'));
     }
 
     public function unsubscribe(Request $request, string $entity, string $invitation_key)
@@ -436,7 +436,7 @@ class InvitationController extends Controller
             return abort(404);
         }
 
-        $data['logo'] = $invite->company->present()->logo();
+        $data['logo'] = \App\Http\ViewComposers\PortalBranding::logo($invite->company);
 
         return $this->render('generic.unsubscribe', $data);
     }

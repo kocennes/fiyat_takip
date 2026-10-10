@@ -28,7 +28,15 @@ interface Props {
   formatter: AnalyticsValueFormatter;
 }
 
+const HEALTH_STATUS_LABELS: Record<string, string> = {
+  green: 'bis_health_green',
+  amber: 'bis_health_amber',
+  red: 'bis_health_red',
+};
+
 export function ProjectHealthHeader({ health, formatter }: Props) {
+  const [t] = useTranslation();
+
   const colors = useColorScheme();
 
   if (!health) {
@@ -46,7 +54,13 @@ export function ProjectHealthHeader({ health, formatter }: Props) {
         </span>
       )}
 
-      {status && <Badge variant={status as BadgeVariant}>{status}</Badge>}
+      {status && (
+        <Badge variant={status as BadgeVariant}>
+          {HEALTH_STATUS_LABELS[status]
+            ? t(HEALTH_STATUS_LABELS[status])
+            : status}
+        </Badge>
+      )}
     </div>
   );
 }
@@ -59,7 +73,9 @@ export function ProjectHealthSummary({ health, formatter }: Props) {
 
   if (!health) {
     return (
-      <AnalyticsEmptyState>{t('no_project_health_data')}</AnalyticsEmptyState>
+      <AnalyticsEmptyState>
+        {t('bis_no_project_health_data')}
+      </AnalyticsEmptyState>
     );
   }
 
@@ -68,7 +84,7 @@ export function ProjectHealthSummary({ health, formatter }: Props) {
   if (!indicatorRows.length) {
     return (
       <AnalyticsEmptyState>
-        {t('no_project_health_indicators')}
+        {t('bis_no_project_health_indicators')}
       </AnalyticsEmptyState>
     );
   }

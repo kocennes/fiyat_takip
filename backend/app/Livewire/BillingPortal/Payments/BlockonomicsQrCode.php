@@ -48,7 +48,7 @@ class BlockonomicsQrCode extends Component
 
             $this->qr_code_svg = $this->getPaymentQrCodeRaw($qrString);
         } catch (\Exception $e) {
-            $this->error_message = 'Error generating QR code';
+            $this->error_message = ctrans('texts.bis_qr_code_error');
         } finally {
             $this->is_loading = false;
         }

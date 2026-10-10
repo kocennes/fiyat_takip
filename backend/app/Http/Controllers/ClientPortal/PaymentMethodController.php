@@ -188,6 +188,6 @@ class PaymentMethodController extends Controller
             return $client_contact->client->getBankTransferGateway(true); //Required to allow rotessa to be used when adding a payment method.
         }
 
-        abort(404, 'Gateway not found.');
+        abort(404, ctrans('texts.bis_gateway_not_found'));
     }
 }

@@ -132,7 +132,7 @@ export function MarkdownEditor(props: Props) {
               'preview',
               'help',
               'wordcount',
-              // 'mceCodeEditor': https://github.com/invoiceninja/invoiceninja/issues/11060
+              // 'mceCodeEditor' is intentionally not enabled.
               'emoticons',
             ],
             toolbar: [

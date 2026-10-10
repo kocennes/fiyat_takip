@@ -172,7 +172,7 @@ class Login extends Component
             return;
         }
 
-        session()->flash('message', 'These credentials do not match our records.');
+        session()->flash('message', ctrans('texts.invalid_credentials'));
     }
 
     public function mount()

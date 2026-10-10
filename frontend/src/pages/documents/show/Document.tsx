@@ -109,7 +109,6 @@ export default function Document() {
     <Default
       title={document?.description || documentTitle}
       breadcrumbs={pages}
-      docsLink="en/documents"
       navigationTopRight={
         <div className="flex">
           <Button

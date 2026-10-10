@@ -151,7 +151,7 @@ export function UploadImport(props: Props) {
 
     if (isImportFileTypeZip) {
       if (!importSettings && !importData) {
-        toast.error('settings_or_data');
+        toast.error('bis_settings_or_data');
         return;
       } else {
         endPointUrl = '/api/v1/import_json?';

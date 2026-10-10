@@ -18,12 +18,11 @@ import { Bell } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { GoDotFill } from 'react-icons/go';
 import { useColorScheme } from '$app/common/colors';
-import { date, isHosted, isSelfHosted, trans } from '$app/common/helpers';
+import { date, isSelfHosted, trans } from '$app/common/helpers';
 import { route } from '$app/common/helpers/route';
 import { useCompanyTimeFormat } from '$app/common/hooks/useCompanyTimeFormat';
 import { useCurrentCompanyDateFormats } from '$app/common/hooks/useCurrentCompanyDateFormats';
 import { useCurrentCompanyUser } from '$app/common/hooks/useCurrentCompanyUser';
-import { useReactSettings } from '$app/common/hooks/useReactSettings';
 import { $refetch } from '$app/common/hooks/useRefetch';
 import { useReplaceVariables } from '$app/common/hooks/useReplaceTranslationVariables';
 import { useSockets } from '$app/common/hooks/useSockets';
@@ -92,7 +91,6 @@ export function Notifications() {
 
   const sockets = useSockets();
   const colors = useColorScheme();
-  const reactSettings = useReactSettings();
   const companyUser = useCurrentCompanyUser();
   const { timeFormat } = useCompanyTimeFormat();
   const { dateFormat } = useCurrentCompanyDateFormats();
@@ -465,16 +463,14 @@ export function Notifications() {
   });
 
   useEffect(() => {
-    if (
-      isSelfHosted() &&
-      !reactSettings.preferences.enable_public_notifications
-    ) {
+    // The broadcast news channels are operated by the upstream service. A
+    // self-hosted installation never subscribes to them.
+    if (isSelfHosted()) {
       return;
     }
 
     if (sockets) {
-      const channelName = isHosted() ? 'general_hosted' : 'general_selfhosted';
-      const channel = sockets.subscribe(channelName);
+      const channel = sockets.subscribe('general_hosted');
 
       channel.bind(
         'App\\Events\\General\\GenericMessage',
@@ -498,12 +494,11 @@ export function Notifications() {
         channel.unbind('App\\Events\\General\\GenericMessage');
       };
     }
-  }, [sockets, reactSettings.preferences.enable_public_notifications]);
+  }, [sockets]);
 
-  if (
-    isSelfHosted() &&
-    !reactSettings.preferences.enable_public_notifications
-  ) {
+  // Self-hosted installations have no realtime notification feed (it relies on
+  // the upstream socket service), so the bell is not shown.
+  if (isSelfHosted()) {
     return null;
   }
 

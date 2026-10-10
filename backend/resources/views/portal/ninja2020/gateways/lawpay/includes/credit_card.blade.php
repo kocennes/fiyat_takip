@@ -5,8 +5,8 @@
             placeholder="{{ ctrans('texts.name')}}">
         <div id="lawpay_card_number" class="input w-full" style="height: 40px; padding: 8px;"></div>
         <div class="flex items-center gap-2">
-            <input type="text" class="input w-1/3" id="lawpay_exp_month" placeholder="MM" maxlength="2">
-            <input type="text" class="input w-1/3" id="lawpay_exp_year" placeholder="YYYY" maxlength="4">
+            <input type="text" class="input w-1/3" id="lawpay_exp_month" placeholder="{{ ctrans('texts.bis_month_placeholder') }}" maxlength="2">
+            <input type="text" class="input w-1/3" id="lawpay_exp_year" placeholder="{{ ctrans('texts.bis_year_placeholder') }}" maxlength="4">
             <div id="lawpay_cvv" class="input w-1/3" style="height: 40px; padding: 8px;"></div>
         </div>
     </div>

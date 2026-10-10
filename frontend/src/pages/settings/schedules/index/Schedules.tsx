@@ -29,7 +29,6 @@ export function Schedules() {
   return (
     <Settings
       title={documentTitle}
-      docsLink="en/advanced-settings/#schedules"
       breadcrumbs={pages}
     >
       <DataTable

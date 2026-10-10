@@ -48,7 +48,7 @@ export function AURegions() {
 
   return (
     <>
-      <Element leftSide="Australia" key="AU">
+      <Element leftSide={t('bis_region_australia')} key="AU">
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-4">
             <SelectField

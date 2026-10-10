@@ -10,6 +10,7 @@
 
 import classNames from 'classnames';
 import { ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useColorScheme } from '$app/common/colors';
 import { useReactSettings } from '$app/common/hooks/useReactSettings';
 import CommonProps from '../../common/interfaces/common-props.interface';
@@ -26,13 +27,14 @@ interface Props extends CommonProps {
 }
 
 export function Radio(props: Props) {
+  const [t] = useTranslation();
   const colors = useColorScheme();
 
   const reactSettings = useReactSettings();
 
   return (
     <fieldset>
-      <legend className="sr-only">Notification method</legend>
+      <legend className="sr-only">{t('options')}</legend>
       <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
         {props.options.map((option) => (
           <div

@@ -21,7 +21,7 @@ import { useTableColumns } from './common/hooks/useTableColumns';
 import { EditBlueprintModal } from './edit/components/EditBlueprintModal';
 
 export default function Blueprints() {
-  useTitle('blueprints');
+  useTitle('templates');
 
   const [t] = useTranslation();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);

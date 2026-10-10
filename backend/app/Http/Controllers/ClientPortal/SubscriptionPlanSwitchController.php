@@ -54,6 +54,6 @@ class SubscriptionPlanSwitchController extends Controller
 
     public function not_availabe()
     {
-        abort(404, 'Not Available');
+        abort(404, ctrans('texts.bis_not_available'));
     }
 }

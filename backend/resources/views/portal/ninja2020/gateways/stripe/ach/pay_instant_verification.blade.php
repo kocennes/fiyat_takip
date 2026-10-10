@@ -42,7 +42,7 @@
     @else
 
     @component('portal.ninja2020.components.general.card-element-single', ['title' => 'ACH', 'show_title' => false])
-        <span>Pay with a new bank account.</span>
+        <span>{{ ctrans('texts.bis_pay_with_new_bank_account') }}</span>
         <button type="button" class="button button-primary bg-primary" id="new-bank">{{ ctrans('texts.new_bank_account') }}</button>
 
     @endcomponent

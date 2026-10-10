@@ -2,7 +2,7 @@
     <div class="col-span-8 bg-gray-50 flex flex-col max-h-100px items-center min-h-screen">
         <div class="w-full p-4 md:max-w-3xl">
             <div class="w-full mb-4">
-                <img class="object-scale-down" style="max-height: 100px;"src="{{ $this->subscription->company->present()->logo }}" alt="{{ $this->subscription->company->present()->name }}">
+                <img class="object-scale-down" style="max-height: 100px;" src="{{ \App\Http\ViewComposers\PortalBranding::logo($this->subscription->company) }}" alt="{{ $this->subscription->company->present()->name }}">
                 <h1 id="billing-page-company-logo" class="text-3xl font-bold tracking-wide mt-6  border-b-2">
                 {{ $this->subscription->name }}
                 </h1>
@@ -57,7 +57,7 @@
                             <p class="text-gray-500 w-3/4"></p>
                             <div class="flex place-content-end">
                                 @if($this->subscription->use_inventory_management && $product->in_stock_quantity == 0)
-                                <p class="text-sm font-light text-red-500 text-right mr-2 mt-2">Out of stock</p>
+                                <p class="text-sm font-light text-red-500 text-right mr-2 mt-2">{{ ctrans('texts.out_of_stock') }}</p>
                                 @else
                                 <p class="text-sm font-light text-gray-700 text-right mr-2 mt-2">{{ ctrans('texts.qty') }}</p>
                                 @endif
@@ -158,7 +158,7 @@
                                 <p class="text-gray-500 w-3/4"></p>
                                 <div class="flex place-content-end">
                                     @if($this->subscription->use_inventory_management && $product->in_stock_quantity == 0)
-                                    <p class="w-full text-sm font-light text-red-500 text-right mr-2 mt-2">Out of stock</p>
+                                    <p class="w-full text-sm font-light text-red-500 text-right mr-2 mt-2">{{ ctrans('texts.out_of_stock') }}</p>
                                     @else
                                     <p class="text-sm font-light text-gray-700 text-right mr-2 mt-2">{{ ctrans('texts.qty') }}</p>
                                     @endif
@@ -202,7 +202,7 @@
                                 <p class="text-gray-500 w-3/4"></p>
                                 <div class="flex place-content-end">
                                     @if($this->subscription->use_inventory_management && $product->in_stock_quantity == 0)
-                                    <p class="w-full text-sm font-light text-red-500 text-right mr-2 mt-2">Out of stock</p>
+                                    <p class="w-full text-sm font-light text-red-500 text-right mr-2 mt-2">{{ ctrans('texts.out_of_stock') }}</p>
                                     @else
                                     <p class="text-sm font-light text-gray-700 text-right mr-2 mt-2">{{ ctrans('texts.qty') }}</p>
                                     @endif

@@ -10,8 +10,6 @@
 
 import { useTranslation } from 'react-i18next';
 import { MdWarning } from 'react-icons/md';
-import reactStringReplace from 'react-string-replace';
-import { Link } from '$app/components/forms';
 import { Tooltip } from '$app/components/Tooltip';
 
 interface Props {
@@ -24,19 +22,7 @@ export function UserUnsubscribedTooltip(props?: Props) {
 
   return (
     <Tooltip
-      tooltipElement={reactStringReplace(
-        t('user_unsubscribed') as string,
-        ':link',
-        () => (
-          <Link
-            className="lowercase text-xs"
-            to="https://invoiceninja.github.io/docs/hosted/hosted-mail/#handling-spam--contacts-unsubscribing-from-your-emails"
-            external
-          >
-            {t('link')}.
-          </Link>
-        )
-      )}
+      tooltipElement={<span>{t('bis_user_unsubscribed')}</span>}
       width="auto"
       placement="top"
     >

@@ -56,6 +56,9 @@ class NinjaPlanController extends Controller
 
     public function index(string $contact_key, string $account_or_company_key)
     {
+        // BISAVUNMA: the upstream SaaS plan / trial pages are never offered on this installation.
+        abort_unless(\App\Utils\Ninja::isHosted(), 404);
+
         MultiDB::findAndSetDbByCompanyKey($account_or_company_key);
         $company = Company::query()->where('company_key', $account_or_company_key)->first();
 
@@ -83,6 +86,8 @@ class NinjaPlanController extends Controller
 
     public function trial()
     {
+        abort_unless(\App\Utils\Ninja::isHosted(), 404);
+
         $contact = Auth::guard('contact')->user();
         $client = $contact->client;
 
@@ -142,6 +147,8 @@ class NinjaPlanController extends Controller
 
     public function trial_confirmation(Request $request): JsonResponse
     {
+        abort_unless(\App\Utils\Ninja::isHosted(), 404);
+
         $validated = $request->validate([
             'payment_intent_id' => ['required', 'string', 'starts_with:pi_'],
         ]);
@@ -371,6 +378,8 @@ class NinjaPlanController extends Controller
 
     public function trialConfirmed(): RedirectResponse|View
     {
+        abort_unless(\App\Utils\Ninja::isHosted(), 404);
+
         if (! request()->session()->pull('ninja_plan_trial_confirmed', false)) {
             return redirect()->route('client.plan');
         }
@@ -912,6 +921,8 @@ class NinjaPlanController extends Controller
 
     public function plan()
     {
+        abort_unless(\App\Utils\Ninja::isHosted(), 404);
+
         // return $this->trial();
         //harvest the current plan
         $data = [];

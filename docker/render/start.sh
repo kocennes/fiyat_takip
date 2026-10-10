@@ -56,10 +56,9 @@ if [ "$(ls -A /tmp/public)" ]; then
     rm -rf /var/www/html/public/.htaccess /var/www/html/public/.well-known /var/www/html/public/*
     cp -r /tmp/public/* /tmp/public/.htaccess /tmp/public/.well-known /var/www/html/public/
 fi
-mkdir -p /var/www/html/public/images
 install -m 0644 /opt/bisavunma/index.php /var/www/html/public/index.php
-cp /opt/bisavunma/fiyattakip-logo.svg /var/www/html/public/images/fiyattakip-logo.svg
 rsync -a --exclude index.html /opt/bisavunma/ui/ /var/www/html/public/
+rsync -a /opt/bisavunma/public/ /var/www/html/public/
 chown -R www-data:www-data /var/www/html/public /var/www/html/storage
 
 if [ -z "${APP_KEY:-}" ]; then
@@ -72,6 +71,7 @@ fi
 
 runuser -u www-data -- php artisan migrate --force
 runuser -u www-data -- php artisan cache:clear
+runuser -u www-data -- php artisan view:clear
 runuser -u www-data -- php artisan ninja:design-update
 
 if [ "$(runuser -u www-data -- php artisan tinker --execute='echo Schema::hasTable("accounts") && !App\Models\Account::query()->exists();')" = "1" ]; then

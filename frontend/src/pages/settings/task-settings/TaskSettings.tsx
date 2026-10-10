@@ -92,7 +92,6 @@ export function TaskSettings() {
       onCancelClick={onCancel}
       title={t('task_settings')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#task_settings"
       disableSaveButton={isFormBusy}
     >
       <Card

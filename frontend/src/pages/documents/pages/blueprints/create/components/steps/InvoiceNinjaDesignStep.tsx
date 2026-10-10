@@ -89,7 +89,7 @@ export function InvoiceNinjaDesignStep({
       onComplete(response.data.data.id);
     } catch (error) {
       // console.error('Error creating blueprint:', error);
-      toast.error('Error creating blueprint:');
+      toast.error('bis_template_create_failed');
     } finally {
       setIsLoading(false);
     }

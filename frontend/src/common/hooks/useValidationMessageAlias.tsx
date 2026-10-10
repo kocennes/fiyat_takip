@@ -8,34 +8,13 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
-import { useTranslation } from 'react-i18next';
-import { Link } from '$app/components/forms';
-
 interface Params {
   entity?: 'client';
 }
-export function useValidationMessageAlias(params?: Params) {
-  const [t] = useTranslation();
 
-  const { entity } = params || {};
-
-  return (property: string, message: string[]) => {
-    if (property === 'id' && entity === 'client') {
-      return (
-        <div className="inline-flex flex-col justify-center">
-          <div className="flex items-center space-x-2">
-            <span>{t('clients_limit')}!</span>
-
-            <Link className="underline" to="/settings/account_management">
-              {t('unlock_unlimited_clients')}!
-            </Link>
-          </div>
-
-          <span>{message}</span>
-        </div>
-      );
-    }
-
-    return message;
-  };
+// Upstream replaced the hosted-plan client limit error with an "upgrade your
+// plan" prompt here. This installation has no plans, so validation messages
+// are shown exactly as the server returns them.
+export function useValidationMessageAlias(_params?: Params) {
+  return (_property: string, message: string[]) => message;
 }

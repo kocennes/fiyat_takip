@@ -101,7 +101,7 @@
                     var session = await response.json();
 
                     if (!response.ok || !session.checkout_token || !session.secret_token) {
-                        throw new Error(session.message || 'Unable to initialize Helcim ACH checkout.');
+                        throw new Error(session.message || @json(ctrans('texts.bis_helcim_ach_init_failed')));
                     }
 
                     checkoutToken = session.checkout_token;
@@ -112,7 +112,7 @@
                     window.appendHelcimPayIframe(checkoutToken);
                 } catch (error) {
                     console.error(error);
-                    window.alert(error.message || 'Unable to initialize Helcim ACH checkout.');
+                    window.alert(error.message || @json(ctrans('texts.bis_helcim_ach_init_failed')));
                     this.disabled = false;
                 }
             }

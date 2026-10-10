@@ -248,7 +248,7 @@ class BillingPortalPurchase extends Component
             $attempt = Auth::guard('contact')->attempt(['email' => $this->email, 'password' => $this->password, 'company_id' => $this->subscription->company_id]);
 
             if (! $attempt) {
-                return session()->flash('message', 'These credentials do not match our records.');
+                return session()->flash('message', ctrans('texts.invalid_credentials'));
             }
 
             $this->dispatch('update-csrf', token: csrf_token());

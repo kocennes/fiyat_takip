@@ -25,7 +25,6 @@ import { classNames } from '../../common/helpers';
 import { companySettingsErrorsAtom } from '../../pages/settings/common/atoms';
 import { SelectField } from '../forms';
 import { Icon } from '../icons/Icon';
-import { Sparkle } from '../icons/Sparkle';
 import { XMark } from '../icons/XMark';
 import { useSettingsRoutes } from './common/hooks';
 import { Default } from './Default';
@@ -149,7 +148,10 @@ export function Settings(props: Props) {
               ))}
           </SelectField>
 
-          <nav className="space-y-1 hidden lg:block" aria-label="Sidebar">
+          <nav
+            className="space-y-1 hidden lg:block"
+            aria-label={t('basic_settings')}
+          >
             {basic.map(
               (item) =>
                 item.enabled && (
@@ -177,16 +179,6 @@ export function Settings(props: Props) {
               <span style={{ color: colors.$17 }}>
                 {t('advanced_settings')}
               </span>
-
-              <div className="flex space-x-0.5 items-center text-xs py-1 px-2 bg-[#2176FF26] rounded">
-                <div>
-                  <Sparkle size="1rem" color="#2176FF" />
-                </div>
-
-                <span className="font-medium" style={{ color: '#2176FF' }}>
-                  {t('pro')}
-                </span>
-              </div>
             </div>
           )}
 
@@ -206,7 +198,10 @@ export function Settings(props: Props) {
               ))}
           </SelectField>
 
-          <nav className="space-y-1 hidden lg:block" aria-label="Sidebar">
+          <nav
+            className="space-y-1 hidden lg:block"
+            aria-label={t('advanced_settings')}
+          >
             {advanced.map((item, index) => (
               <div key={index}>
                 {item.enabled && (

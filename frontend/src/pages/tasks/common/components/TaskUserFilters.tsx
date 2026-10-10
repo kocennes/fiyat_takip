@@ -83,7 +83,7 @@ export function TaskUserFilter({ state }: Props) {
       <ComboboxAsync<User>
         inputOptions={{
           value: state.userId || null,
-          placeholder: t('filter_by_user') ?? 'Filter by user…',
+          placeholder: t('filter_by_user') as string,
         }}
         endpoint={endpoint('/api/v1/users?status=active')}
         entryOptions={{
@@ -113,7 +113,7 @@ export function TaskProjectFilter({ state }: Props) {
       <ComboboxAsync<Project>
         inputOptions={{
           value: state.projectId || null,
-          placeholder: t('filter_by_project') ?? 'Filter by project…',
+          placeholder: t('filter_by_project') as string,
         }}
         endpoint={endpoint('/api/v1/projects?status=active')}
         entryOptions={{

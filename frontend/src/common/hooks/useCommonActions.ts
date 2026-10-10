@@ -107,7 +107,7 @@ export function useAllCommonActions() {
       { value: 'mark_sent', label: t('mark_sent') },
       { value: 'convert_to_expense', label: t('convert_to_expense') },
       { value: 'add_to_inventory', label: t('add_to_inventory') },
-      { value: 'view_expense', label: `${t('view')} ${t('expense')}` },
+      { value: 'view_expense', label: t('bis_view_expense') },
       { value: 'vendor_portal', label: t('vendor_portal') },
       { value: 'clone_to', label: t('clone_to') },
       { value: 'run_template', label: t('run_template') },

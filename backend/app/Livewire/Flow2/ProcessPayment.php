@@ -77,7 +77,7 @@ class ProcessPayment extends Component
         } else {
             
             if (! $responder_data['payload']['company_gateway']) {
-                throw new PaymentFailed('Gateway no longer available', 400);
+                throw new PaymentFailed(ctrans('texts.bis_gateway_no_longer_available'), 400);
             }
 
             $driver = $responder_data['payload']['company_gateway']

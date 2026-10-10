@@ -160,7 +160,7 @@ export function Connect() {
                   <path fill="#ffba08" d="M12 12h10v10H12z"></path>
                 </svg>
 
-                <p style={{ color: '#000' }}>Log in with Microsoft</p>
+                <p style={{ color: '#000' }}>{t('microsoft_sign_in')}</p>
               </SignInProviderButton>
             </Element>
           </div>
@@ -216,7 +216,7 @@ export function Connect() {
           </Element>
 
           {!freePlan() && (
-            <Element leftSide="Email">
+            <Element leftSide={t('email')}>
               {user?.oauth_user_token ? (
                 <Button
                   type="minimal"

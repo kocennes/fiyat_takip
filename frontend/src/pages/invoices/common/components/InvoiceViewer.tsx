@@ -10,6 +10,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { request } from '$app/common/helpers/request';
 import { toast } from '$app/common/helpers/toast/toast';
 import { Spinner } from '$app/components/Spinner';
@@ -34,6 +35,7 @@ interface Props {
 export const android = Boolean(navigator.userAgent.match(/Android/i));
 
 export function InvoiceViewer(props: Props) {
+  const [t] = useTranslation();
   const queryClient = useQueryClient();
 
   const { renderAsHTML } = props;
@@ -108,9 +110,9 @@ export function InvoiceViewer(props: Props) {
   if (android) {
     return (
       <p>
-        Unable to preview PDF. &nbsp;
+        {t('bis_unable_to_preview_pdf')} &nbsp;
         <a ref={linkRef} style={{ textDecoration: 'underline' }}>
-          Click to download it.
+          {t('bis_click_to_download')}
         </a>
       </p>
     );

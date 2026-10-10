@@ -23,7 +23,6 @@ import { InputField } from '../../components/forms/InputField';
 import { Link } from '../../components/forms/Link';
 import { ForgotPasswordValidation } from './common/ValidationInterface';
 import { Header } from './components/Header';
-import { HostedLinks } from './components/HostedLinks';
 
 interface Response {
   message: string;
@@ -62,7 +61,10 @@ export function RecoverPassword() {
           if (error.response?.status === 422) {
             setErrors(error.response?.data as ForgotPasswordValidation);
           } else if (error.response?.status === 429) {
-            setMessage({ message: 'Too many requests.', status: false });
+            setMessage({
+              message: t('too_many_requests') as string,
+              status: false,
+            });
             setIsDisabled(true);
             setTimeout(() => setIsDisabled(false), 30000);
           } else {
@@ -117,12 +119,6 @@ export function RecoverPassword() {
             {isHosted() && <Link to="/login">{t('login')}</Link>}
           </div>
         </div>
-
-        {isHosted() && (
-          <div className="bg-white mx-4 max-w-md w-full rounded md:shadow-lg mt-4">
-            <HostedLinks />
-          </div>
-        )}
       </div>
     </div>
   );

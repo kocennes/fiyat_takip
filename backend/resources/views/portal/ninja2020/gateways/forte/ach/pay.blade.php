@@ -25,7 +25,7 @@
     <div id="forte_errors"></div>
 
     @component('portal.ninja2020.components.general.card-element', ['title' => ctrans('texts.payment_type')])
-        Bank Transfer
+        {{ ctrans('texts.bank_transfer') }}
     @endcomponent
 
     @include('portal.ninja2020.gateways.includes.payment_details')

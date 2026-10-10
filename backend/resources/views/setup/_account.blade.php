@@ -4,7 +4,7 @@
             {{ ctrans('texts.user_details') }}
         </h3>
         <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
-            .. and let's create first account!
+            {{ ctrans('texts.bis_setup_create_first_account') }}
         </p>
     </div>
     <div>

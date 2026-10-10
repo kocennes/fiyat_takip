@@ -114,7 +114,7 @@ export default function Payments() {
   });
 
   return (
-    <Default title={t('payments')} breadcrumbs={pages} docsLink="en/payments/">
+    <Default title={t('payments')} breadcrumbs={pages}>
       <DataTable
         resource="payment"
         columns={columns}

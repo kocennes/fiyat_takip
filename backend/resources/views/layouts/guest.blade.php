@@ -2,11 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
 
-    <!-- Source: https://github.com/invoiceninja/invoiceninja -->
     <!-- Error: {{ session('error') }} -->
 
     @if (config('services.analytics.tracking_id'))
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122229484-1"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.analytics.tracking_id') }}"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -23,12 +22,10 @@
     @endif
 
     <meta charset="utf-8">
-    <title>@yield('meta_title', 'Invoice Ninja') | {{ config('app.name') }}</title>
+    <title>@yield('meta_title', \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME) | {{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}</title>
     <meta name="description" content="@yield('meta_description')"/>
 
-    @if(auth()->guard('contact')->user() && !auth()->guard('contact')->user()->user->account->isPaid())
-        <link href="{{ asset('favicon.png') }}" rel="shortcut icon" type="image/png">
-    @endif
+    <link href="{{ asset('favicon.ico') }}" rel="icon" type="image/x-icon">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">

@@ -42,15 +42,15 @@
 
 <div class="flex flex-col justify-center items-center mt-10" id="container-fastlink">
     <div class="mb-4">
-        @if($account && !$account->isPaid())
+        @if(isset($company) && !is_null($company))
           <div class="max-h-28">
-              <img src="{{ asset('images/invoiceninja-black-logo-2.png') }}"
-                   class="border-b border-gray-100 h-18 pb-4" alt="Invoice Ninja logo">
+              <img src="{{ \App\Http\ViewComposers\PortalBranding::logo($company) }}"
+                   class="mx-auto border-b border-gray-100 h-18 pb-4" style="max-width: 400px;" alt="{{ $company->present()->name() }}">
           </div>
-        @elseif(isset($company) && !is_null($company))
+        @else
           <div class="max-h-28">
-              <img src="{{ $company->present()->logo()  }}"
-                   class="mx-auto border-b border-gray-100 h-18 pb-4" style="max-width: 400px;" alt="{{ $company->present()->name() }} logo">
+              <img src="{{ \App\Http\ViewComposers\PortalBranding::defaultLogo() }}"
+                   class="mx-auto border-b border-gray-100 h-18 pb-4" style="max-width: 400px;" alt="{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
           </div>
         @endif
     </div>
@@ -61,14 +61,14 @@
 
       <div x-show="open" class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
         <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-        <h2 class="text-center text-gray text-xl font-semibold">Loading...</h2>
-        <p class="w-1/3 text-center text-gray">This may take a few seconds, please don't close this page.</p>
+        <h2 class="text-center text-gray text-xl font-semibold">{{ ctrans('texts.loading') }}...</h2>
+        <p class="w-1/3 text-center text-gray">{{ ctrans('texts.bis_please_wait_dont_close') }}</p>
       </div>
 
     </div>
 
     <div id="completed" class="mb-4">
-      <a class="button button-primary bg-blue-600 my-4" href="{{ $redirect_url }}">Return to admin portal.</a>
+      <a class="button button-primary bg-blue-600 my-4" href="{{ $redirect_url }}">{{ ctrans('texts.bis_return_to_admin_portal') }}</a>
     </div>
 
 </div>

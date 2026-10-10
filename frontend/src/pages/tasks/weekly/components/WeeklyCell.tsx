@@ -41,6 +41,7 @@ export function WeeklyCell({
   initialDescription,
   onEdit,
 }: WeeklyCellProps) {
+  const [t] = useTranslation();
   const colors = useColorScheme();
   const iconBtnRef = useRef<HTMLButtonElement>(null);
   const [panelPos, setPanelPos] = useState<{
@@ -95,9 +96,7 @@ export function WeeklyCell({
         value={durationText}
         readOnly={disabled}
         title={
-          disabled
-            ? 'Stop the running timer to edit'
-            : 'Decimal hours (1.5) or h:m (1:30)'
+          disabled ? t('bis_stop_timer_to_edit') : t('bis_duration_input_help')
         }
         onKeyDown={(event) => {
           if (disabled) return;
@@ -147,11 +146,11 @@ export function WeeklyCell({
                 disabled={disabled}
                 tabIndex={-1}
                 className="p-1 rounded hover:opacity-80 focus:outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
-                aria-label="note"
+                aria-label={t('notes')}
                 title={
                   disabled
-                    ? 'Stop the running timer to edit'
-                    : 'Note & billable'
+                    ? t('bis_stop_timer_to_edit')
+                    : t('bis_note_and_billable')
                 }
               >
                 <Message

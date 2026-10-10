@@ -52,7 +52,6 @@ export function GroupSettings() {
     <Settings
       title={documentTitle}
       breadcrumbs={pages}
-      docsLink="en/advanced-settings/#group_settings"
     >
       <AdvancedSettingsPlanAlert />
 

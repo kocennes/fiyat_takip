@@ -10,7 +10,7 @@
 
 import { Default } from '$app/components/layouts/Default';
 import { Card } from '$app/components/cards';
-import { Button, Link } from '$app/components/forms';
+import { Button } from '$app/components/forms';
 import { Send, Star, Clock, CheckCircle } from 'react-feather';
 import { NonClickableElement } from '$app/components/cards/NonClickableElement';
 import { toast } from '$app/common/helpers/toast/toast';
@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentAccount } from '$app/common/hooks/useCurrentAccount';
 import { useAdmin } from '$app/common/hooks/permissions/useHasPermission';
 import { useDocuNinjaActions } from '$app/common/hooks/useDocuNinjaActions';
+import { BrandLockup } from '$app/components/brand/BrandLockup';
 
 export default function Join() {
   const navigate = useNavigate();
@@ -63,12 +64,8 @@ export default function Join() {
       <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
         <div className="max-w-2xl w-full">
           <div className="text-center mb-8">
-            <div className="w-40 h-10 rounded mx-auto mb-4 flex items-center justify-center">
-              <img
-                src="https://docuninja.co/wp-content/uploads/2025/03/logo.svg"
-                alt={t('docuninja')}
-                className="size-32 object-contain"
-              />
+            <div className="mx-auto mb-4 flex items-center justify-center">
+              <BrandLockup />
             </div>
             <h1 className="text-3xl font-bold mb-3">{t('welcome_to_docuninja')}</h1>
             <p className="text-lg opacity-80 max-w-lg mx-auto">
@@ -144,16 +141,9 @@ export default function Join() {
                     : t('create_docuninja_account')}
                 </Button>
               ) : (
-                <div className="text-center">
-                  <p className="text-sm opacity-70 mb-3">
-                    {t('upgrade_plan_docuninja')}
-                  </p>
-                  <Link to="/settings/account_management">
-                    <Button type="primary" behavior="button">
-                      {t('upgrade')}
-                    </Button>
-                  </Link>
-                </div>
+                <p className="text-sm opacity-70">
+                  {t('bis_esign_unavailable')}
+                </p>
               )
             ) : (
               <p className="text-sm opacity-70">

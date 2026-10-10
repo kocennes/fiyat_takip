@@ -466,7 +466,7 @@ export default function Weekly() {
               onClick={prevWeek}
               className="p-2 rounded-md border"
               style={{ borderColor: colors.$5 }}
-              aria-label="prev week"
+              aria-label={t('previous') as string}
             >
               <ChevronLeft size="1rem" color={colors.$3} />
             </button>
@@ -485,7 +485,7 @@ export default function Weekly() {
               onClick={nextWeek}
               className="p-2 rounded-md border"
               style={{ borderColor: colors.$5 }}
-              aria-label="next week"
+              aria-label={t('next') as string}
             >
               <ChevronRight size="1rem" color={colors.$3} />
             </button>
@@ -586,7 +586,7 @@ export default function Weekly() {
                                 backgroundColor: '#fee2e2',
                                 color: '#b91c1c',
                               }}
-                              title="Stop the running timer to edit this row"
+                              title={t('bis_stop_timer_to_edit_row')}
                             >
                               <span
                                 className="inline-block w-1.5 h-1.5 rounded-full animate-pulse"

@@ -234,7 +234,6 @@ export default function Edit() {
               entity="quote"
               relationType="client_id"
               endpoint="/api/v1/live_preview?entity=:entity"
-              withRemoveLogoCTA
               observable={true}
               initiallyVisible={false}
             />

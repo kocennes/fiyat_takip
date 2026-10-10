@@ -115,7 +115,7 @@ export default function Invoices() {
   } = useChangeTemplate();
 
   return (
-    <Default title={documentTitle} breadcrumbs={pages} docsLink="en/invoices">
+    <Default title={documentTitle} breadcrumbs={pages}>
       <DataTable
         resource="invoice"
         endpoint={`/api/v1/invoices?include=client.group_settings,project${

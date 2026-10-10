@@ -94,8 +94,8 @@ export function Webhook(props: SubscriptionProps) {
           customSelector
         >
           <option defaultChecked value=""></option>
-          <option value="post">{t('post')}</option>
-          <option value="put">{t('put')}</option>
+          <option value="post">POST</option>
+          <option value="put">PUT</option>
         </SelectField>
       </Element>
 

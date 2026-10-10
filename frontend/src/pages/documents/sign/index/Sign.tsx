@@ -180,12 +180,11 @@ function Success() {
     >
       <div className="flex flex-col gap-6 px-4 sm:px-6">
         <div className="text-sm" style={{ color: colors.$3 }}>
-          Done! You’ve successfully signed the document!
+          {t('bis_document_signed_success')}
           <br /> <br />
-          You’ll receive an email once the document is finalized—immediately for
-          self-signed, or after all parties have signed.
+          {t('bis_document_signed_email_notice')}
           <br /> <br />
-          This page is now safe to close.
+          {t('bis_page_safe_to_close')}
         </div>
       </div>
     </Card>

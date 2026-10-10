@@ -98,7 +98,7 @@ export default function Products() {
   }, []);
 
   return (
-    <Default title={t('products')} breadcrumbs={pages} docsLink="en/products">
+    <Default title={t('products')} breadcrumbs={pages}>
       <DataTable
         resource="product"
         columns={columns}

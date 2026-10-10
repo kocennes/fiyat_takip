@@ -11,13 +11,9 @@
 import { arrayMoveImmutable } from 'array-move';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { HelpCircle } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { useColorScheme } from '$app/common/colors';
-import { endpoint, isHosted } from '$app/common/helpers';
-import { request } from '$app/common/helpers/request';
-import { route } from '$app/common/helpers/route';
-import { useAccentColor } from '$app/common/hooks/useAccentColor';
+import { isHosted } from '$app/common/helpers';
 import { useTitle } from '$app/common/hooks/useTitle';
 import { CompanyGateway } from '$app/common/interfaces/company-gateway';
 import { Gateway } from '$app/common/interfaces/statics';
@@ -28,7 +24,6 @@ import {
 } from '$app/common/queries/company-gateways';
 import { Card, Element } from '$app/components/cards';
 import { Button, Link, SelectField } from '$app/components/forms';
-import { $help, HelpWidget } from '$app/components/HelpWidget';
 import { Settings } from '$app/components/layouts/Settings';
 import { TabGroup } from '$app/components/TabGroup';
 import {
@@ -36,8 +31,6 @@ import {
   GatewayLogoName,
   GatewayTypeIcon,
 } from '$app/pages/clients/show/components/GatewayTypeIcon';
-import { useHandleGoCardless } from '$app/pages/settings/gateways/create/hooks/useHandleGoCardless';
-import { useHandleSquareOAuth } from '$app/pages/settings/gateways/create/hooks/useHandleSquareOAuth';
 import { useGateways } from '../common/hooks/useGateways';
 import { Credentials } from './components/Credentials';
 import { DuplicatingGatewayModal } from './components/DuplicatingGatewayModal';
@@ -81,6 +74,14 @@ export const gatewaysDetails = [
   { name: 'payware', key: 'b0a6294fca4488c2bab58f3e11e3c623' },
 ];
 
+// Gateways that can only be onboarded through the upstream vendor's hosted
+// platform (Stripe Connect, PayPal Platform, WePay); not offered here.
+const upstreamPlatformGateways = [
+  'd14dd26a47cecc30fdd65700bfb67b34',
+  '80af24a6a691230bbec33e930ab40666',
+  '8fdeed552015b3c7b44ed6c8ebd9e992',
+];
+
 const hostedGatewayFilter = [
   '38f2c48af60c7dd69e04248cbb24c36e', //do not allow express to be created in hosted
   '80af24a6a691230bbec33e930ab40665', //do not allow pp rest to be created in hosted
@@ -109,7 +110,6 @@ export function Create() {
 
   const gateways = useGateways();
   const colors = useColorScheme();
-  const accentColor = useAccentColor();
 
   const { data: blankCompanyGateway } = useBlankCompanyGatewayQuery();
   const { data: companyGatewaysResponse } = useCompanyGatewaysQuery({
@@ -151,52 +151,12 @@ export function Create() {
 
     setGateway(gateway);
 
-    if (gateway?.key === '80af24a6a691230bbec33e930ab40666' && !isDuplicating) {
-      return handleSetup();
-    }
-
-    if (gateway?.key === 'd14dd26a47cecc30fdd65700bfb67b34' && !isDuplicating) {
-      return handleStripeSetup();
-    }
-
-    if (
-      gateway?.key === 'b9886f9257f0c6ee7c302f1c74475f6c' &&
-      isHosted() &&
-      !isDuplicating
-    ) {
-      return handleGoCardless();
-    }
-
-    if (
-      gateway?.key === '65faab2ab6e3223dbe848b1686490baz' &&
-      isHosted() &&
-      !isDuplicating
-    ) {
-      return handleSquareOAuth();
-    }
-
     if (isManualChange && value && !isDuplicating) {
       setTabIndex(1);
     }
   };
 
   const handleOnDuplicatingGatewayConfirm = () => {
-    if (gateway?.key === '80af24a6a691230bbec33e930ab40666') {
-      return handleSetup();
-    }
-
-    if (gateway?.key === 'd14dd26a47cecc30fdd65700bfb67b34') {
-      return handleStripeSetup();
-    }
-
-    if (gateway?.key === 'b9886f9257f0c6ee7c302f1c74475f6c' && isHosted()) {
-      return handleGoCardless();
-    }
-
-    if (gateway?.key === '65faab2ab6e3223dbe848b1686490baz' && isHosted()) {
-      return handleSquareOAuth();
-    }
-
     if (gateway && !createBySetup) {
       setTabIndex(1);
     }
@@ -210,39 +170,6 @@ export function Create() {
     setTabIndex(0);
     createBySetup && setCreateBySetup(false);
   };
-
-  const handleSetup = () => {
-    request('POST', endpoint('/api/v1/one_time_token'), {
-      context: 'paypal_ppcp',
-    }).then((response) =>
-      window
-        .open(
-          route('https://invoicing.co/paypal?hash=:hash', {
-            hash: response.data.hash,
-          }),
-          '_blank'
-        )
-        ?.focus()
-    );
-  };
-
-  const handleStripeSetup = () => {
-    request('POST', endpoint('/api/v1/one_time_token'), {
-      context: 'stripe_connect',
-    }).then((response) =>
-      window
-        .open(
-          route('https://invoicing.co/stripe/signup/:token', {
-            token: response.data.hash,
-          }),
-          '_blank'
-        )
-        ?.focus()
-    );
-  };
-
-  const handleGoCardless = useHandleGoCardless();
-  const handleSquareOAuth = useHandleSquareOAuth();
 
   const getGatewayNameByKey = (key: string) => {
     const gateway = gatewaysDetails.find((gateway) => gateway.key === key);
@@ -260,26 +187,30 @@ export function Create() {
 
   useEffect(() => {
     if (gateways) {
+      const availableGateways = gateways.filter(
+        (gateway) => !upstreamPlatformGateways.includes(gateway.key)
+      );
+
       if (isHosted()) {
-        const mutated_gateways = gateways.filter((gateway) => {
+        const mutated_gateways = availableGateways.filter((gateway) => {
           return !hostedGatewayFilter.includes(gateway.key);
         });
         setFilteredGateways(mutated_gateways);
       } else {
-        const payPalRestIndex = gateways.findIndex(
+        const payPalRestIndex = availableGateways.findIndex(
           ({ key }) => key === '80af24a6a691230bbec33e930ab40665'
         );
 
         if (payPalRestIndex >= 0) {
           const sortedGateways: Gateway[] = arrayMoveImmutable(
-            gateways as Gateway[],
+            availableGateways as Gateway[],
             payPalRestIndex,
             1
           );
 
           setFilteredGateways(sortedGateways);
         } else {
-          setFilteredGateways(gateways);
+          setFilteredGateways(availableGateways);
         }
       }
     }
@@ -366,11 +297,6 @@ export function Create() {
       onSaveClick={() => onSave(1)}
       disableSaveButton={!gateway || isFormBusy}
     >
-      <HelpWidget
-        id="gateways"
-        url="https://raw.githubusercontent.com/invoiceninja/invoiceninja.github.io/refs/heads/v5-rework/docs/user-guide/gateways.mdx"
-      />
-
       <DuplicatingGatewayModal
         visible={isDuplicatingGatewayModalOpen}
         onConfirm={handleOnDuplicatingGatewayConfirm}
@@ -383,42 +309,6 @@ export function Create() {
         style={{ borderColor: colors.$24 }}
         withoutBodyPadding
         withoutHeaderBorder
-        topRight={
-          <>
-            {tabIndex === 1 && (
-              <button
-                style={{ color: accentColor }}
-                type="button"
-                onClick={() =>
-                  $help('gateways', {
-                    moveToHeading: 'Credentials',
-                  })
-                }
-                className="inline-flex items-center space-x-1 text-sm"
-              >
-                <HelpCircle size={18} />
-
-                <span>{t('documentation')}</span>
-              </button>
-            )}
-
-            {tabIndex === 3 && (
-              <button
-                style={{ color: accentColor }}
-                type="button"
-                onClick={() =>
-                  $help('gateways', {
-                    moveToHeading: 'Limits/Fees',
-                  })
-                }
-                className="inline-flex items-center space-x-1 text-sm"
-              >
-                <HelpCircle size={18} />
-                <span>{t('documentation')}</span>
-              </button>
-            )}
-          </>
-        }
       >
         <TabGroup
           tabs={tabs}

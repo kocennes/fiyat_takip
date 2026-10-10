@@ -123,7 +123,7 @@ export function KeyboardShortcuts() {
     <div className="px-4 sm:px-6 pt-4 space-y-4">
       <div className="flex items-center justify-between gap-4">
         <div className="text-sm" style={{ color: colors.$17 }}>
-          {t('keyboard_shortcuts_help')}
+          {t('bis_keyboard_shortcuts_help')}
         </div>
 
         {hasAnyEnabled && (
@@ -196,8 +196,8 @@ export function KeyboardShortcuts() {
                           }}
                           title={
                             hasShortcut
-                              ? (t('shortcut_set') as string)
-                              : (t('no_shortcut_set') as string)
+                              ? (t('bis_shortcut_set') as string)
+                              : (t('bis_no_shortcut_set') as string)
                           }
                         />
 
@@ -290,7 +290,7 @@ function ShortcutDetail({
               : colors.$5,
           backgroundColor: colors.$1,
         }}
-        title={hasConflict ? (t('shortcut_conflict') as string) : undefined}
+        title={hasConflict ? (t('bis_shortcut_conflict') as string) : undefined}
       >
         {buttonLabel}
       </button>

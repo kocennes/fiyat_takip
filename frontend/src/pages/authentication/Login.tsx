@@ -34,7 +34,6 @@ import { LoginMethod, useLogin, useLoginPrecheck } from './common/hooks';
 import { LoginValidation } from './common/ValidationInterface';
 import { Disable2faModal } from './components/Disable2faModal';
 import { Header } from './components/Header';
-import { HostedLinks } from './components/HostedLinks';
 import { OrDivider } from './components/OrDivider';
 import { SignInProviders } from './components/SignInProviders';
 
@@ -416,12 +415,6 @@ export function Login() {
             {isHosted() && <Link to="/register">{t('register_label')}</Link>}
           </div>
         </div>
-
-        {isHosted() && (
-          <div className="mx-4 max-w-md w-full rounded md:shadow-lg mt-4">
-            <HostedLinks />
-          </div>
-        )}
 
         <p className="mt-4 text-xs">{version}</p>
       </div>

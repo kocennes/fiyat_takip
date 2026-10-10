@@ -14,7 +14,7 @@ import { Gateway } from '$app/common/interfaces/statics';
 import { ValidationBag } from '$app/common/interfaces/validation-bag';
 import { Element } from '$app/components/cards';
 import { InputField } from '$app/components/forms';
-import { formatLabel } from '../../helpers/format-label';
+import { useFormatGatewayFieldLabel } from '../../helpers/format-label';
 import { useHandleCredentialsChange } from '../../hooks/useHandleCredentialsChange';
 import { useResolveConfigValue } from '../../hooks/useResolveConfigValue';
 import { Field, useResolveInputField } from '../../hooks/useResolveInputField';
@@ -38,6 +38,7 @@ export function Payware(props: Props) {
   const [t] = useTranslation();
 
   const config = useResolveConfigValue(props.companyGateway);
+  const formatLabel = useFormatGatewayFieldLabel();
   const handleCredentialChange = useHandleCredentialsChange(
     props.setCompanyGateway
   );

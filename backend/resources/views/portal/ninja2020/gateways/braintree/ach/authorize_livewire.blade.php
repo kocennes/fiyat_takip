@@ -31,7 +31,7 @@
 
     @component('portal.ninja2020.components.general.card-element-single')
         <input type="checkbox" class="form-checkbox mr-1" id="accept-terms" required>
-        <label for="accept-terms" class="cursor-pointer">By clicking ["Add Payment Method"], I authorize Braintree, a service of PayPal, on behalf of <b>{{ $company->present()->name() }}</b> (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.</label>
+        <label for="accept-terms" class="cursor-pointer">{{ ctrans('texts.bis_braintree_ach_authorization', ['company' => $company->present()->name()]) }}</label>
     @endcomponent
 
     @component('portal.ninja2020.components.general.card-element', ['title' => ctrans('texts.account_type')])

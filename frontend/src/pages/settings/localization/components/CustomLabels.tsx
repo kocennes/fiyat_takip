@@ -25,7 +25,6 @@ import { Element } from '../../../../components/cards';
 import {
   Button,
   InputField,
-  Link,
   SelectField,
 } from '../../../../components/forms';
 
@@ -160,13 +159,6 @@ export function CustomLabels() {
         >
           {t('submit')}
         </Button>
-
-        <Link
-          external
-          to="https://github.com/invoiceninja/invoiceninja/blob/master/resources/lang/en/texts.php"
-        >
-          {t('labels')}
-        </Link>
       </Modal>
 
       <Element

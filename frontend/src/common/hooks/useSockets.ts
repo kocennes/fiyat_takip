@@ -33,10 +33,9 @@ export function useSockets() {
       return;
     }
 
-    if (
-      isSelfHosted() &&
-      !reactSettings.preferences.enable_public_notifications
-    ) {
+    // The socket server below (wsHost) is the upstream vendor's hosted
+    // service; a self-hosted installation never connects to it.
+    if (isSelfHosted()) {
       return;
     }
 

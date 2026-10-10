@@ -6,6 +6,6 @@
 
 @section('body')
 <div class="flex justify-center items-center h-screen">
-  <h1>Vendor Portal</h1>
+  <h1>{{ ctrans('texts.vendor_portal') }}</h1>
 </div>
 @endsection

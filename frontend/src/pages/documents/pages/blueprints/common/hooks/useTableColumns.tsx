@@ -40,8 +40,8 @@ export function useTableColumns() {
     let label = '';
 
     if (blueprint.design_hash?.length && blueprint.design_hash.length > 0) {
-      const entity = blueprint.document?.metadata?.entity_type ?? 'ninja';
-      label = `${t(entity)} ${t('design')}`;
+      const entity = blueprint.document?.metadata?.entity_type;
+      label = entity ? `${t(entity)} ${t('design')}` : t('design');
     } else label = t('custom');
 
     return label;

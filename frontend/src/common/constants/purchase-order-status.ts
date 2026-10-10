@@ -12,7 +12,7 @@ import { PurchaseOrderStatus } from '$app/common/enums/purchase-order-status';
 
 export default {
   [PurchaseOrderStatus.Accepted]: 'accepted',
-  [PurchaseOrderStatus.Cancelled]: 'canclled',
+  [PurchaseOrderStatus.Cancelled]: 'cancelled',
   [PurchaseOrderStatus.Draft]: 'draft',
   [PurchaseOrderStatus.Received]: 'received',
   [PurchaseOrderStatus.Sent]: 'sent',

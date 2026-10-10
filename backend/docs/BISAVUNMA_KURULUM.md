@@ -1,8 +1,9 @@
-# Fiyat Takip Uygulaması - Invoice Ninja Başlangıcı
+# BISAVUNMA Fiyat Takip - Kurulum Notları
 
-Bu çalışma alanı, Invoice Ninja'nın `v5-stable` dalını temel alır. Yeni eklenen
-**Proforma** tasarımı, verilen örnekteki tek sayfalık kurumsal düzeni teklif
-çıktılarına uygular.
+Bu çalışma alanı, açık kaynaklı fatura altyapısının 5.13.47 sürümünü temel alır;
+Docker imajı da aynı sürüme sabitlenmiştir (bkz. kök dizindeki `Dockerfile`).
+Yeni eklenen **Proforma** tasarımı, verilen örnekteki tek sayfalık kurumsal
+düzeni teklif çıktılarına uygular.
 
 ## Gereksinimler
 
@@ -13,7 +14,7 @@ Bu çalışma alanı, Invoice Ninja'nın `v5-stable` dalını temel alır. Yeni 
 
 ## Yerel kurulum
 
-1. `invoiceninja` klasöründe `.env.example` dosyasını `.env` olarak kopyalayın.
+1. `backend` klasöründe `.env.example` dosyasını `.env` olarak kopyalayın.
 2. `.env` içindeki `APP_URL` ile `DB_*` ayarlarını kendi ortamınıza göre girin.
 3. Bağımlılıkları yükleyin: `composer install` ve `npm install`.
 4. Uygulama anahtarını üretin: `php artisan key:generate`.
@@ -29,7 +30,7 @@ Bu çalışma alanı, Invoice Ninja'nın `v5-stable` dalını temel alır. Yeni 
 3. Teklif numara biçimini `PRF-{YEAR}-{COUNTER}` olarak ayarlayın.
 4. Şirket bilgileri, vergi numarası ve banka bilgisini şirket ayarlarından girin.
    Banka/IBAN bilgisi için şirket özel alanı `company1` kullanılır. Proforma
-   şablonu, uygulamanın yerleşik FiyatTakip logosunu kullanır.
+   şablonu, uygulamanın yerleşik BISAVUNMA logosunu kullanır.
 5. Müşteriyi ve ürünleri ekleyin; teklif oluşturup PDF indirerek proformayı alın.
 
 Mevcut bir kurulumda `php artisan migrate` komutu, Proforma tasarımını otomatik
@@ -54,7 +55,7 @@ oran adıyla birlikte gösterir.
 
 ## Fiyat takip kapsamı
 
-Invoice Ninja ürün, tedarikçi, satın alma siparişi ve teklif yönetimini sunar;
+Altyapı ürün, tedarikçi, satın alma siparişi ve teklif yönetimini sunar;
 ancak bağımsız bir **fiyat geçmişi** kaydı hazır gelmez. Sonraki geliştirme
 aşamasında her ürün/tedarikçi için alış fiyatı, para birimi, tarih, kaynak ve
 not alanlarını içeren manuel kayıt ekranı ile fiyat değişim raporu eklenmelidir.

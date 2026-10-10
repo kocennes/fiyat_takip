@@ -37,16 +37,19 @@ export function RectifyInvoiceModal({ visible, onClose, onConfirm }: Props) {
   };
 
   return (
-    <Modal title="Rectificar factura" visible={visible} onClose={handleClose}>
+    <Modal
+      title={t('bis_rectify_invoice')}
+      visible={visible}
+      onClose={handleClose}
+    >
       <div className="flex items-center">
         <Icon element={MdOutlineWarning} color="orange" size={48} />
         <span className="font-medium text-sm ml-2 text-orange-500">
-          Esto le permitirá crear una factura rectificativa parcial por una
-          parte del importe de la factura.
+          {t('bis_verifactu_rectify_warning')}
         </span>
       </div>
       <InputField
-        label="Motivo de la rectificación"
+        label={t('bis_rectification_reason')}
         value={rectificationReason}
         changeOverride={true}
         onValueChange={(value: string) => setRectificationReason(value)}

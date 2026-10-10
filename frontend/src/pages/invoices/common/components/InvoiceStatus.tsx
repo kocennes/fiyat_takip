@@ -121,7 +121,7 @@ export function InvoiceStatus(props: Props) {
           ...props.style,
         }}
       >
-        {isRectificativa ? 'Rectificativa' : t('sent')}
+        {isRectificativa ? t('bis_rectifying_invoice') : t('sent')}
       </Badge>
     );
   }

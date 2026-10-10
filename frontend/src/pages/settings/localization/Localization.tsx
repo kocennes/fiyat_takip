@@ -47,7 +47,6 @@ export function Localization() {
       onCancelClick={onCancel}
       title={t('localization')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#localization"
       disableSaveButton={isFormBusy}
     >
       <Card

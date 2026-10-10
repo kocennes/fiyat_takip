@@ -39,16 +39,12 @@ export function useAccountManagementTabs() {
     ? [
         ...tabs,
         {
-          name: t('referral_program'),
-          href: '/settings/account_management/referral_program',
-        },
-        {
           name: t('users'),
           href: '/settings/account_management/users',
           enabled: isOwner,
         },
         {
-          name: 'Billing History',
+          name: t('bis_billing_history'),
           href: '/settings/account_management/billing_history',
           enabled: isOwner,
         },

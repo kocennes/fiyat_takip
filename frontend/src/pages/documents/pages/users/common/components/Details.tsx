@@ -99,7 +99,7 @@ export default function Details(props?: DocuninjaUserProps) {
       {editPage && (
         <>
           <Element
-            leftSide={t('signature')}
+            leftSide={t('invoice_signature')}
             leftSideHelp={t('signature_description')}
           >
             <div>
@@ -109,7 +109,7 @@ export default function Details(props?: DocuninjaUserProps) {
                     <div>
                       <img
                         src={user.e_signature}
-                        alt="Signature"
+                        alt={t('invoice_signature') as string}
                         className="w-full max-h-32 border rounded p-2 mb-2"
                       />
 
@@ -324,7 +324,7 @@ export default function Details(props?: DocuninjaUserProps) {
                     <div>
                       <img
                         src={user.e_initials}
-                        alt="Initials"
+                        alt={t('initials') as string}
                         className="w-full max-h-32 border rounded p-2 mb-2"
                       />
 

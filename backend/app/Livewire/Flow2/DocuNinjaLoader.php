@@ -87,7 +87,7 @@ class DocuNinjaLoader extends Component
             } elseif (!$invitation->can_sign && $invitation->{$this->entity_type}->invitations()->where('can_sign', true)->count() >= 1) {
                 // A special edge case exists for old invitations where the can_sign flag is not set.
                 // For this scenario - the first user to view the doc, will have can_sign set to true.
-                $this->error = 'You are not authorized to sign this document.';
+                $this->error = ctrans('texts.bis_not_authorized_to_sign');
                 $this->isLoading = false;
                 return;
             } elseif ($invitation->can_sign
@@ -178,7 +178,9 @@ class DocuNinjaLoader extends Component
 
         } catch (\Exception $e) {
 
-            $this->error = 'Failed to load DocuNinja data: ' . $e->getMessage();
+            nlog('Failed to load DocuNinja data: ' . $e->getMessage());
+
+            $this->error = ctrans('texts.docuninja_unavailable');
             $this->isLoading = false;
         }
     }

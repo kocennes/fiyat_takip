@@ -43,12 +43,12 @@ interface Props {
 }
 
 const PROPERTY_LABELS = {
-  geoPostalCode: 'ZIP',
-  geoCity: 'City',
-  geoCounty: 'County',
-  geoState: 'State',
-  taxSales: 'Sales Tax',
-  taxUse: 'Use Tax',
+  geoPostalCode: 'zip',
+  geoCity: 'city',
+  geoCounty: 'county',
+  geoState: 'state',
+  taxSales: 'bis_sales_tax',
+  taxUse: 'bis_use_tax',
 };
 
 export function TaxDataModal({
@@ -160,7 +160,7 @@ export function TaxDataModal({
                   className="text-sm font-medium"
                   style={{ color: colors.$3 }}
                 >
-                  {PROPERTY_LABELS[key as keyof typeof PROPERTY_LABELS]}:
+                  {t(PROPERTY_LABELS[key as keyof typeof PROPERTY_LABELS])}:
                 </span>
 
                 <span className="text-sm" style={{ color: colors.$3 }}>

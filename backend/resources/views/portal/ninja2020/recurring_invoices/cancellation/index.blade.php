@@ -8,7 +8,7 @@
                     {{ ctrans('texts.recurring_invoices') }}
                 </h3>
                 <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500" translate>
-                    Details of the recurring invoice.
+                    {{ ctrans('texts.bis_recurring_invoice_details') }}
                 </p>
             </div>
             <div>
@@ -61,7 +61,7 @@
                 <div class="sm:flex sm:items-start sm:justify-between">
                     <div>
                         <h3 class="text-lg leading-6 font-medium text-gray-900">
-                            Cancellation pending, we'll be in touch!
+                            {{ ctrans('texts.cancellation_pending') }}
                         </h3>
                     </div>
                 </div>

@@ -55,7 +55,6 @@ export function BankAccounts() {
     <Settings
       title={t('bank_accounts')}
       breadcrumbs={pages}
-      docsLink="/docs/advanced-settings/#bank_accounts"
     >
       {!enterprisePlan() && isHosted() && <BankAccountsPlanAlert />}
 

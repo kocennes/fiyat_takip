@@ -118,8 +118,10 @@ export function ConfirmationDialog({
   content,
   action,
 }: ConfirmationDialogProps) {
+  const [t] = useTranslation();
+
   return (
-    <Modal title="Confirmation" visible={isOpen} onClose={onOpenChange}>
+    <Modal title={t('confirmation')} visible={isOpen} onClose={onOpenChange}>
       {content}
       {action}
     </Modal>
@@ -198,9 +200,11 @@ export function UninviteButton({
   isSubmitting,
   form,
 }: UninviteDialogButtonProps) {
+  const [t] = useTranslation();
+
   return (
     <Button form={form} disabled={isSubmitting}>
-      Continue
+      {t('continue')}
     </Button>
   );
 }
@@ -279,7 +283,7 @@ export function ImportFromGoogleDrive({
       onClick={onClick}
       className="w-full"
     >
-      {isSubmitting ? `${t('Importing')}...` : t('google_drive')}
+      {isSubmitting ? t('importing_from_google_drive') : t('google_drive')}
     </Button>
   );
 }
@@ -290,8 +294,6 @@ export function RectangleSettingsDialog({
   title,
   children,
 }: RectangleSettingsDialogProps) {
-  const [t] = useTranslation();
-
   return (
     <Modal title={title} visible={open} onClose={onOpenChange}>
       {children}

@@ -95,7 +95,6 @@ export function Edit() {
     <Settings
       title={t('edit_transaction_rule')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#edit_transaction_rule"
       disableSaveButton={!transactionRule || isFormBusy}
       onSaveClick={handleSave}
     >

@@ -1,6 +1,6 @@
 <div class="btc-value-wrapper">
     <div class="btc-value">
-        1 BTC = {{ $btc_price }} {{ $currency }}, updates in <span id="countdown-livewire">{{ $countdown }}</span>
+        {{ ctrans('texts.bis_btc_price_updates_in', ['price' => $btc_price, 'currency' => $currency]) }} <span id="countdown-livewire">{{ $countdown }}</span>
     </div>
     <span class="icon-refresh {{ $is_refreshing ? 'rotating' : '' }}" wire:click="refreshBTCPrice"
           {{ $is_refreshing ? 'style="pointer-events: none;"' : '' }}></span>

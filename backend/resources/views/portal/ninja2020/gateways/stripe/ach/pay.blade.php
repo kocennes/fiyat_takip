@@ -98,7 +98,7 @@
         @endcomponent
         <div class="px-4 py-5 sm:px-6 lg:grid lg:grid-cols-3 lg:gap-4 lg:flex lg:items-center">
             <dt class="text-sm leading-5 font-medium text-gray-500 mr-4">
-                Connect a bank account
+                {{ ctrans('texts.bis_connect_bank_account') }}
             </dt>
             <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
                 <button type="button" class="button button-primary bg-primary" id="new-bank" type="button">
@@ -170,7 +170,7 @@
         newBank.addEventListener('click', (ev) => {
 
         if (!document.getElementById('accept-terms').checked) {
-                errors.textContent = "You must accept the mandate terms prior to making payment.";
+                errors.textContent = @json(ctrans('texts.bis_accept_mandate_terms'));
                 errors.hidden = false;
                 return;
         }
@@ -185,7 +185,7 @@
         const address = billingAddress();
 
         if (!address) {
-            errors.textContent = 'A complete billing address is required to pay by bank account.';
+            errors.textContent = @json(ctrans('texts.bis_billing_address_required_bank'));
             errors.hidden = false;
             return;
         }
@@ -198,7 +198,7 @@
         try {
             stripe = stripeClient();
         } catch (error) {
-            showError(error.message || 'An unexpected error occurred.');
+            showError(error.message || @json(ctrans('texts.bis_unexpected_error')));
             resetButtons();
             return;
         }
@@ -227,13 +227,13 @@
             }
 
             if (!paymentIntent) {
-                showError('An unexpected error occurred.');
+                showError(@json(ctrans('texts.bis_unexpected_error')));
                 resetButtons();
                 return;
             }
 
             if (paymentIntent.status === 'requires_payment_method') {
-                showError('We were unable to process the payment with this account, please try another one.');
+                showError(@json(ctrans('texts.bis_bank_account_payment_failed_try_other')));
                 resetButtons();
                 return;
             }
@@ -245,11 +245,11 @@
                 return confirmPayment(stripe, clientSecret);
             }
 
-            showError('We were unable to process this payment.');
+            showError(@json(ctrans('texts.bis_unable_to_process_payment')));
             resetButtons();
         })
         .catch((error) => {
-            showError(error.message || 'An unexpected error occurred.');
+            showError(error.message || @json(ctrans('texts.bis_unexpected_error')));
             resetButtons();
         });
         });
@@ -260,7 +260,7 @@
         const acceptance = document.getElementById('accept-mandate');
 
         if (!acceptance?.checked) {
-            errors.textContent = 'You must accept the mandate terms prior to making payment.';
+            errors.textContent = @json(ctrans('texts.bis_accept_mandate_terms'));
             errors.hidden = false;
             return;
         }
@@ -268,7 +268,7 @@
         const clientSecret = document.querySelector('meta[name="mandate_client_secret"]')?.content;
 
         if (!clientSecret) {
-            errors.textContent = 'We were unable to renew the bank account authorization.';
+            errors.textContent = @json(ctrans('texts.bis_bank_authorization_renew_failed'));
             errors.hidden = false;
             return;
         }
@@ -281,7 +281,7 @@
         try {
             stripe = stripeClient();
         } catch (error) {
-            showError(error.message || 'An unexpected error occurred.');
+            showError(error.message || @json(ctrans('texts.bis_unexpected_error')));
             setButtonLoading(payNowButton, false);
             return;
         }
@@ -292,7 +292,7 @@
             })
             .then(({setupIntent, error}) => {
                 if (error || setupIntent?.status !== 'succeeded') {
-                    errors.textContent = error?.message || 'We were unable to renew the bank account authorization.';
+                    errors.textContent = error?.message || @json(ctrans('texts.bis_bank_authorization_renew_failed'));
                     errors.hidden = false;
                     setButtonLoading(payNowButton, false);
                     return;
@@ -302,7 +302,7 @@
                 document.getElementById('server-response').submit();
             })
             .catch((error) => {
-                showError(error.message || 'An unexpected error occurred.');
+                showError(error.message || @json(ctrans('texts.bis_unexpected_error')));
                 setButtonLoading(payNowButton, false);
             });
     }
@@ -329,13 +329,13 @@
             }
 
             if (!paymentIntent) {
-                showError('An unexpected error occurred.');
+                showError(@json(ctrans('texts.bis_unexpected_error')));
                 resetButtons();
                 return;
             }
 
             if (paymentIntent.status === "requires_payment_method") {
-                showError("We were unable to process the payment with this account, please try another one.");
+                showError(@json(ctrans('texts.bis_bank_account_payment_failed_try_other')));
                 resetButtons();
                 return;
             }
@@ -349,7 +349,7 @@
             }
 
             if (paymentIntent.next_action?.type === "verify_with_microdeposits" || paymentIntent.next_action?.type === "requires_source_action") {
-                errors.textContent = "You will receive an email with details on how to verify your bank account and process payment.";
+                errors.textContent = @json(ctrans('texts.bis_bank_verification_email'));
                 errors.hidden = false;
                 document.getElementById('new-bank').style.visibility = 'hidden'
 
@@ -359,11 +359,11 @@
                 return;
             }
 
-            showError('We were unable to process this payment.');
+            showError(@json(ctrans('texts.bis_unable_to_process_payment')));
             resetButtons();
           })
           .catch((error) => {
-              showError(error.message || 'An unexpected error occurred.');
+              showError(error.message || @json(ctrans('texts.bis_unexpected_error')));
               resetButtons();
           });
     }

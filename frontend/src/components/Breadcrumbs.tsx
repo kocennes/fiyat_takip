@@ -10,6 +10,7 @@
 
 import classNames from 'classnames';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useColorScheme } from '$app/common/colors';
 import { Link } from './forms';
 import { House } from './icons/House';
@@ -17,6 +18,7 @@ import { House } from './icons/House';
 export type Page = { name: string; href: string; afterName?: ReactNode };
 
 export function Breadcrumbs(props: { pages: Page[] }) {
+  const [t] = useTranslation();
   const colors = useColorScheme();
 
   if (props.pages.length === 0) {
@@ -24,7 +26,7 @@ export function Breadcrumbs(props: { pages: Page[] }) {
   }
 
   return (
-    <nav className="flex" aria-label="Breadcrumb">
+    <nav className="flex" aria-label={t('bis_breadcrumb')}>
       <ol role="list" className="flex items-center space-x-4">
         <li>
           <Link to="/dashboard" withoutDefaultStyling>

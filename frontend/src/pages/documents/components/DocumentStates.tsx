@@ -9,7 +9,6 @@
  */
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { useColorScheme } from '$app/common/colors';
 import { Page } from '$app/components/Breadcrumbs';
 import { Card } from '$app/components/cards';
@@ -38,20 +37,12 @@ export function LoadingState({ pages }: DocumentStateProps) {
 
 export function UpgradePlan({ pages }: DocumentStateProps) {
   const [t] = useTranslation();
-  const navigate = useNavigate();
   const colors = useColorScheme();
 
   return (
     <Default title={t('documents')} breadcrumbs={pages}>
       <div className="flex flex-col items-center gap-4 p-6">
-        <span style={{ color: colors.$17 }}>{t('upgrade_plan_docuninja')}</span>
-
-        <Button
-          onClick={() => navigate('/settings/account_management')}
-          behavior="button"
-        >
-          {t('upgrade_plan')}
-        </Button>
+        <span style={{ color: colors.$17 }}>{t('bis_esign_unavailable')}</span>
       </div>
     </Default>
   );
@@ -132,10 +123,9 @@ export function CompanySetup({
   return (
     <Default title={t('documents')} breadcrumbs={pages}>
       <div className="flex flex-col items-center gap-4 p-6">
-        <p className="text-gray-600 mb-4">Welcome to DocuNinja!</p>
+        <p className="text-gray-600 mb-4">{t('welcome_to_docuninja')}</p>
         <p className="text-gray-600 mb-4">
-          Your account exists but this company is not set up yet. Please click
-          the button below to set it up.
+          {t('bis_esign_company_not_set_up')}
         </p>
         <Button
           onClick={onCreateAccount}

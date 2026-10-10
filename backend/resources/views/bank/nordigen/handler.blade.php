@@ -1,6 +1,11 @@
 @extends('layouts.ninja')
 @section('meta_title', ctrans('texts.new_bank_account'))
 
+@php
+    // Use the full locale (e.g. tr_TR): the two-letter code passed by the controller has no language directory.
+    $lang = (isset($company) && $company) ? $company->locale() : config('app.locale');
+@endphp
+
 @push('head')
 
 <link href="https://unpkg.com/nordigen-bank-ui@1.5.2/package/src/selector.min.css" rel="stylesheet" />
@@ -26,9 +31,9 @@
         // Redirect URL that is being used when modal is being closed.
         redirectUrl: "{{ $redirectUrl }}" || new URL("", window.location.origin).href,
         // Text that will be displayed on the left side under the logo. Text is limited to 100 characters, and rest will be truncated. @turbo124 replace with a translated version like ctrans()
-        text: "{{ ($account ?? false) && !$account->isPaid() ? 'Invoice Ninja' : (isset($company) && !is_null($company) ? $company->name : 'Invoice Ninja') }} {{ ctrans('texts.nordigen_handler_subtitle', [], $lang ?? 'en') }}",
+        text: "{{ isset($company) && !is_null($company) ? $company->present()->name() : \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }} {{ ctrans('texts.nordigen_handler_subtitle', [], $lang ?? 'en') }}",
         // Logo URL that will be shown below the modal form.
-        logoUrl: "{{ ($account ?? false) && !$account->isPaid() ? asset('images/invoiceninja-black-logo-2.png') : (isset($company) && !is_null($company) ? $company->present()->logo() : asset('images/invoiceninja-black-logo-2.png')) }}",
+        logoUrl: "{{ \App\Http\ViewComposers\PortalBranding::logo($company ?? null) }}",
         // Will display country list with corresponding institutions. When `countryFilter` is set to `false`, only list of institutions will be shown.
         countryFilter: true,
         // style configs
@@ -55,10 +60,10 @@
             url = new URL(window.location.href);
 
         container.innerHTML = '';
-        _changeHeading('Select your transaction history');
+        _changeHeading(@json(ctrans('texts.bis_select_transaction_history', [], $lang ?? 'en')));
 
         clone.classList.replace('ob-list-institution', 'ob-history-option');
-        clone.querySelector('.ob-span-text').innerText = `${max_history} days`;
+        clone.querySelector('.ob-span-text').innerText = `${max_history} ` + @json(ctrans('texts.days', [], $lang ?? 'en'));
         url.searchParams.set('institution_id', institution.id);
 
         // When we come from the renew button we need to replace the country flag
@@ -81,7 +86,7 @@
 
             url.searchParams.set('tx_days', i == 360 ? 365 : i);
 
-            option.querySelector('.ob-span-text').innerText = `${i == 360 ? 365 : i} days`;
+            option.querySelector('.ob-span-text').innerText = `${i == 360 ? 365 : i} ` + @json(ctrans('texts.days', [], $lang ?? 'en'));
             option.querySelector('a').href = url.href;
             container.append(option);
 

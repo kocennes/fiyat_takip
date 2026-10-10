@@ -55,7 +55,6 @@ export function CompanyDetails() {
       onCancelClick={onCancel}
       title={t('company_details')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#company_details"
       disableSaveButton={isFormBusy}
     >
       <Card

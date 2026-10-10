@@ -10,6 +10,7 @@
 
 import { merge } from 'lodash';
 import React, { isValidElement, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import Select, { StylesConfig } from 'react-select';
 import { v4 } from 'uuid';
 import { useColorScheme } from '$app/common/colors';
@@ -81,6 +82,7 @@ export function SearchableSelect({
   const selected = !clearAfterSelection
     ? entries?.find((entry) => entry.value === value)
     : '';
+  const [t] = useTranslation();
   const colors = useColorScheme();
 
   const customStyles: StylesConfig<SelectOption, false> = {
@@ -145,6 +147,8 @@ export function SearchableSelect({
         isDisabled={disabled}
         isClearable={dismissable}
         styles={customStyles}
+        placeholder={t('bis_select_placeholder')}
+        noOptionsMessage={() => t('bis_no_options')}
       />
 
       <ErrorMessage className="mt-2">{errorMessage}</ErrorMessage>

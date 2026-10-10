@@ -3,21 +3,20 @@
 
 @section('body')
     <div class="grid lg:grid-cols-3">
-        <div class="hidden lg:block col-span-1 bg-red-100 h-screen">
-            <img src="{{ asset('images/client-portal-new-image.jpg') }}"
-                 class="w-full h-screen object-cover"
-                 alt="Background image">
-        </div>
-
-        <div class="col-span-2 h-screen flex">
+        <div class="col-span-3 h-screen flex">
             <div class="m-auto md:w-1/2 lg:w-1/3 flex flex-col items-center">
-                <span class="flex items-center text-2xl">
+                <div>
+                    <img src="{{ \App\Http\ViewComposers\PortalBranding::logo($company ?? null) }}"
+                         class="mx-auto border-b border-gray-100 h-18 pb-4" alt="{{ isset($company) && !is_null($company) ? $company->present()->name() : \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
+                </div>
+
+                <span class="flex items-center text-2xl mt-4">
                     @yield('code') — @yield('message')
                 </span>
 
                 @if (\App\Utils\Ninja::isSelfHost())
                     <span class="flex items-center text-1xl">
-                        Check storage/logs for more details
+                        {{ ctrans('texts.bis_contact_admin_for_details') }}
                     </span>
                 @endif
 

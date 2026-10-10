@@ -75,7 +75,7 @@ const entrySeconds = (start: number, stop: number) => {
 };
 
 export default function Daily() {
-  const { documentTitle } = useTitle('daily');
+  const { documentTitle } = useTitle('freq_daily');
   const [t] = useTranslation();
   const colors = useColorScheme();
   const reactSettings = useReactSettings();
@@ -279,7 +279,7 @@ export default function Daily() {
               onClick={goPrev}
               className="p-2 rounded-md border"
               style={{ borderColor: colors.$5 }}
-              aria-label="prev"
+              aria-label={t('previous') as string}
             >
               <ChevronLeft size="1rem" color={colors.$3} />
             </button>
@@ -299,7 +299,7 @@ export default function Daily() {
               onClick={goNext}
               className="p-2 rounded-md border"
               style={{ borderColor: colors.$5 }}
-              aria-label="next"
+              aria-label={t('next') as string}
             >
               <ChevronRight size="1rem" color={colors.$3} />
             </button>

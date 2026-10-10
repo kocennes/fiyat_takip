@@ -6,11 +6,9 @@
 
         <div class="m-auto md:w-1/3 lg:w-1/5">
             
-        @if($account && !$account->isPaid())
         <div>
-            <img src="{{ asset('images/invoiceninja-black-logo-2.png') }}" class="border-b border-gray-100 h-18 pb-4" alt="Invoice Ninja logo">
+            <img src="{{ \App\Http\ViewComposers\PortalBranding::defaultLogo() }}" class="border-b border-gray-100 h-18 pb-4" alt="{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
         </div>
-        @endif
 
             <div class="flex flex-col">
                 <h1 class="text-center text-3xl">{{ ctrans('texts.password_recovery') }}</h1>
@@ -27,7 +25,7 @@
                         <label for="email" class="text-sm text-gray-600">{{ ctrans('texts.email_address') }}</label>
                         <input type="email" name="email" id="email"
                                class="input"
-                               placeholder="user@example.com"
+                               placeholder="kullanici@ornek.com"
                                value="{{ old('email') }}"
                                autofocus>
                         @error('email')

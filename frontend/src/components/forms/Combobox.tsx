@@ -751,7 +751,7 @@ export function ComboboxStatic<T = any>({
                 >
                   {() => (
                     <div className="block space-x-1">
-                      <span>{t('Select')}</span>
+                      <span>{t('select')}</span>
 
                       <q className="font-semibold">{query}</q>
                     </div>

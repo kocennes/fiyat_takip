@@ -126,7 +126,7 @@
                 if (!sessionId || !sessionToken || !publicKey) {
                     var errEl = document.getElementById('flow-error-message');
                     if (errEl) {
-                        errEl.textContent = 'Payment session is missing. Please refresh the page.';
+                        errEl.textContent = @json(ctrans('texts.bis_payment_session_missing'));
                         errEl.classList.remove('hidden');
                     }
                     return;
@@ -161,7 +161,7 @@
                         onError: function(event) {
                             var errEl = document.getElementById('flow-error-message');
                             if (errEl) {
-                                errEl.textContent = (event.detail && event.detail.message) || 'Payment failed. Please try again.';
+                                errEl.textContent = (event.detail && event.detail.message) || @json(ctrans('texts.bis_payment_failed_try_again'));
                                 errEl.classList.remove('hidden');
                             }
                         },
@@ -171,7 +171,7 @@
                     }).catch(function(err) {
                         var errEl = document.getElementById('flow-error-message');
                         if (errEl) {
-                            errEl.textContent = (err && err.message) || 'Unable to load payment form. Please refresh the page.';
+                            errEl.textContent = (err && err.message) || @json(ctrans('texts.bis_payment_form_load_failed'));
                             errEl.classList.remove('hidden');
                         }
                     });

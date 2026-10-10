@@ -69,8 +69,8 @@ export function useRecurringExpenseQuery(params: Params) {
 }
 
 const successMessages = {
-  start: 'started_recurring_expense',
-  stop: 'stopped_recurring_expense',
+  start: 'bis_started_recurring_expense',
+  stop: 'bis_stopped_recurring_expense',
 };
 
 export const useBulk = () => {

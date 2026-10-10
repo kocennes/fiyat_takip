@@ -54,7 +54,7 @@ export function EURegions() {
 
   return (
     <>
-      <Element leftSide="Europe" key="EU">
+      <Element leftSide={t('bis_region_europe')} key="EU">
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-4">
             <SelectField

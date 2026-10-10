@@ -67,7 +67,7 @@
 
                 if (!response.ok) {
                     return response.json().then(errorData => {
-                        throw new Error(errorData.message ?? 'Unknown error.');
+                        throw new Error(errorData.message ?? @json(ctrans('texts.bis_unknown_error')));
                     });
                 }
                 
@@ -93,7 +93,7 @@
             .catch(error => {
                 console.error('Error:', error);
 
-                document.getElementById('errors').textContent = `Sorry, your transaction could not be processed...\n\n${error.message}`;
+                document.getElementById('errors').textContent = @json(ctrans('texts.bis_transaction_not_processed')) + `\n\n${error.message}`;
                 document.getElementById('errors').hidden = false;
             });
 

@@ -2,13 +2,13 @@
     <section class="flex items-center">
         <div class="items-center" style="{{ $mobile ? '' : 'display: none' }}" id="pagination-button-container">
             <button class="input-label focus:outline-none hover:text-blue-600 transition ease-in-out duration-300"
-                id="previous-page-button" title="Previous page">
+                id="previous-page-button" title="{{ ctrans('texts.previous_page') }}">
                 <svg class="w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
             <button class="input-label focus:outline-none hover:text-blue-600 transition ease-in-out duration-300"
-                id="next-page-button" title="Next page">
+                id="next-page-button" title="{{ ctrans('texts.next_page') }}">
                 <svg class="w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>

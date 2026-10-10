@@ -61,7 +61,7 @@ export function CustomBlueprintStep({
           setErrors(error.response.data);
           toast.dismiss();
         } else {
-          toast.error('Error creating blueprint:');
+          toast.error('bis_template_create_failed');
         }
       });
   }

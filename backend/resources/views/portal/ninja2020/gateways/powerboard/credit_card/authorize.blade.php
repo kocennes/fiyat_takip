@@ -11,7 +11,7 @@
 @section('gateway_content')
     <form action="javascript:void(0);" id="stepone">
         <input type="hidden" name="gateway_response">
-        <button type="submit" class="hidden" id="stepone_submit">Submit</button>
+        <button type="submit" class="hidden" id="stepone_submit">{{ ctrans('texts.submit') }}</button>
     </form>
 
     <form action="{{ route('client.payment_methods.store', ['method' => App\Models\GatewayType::CREDIT_CARD]) }}" method="post" id="server-response">
@@ -21,7 +21,7 @@
         <input type="hidden" name="payment_method_id" value="{{ $payment_method_id }}">
         <input type="hidden" name="browser_details">
         <input type="hidden" name="charge">
-        <button type="submit" class="hidden" id="stub">Submit</button>
+        <button type="submit" class="hidden" id="stub">{{ ctrans('texts.submit') }}</button>
     </form>
 
     <div class="alert alert-failure mb-4" hidden id="errors"></div>

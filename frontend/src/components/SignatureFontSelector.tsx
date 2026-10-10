@@ -100,6 +100,8 @@ function FontPreviewCard({
   previewText: string;
   onClick: () => void;
 }) {
+  const [t] = useTranslation();
+
   const { containerRef, textRef, fontSize } = useAutoScalingFont(
     previewText,
     font.fontFamily
@@ -132,7 +134,7 @@ function FontPreviewCard({
             textAlign: 'center',
           }}
         >
-          {previewText || 'Preview'}
+          {previewText || t('preview')}
         </div>
       </div>
     </button>

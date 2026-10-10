@@ -1,4 +1,4 @@
-import { endpoint } from '$app/common/helpers';
+import { endpoint, trans } from '$app/common/helpers';
 import { wait } from '$app/common/helpers/wait';
 import type { GatewayToken as ClientGatewayToken } from '$app/common/interfaces/client';
 import { request } from '$app/common/helpers/request';
@@ -287,7 +287,7 @@ export function PaymentMethodForm({
     } catch (error) {
       setErrors(
         getApiErrorMessage(error, t('failed_payment') as string) ||
-          'Failed to confirm payment'
+          (t('failed_payment') as string)
       );
       setIsSubmitting(false);
       setPaymentState('payment_failed');
@@ -314,7 +314,7 @@ export function PaymentMethodForm({
     );
 
     if (result.error) {
-      setErrors(result.error.message || 'Payment failed');
+      setErrors(result.error.message || (t('failed_payment') as string));
       setIsSubmitting(false);
       setPaymentState('payment_failed');
       return;
@@ -325,7 +325,7 @@ export function PaymentMethodForm({
       return;
     }
 
-    setErrors('Payment was not completed');
+    setErrors(t('payment_was_not_completed') as string);
     setIsSubmitting(false);
     setPaymentState('payment_failed');
   };
@@ -367,7 +367,7 @@ export function PaymentMethodForm({
     });
 
     if (result.error) {
-      setErrors(result.error.message || 'Payment failed');
+      setErrors(result.error.message || (t('failed_payment') as string));
       setIsSubmitting(false);
       setPaymentState('payment_failed');
       return;
@@ -378,7 +378,7 @@ export function PaymentMethodForm({
       return;
     }
 
-    setErrors('Payment was not completed');
+    setErrors(t('payment_was_not_completed') as string);
     setIsSubmitting(false);
     setPaymentState('payment_failed');
   };
@@ -409,7 +409,7 @@ export function PaymentMethodForm({
 
       await confirmSavedTokenPaymentWithStripe(token);
     } catch {
-      setErrors('An unexpected error occurred');
+      setErrors(t('an_error_occurred') as string);
       setIsSubmitting(false);
       setPaymentState('payment_failed');
     }
@@ -430,7 +430,7 @@ export function PaymentMethodForm({
       <div className="space-y-4">
         <RadioGroup value={selectedMethod} onChange={handleMethodChange}>
           <RadioGroup.Label className="sr-only">
-            Payment Method
+            {t('payment_methods')}
           </RadioGroup.Label>
           <div className="space-y-2">
             {tokens?.map((token: ClientGatewayToken) => (
@@ -461,8 +461,11 @@ export function PaymentMethodForm({
                                   : 'text-gray-900'
                               }
                             >
-                              {token.meta.brand} ending in {token.meta.last4}
-                              {token.is_default && ' (Default)'}
+                              {trans('bis_card_ending_in', {
+                                brand: token.meta.brand,
+                                last4: token.meta.last4,
+                              })}
+                              {token.is_default && ` (${t('default')})`}
                             </span>
                           </div>
                         </div>

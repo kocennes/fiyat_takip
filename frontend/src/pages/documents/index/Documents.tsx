@@ -99,7 +99,7 @@ export default function Documents() {
     createAccount()
       .catch((error: any) => {
         toast.error(
-          error.response?.data?.error ?? 'Failed to create Docuninja account'
+          error.response?.data?.error ?? 'bis_esign_account_create_failed'
         );
       })
       .finally(() => {

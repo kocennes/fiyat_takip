@@ -18,7 +18,7 @@ function normalizeName(name: string): string {
 
 export function getDocumentNameFromFile(
   file: File,
-  fallback = 'Untitled document'
+  fallback: string
 ): string {
   const name = file.name.replace(/\.[^/.]+$/, '').trim();
   return name ? normalizeName(name) : fallback;

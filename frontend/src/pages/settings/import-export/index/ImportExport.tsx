@@ -28,7 +28,6 @@ export function ImportExport() {
     <Settings
       title={t('import_export')}
       breadcrumbs={pages}
-      docsLink="en/basic-settings/#import_export"
     >
       <Import />
 
