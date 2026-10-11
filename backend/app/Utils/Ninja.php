@@ -161,6 +161,11 @@ class Ninja
 
     public static function triggerForwarding(string $company_key, string $email)
     {
+        // BISAVUNMA: never send company keys / e-mail addresses to the upstream vendor.
+        if (! self::isHosted()) {
+            return;
+        }
+
         try {
             $x = Http::withHeaders([
                 'X-API-HOSTED-SECRET' => config('ninja.ninja_hosted_secret'),

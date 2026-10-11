@@ -91,21 +91,21 @@ class Gateway extends StaticModel
         $link = '';
 
         if ($this->id == 1) {
-            $link = 'http://reseller.authorize.net/application/?id=5560364';
+            $link = 'https://www.authorize.net/';
         } elseif (in_array($this->id, [15, 60, 61])) {
             $link = 'https://www.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run';
         } elseif ($this->id == 24) {
-            $link = 'https://www.2checkout.com/referral?r=2c37ac2298';
+            $link = 'https://www.2checkout.com/';
         } elseif ($this->id == 35) {
             $link = 'https://bitpay.com/dashboard/signup';
         } elseif ($this->id == 18) {
-            $link = 'https://applications.sagepay.com/apply/2C02C252-0F8A-1B84-E10D-CF933EFCAA99';
+            $link = 'https://www.opayo.co.uk/';
         } elseif ($this->id == 20 || $this->id == 56) {
             $link = 'https://dashboard.stripe.com/account/apikeys';
         } elseif ($this->id == 59) {
             $link = 'https://www.forte.net/';
         } elseif ($this->id == 62) {
-            $link = 'https://docs.btcpayserver.org/InvoiceNinja/';
+            $link = 'https://docs.btcpayserver.org/';
         } elseif ($this->id == 63) {
             $link = 'https://rotessa.com';
         } elseif ($this->id == 65) {

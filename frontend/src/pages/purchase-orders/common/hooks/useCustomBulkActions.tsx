@@ -150,7 +150,7 @@ export function useCustomBulkActions() {
           }
           icon={<Icon element={MdContactPage} />}
         >
-          {`${t('view')} ${t('expense')}`}
+          {t('bis_view_expense')}
         </DropdownElement>
       ),
     ({ selectedIds, selectedResources, setSelected }) =>

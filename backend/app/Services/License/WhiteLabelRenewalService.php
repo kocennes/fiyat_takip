@@ -30,6 +30,11 @@ class WhiteLabelRenewalService
         $licenseKey = config('ninja.license_key');
         $url = rtrim((string) config('ninja.hosted_ninja_url'), '/') . '/claim_license';
 
+        // BISAVUNMA: no licence server is configured by default; never call out without one.
+        if (trim((string) config('ninja.hosted_ninja_url')) === '') {
+            return false;
+        }
+
         if (! $licenseKey) {
             Log::warning('White label license: renewal skipped because LICENSE_KEY is not set', [
                 'step' => 'license_key',

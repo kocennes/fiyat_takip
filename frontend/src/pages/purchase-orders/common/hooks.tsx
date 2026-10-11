@@ -679,7 +679,7 @@ export function useActions(params: ActionsParams = {}) {
           entity="purchase_order"
           actionKey="view_expense"
           isCommonActionSection={!dropdown}
-          tooltipText={`${t('view')} ${t('expense')}`}
+          tooltipText={t('bis_view_expense')}
           onClick={() =>
             navigate(
               route('/expenses/:id/edit', { id: purchaseOrder.expense_id })
@@ -687,7 +687,7 @@ export function useActions(params: ActionsParams = {}) {
           }
           icon={MdPageview}
         >
-          {`${t('view')} ${t('expense')}`}
+          {t('bis_view_expense')}
         </EntityActionElement>
       ),
     (purchaseOrder) => (
