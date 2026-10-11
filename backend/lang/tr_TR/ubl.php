@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'free_export_item' => 'Vergisiz ihracat kalemi',
+    'outside_tax_scope' => 'Vergi kapsamı dışında',
+    'eea_goods_and_services' => 'AEA içi mal ve hizmetler',
+    'lower_rate' => 'İndirimli oran',
+    'mixed_tax_rate' => 'Karma vergi oranı',
+    'higher_rate' => 'Yüksek oran',
+    'canary_islands_indirect_tax' => 'Kanarya Adaları dolaylı vergisi',
+    'ceuta_and_melilla' => 'Ceuta ve Melilla',
+    'transferred_vat_italy' => 'Devredilen KDV (İtalya)',
+    'exempt_for_resale' => 'Yeniden satış için muaf',
+    'vat_not_now_due' => 'KDV ödemesinin vadesi henüz gelmedi',
+    'vat_due_previous_invoice' => 'Önceki faturadan doğan KDV',
+    'transferred_vat' => 'Devredilen KDV',
+    'duty_paid_by_supplier' => 'Vergi tedarikçi tarafından ödendi',
+    'vat_margin_scheme_travel_agents' => 'KDV marj rejimi - seyahat acenteleri',
+    'vat_margin_scheme_second_hand_goods' => 'KDV marj rejimi - ikinci el mallar',
+    'vat_margin_scheme_works_of_art' => 'KDV marj rejimi - sanat eserleri',
+    'vat_margin_scheme_collectors_items' => 'KDV marj rejimi - koleksiyon ürünleri',
+    'vat_exempt_eea_intra_community' => 'AEA topluluk içi KDV muafiyeti',
+    'canary_islands_tax' => 'Kanarya Adaları vergisi',
+    'tax_ceuta_melilla' => 'Ceuta ve Melilla vergisi',
+    'services_outside_scope' => 'Kapsam dışı hizmetler',
+];

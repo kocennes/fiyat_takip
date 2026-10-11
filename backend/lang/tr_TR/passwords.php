@@ -1,22 +1,10 @@
 <?php
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reminder Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are the default lines which match reasons
-    | that are given by the password broker for a password update attempt
-    | has failed, such as for an invalid token or invalid new password.
-    |
-    */
-
-    'password' => 'Şifreler en az altı karakter olmalı ve onay ile eşleşmelidir.',
-    'reset'    => 'Şifreniz sıfırlandı!',
-    'sent'     => 'Şifre sıfırlama bağlantınızı size e-posta ile gönderdik!',
-    'token'    => 'Şifre sıfırlama adresi/kodu geçersiz.',
-    'user'     => 'Bu e-posta adresi ile kayıtlı bir üye bulunmuyor.',
-
+    'password' => 'Şifreler en az altı karakter olmalı ve şifre tekrarıyla eşleşmelidir.',
+    'reset' => 'Şifreniz sıfırlandı!',
+    'sent' => 'Şifre sıfırlama bağlantınızı size e-posta ile gönderdik!',
+    'token' => 'Bu şifre sıfırlama bağlantısı geçersiz.',
+    'user' => 'Bu e-posta adresiyle kayıtlı bir kullanıcı bulunamadı.',
+    'throttled' => 'Kısa süre önce şifre sıfırlama talebinde bulundunuz, lütfen e-postanızı kontrol edin.',
 ];

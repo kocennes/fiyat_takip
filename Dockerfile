@@ -9,6 +9,21 @@ ENV VITE_IS_HOSTED=false \
     VITE_ENABLE_DOCUNINJA=false
 RUN npm run build
 
+# The client portal's compiled CSS/JS is rebuilt from this repository so the
+# translated portal scripts and the Tailwind classes used by the BISAVUNMA
+# views are part of the bundle that the Blade @vite directives load.
+FROM node:22-bookworm AS backend-assets
+
+WORKDIR /backend
+COPY backend/package.json backend/package-lock.json ./
+# The release's lock file misses two optional entries, which `npm ci` rejects.
+RUN npm install --no-audit --no-fund
+COPY backend/vite.config.ts backend/tailwind.config.cjs backend/postcss.config.cjs ./
+COPY backend/resources/ ./resources/
+# resources/js/app.js imports Livewire's ESM build from the Composer packages.
+COPY --from=invoiceninja/invoiceninja-debian:5.13.47 /var/www/html/vendor/livewire/livewire/dist ./vendor/livewire/livewire/dist
+RUN npm run build
+
 # backend/ is the upstream 5.13.47 release source plus the BISAVUNMA changes.
 # The base image must stay on exactly that release: the overlaid PHP, Blade and
 # language files below rely on the vendor libraries and compiled assets that
@@ -45,6 +60,7 @@ COPY --from=frontend-build --chown=www-data:www-data /frontend/dist/index.html /
 # BISAVUNMA images published under the upstream file names, so any remaining
 # reference to an upstream logo or badge shows the BISAVUNMA brand instead.
 COPY docker/branding/public/ /opt/bisavunma/public/
+COPY --from=backend-assets /backend/public/build /opt/bisavunma/public/build
 COPY docker/app-init.sh /usr/local/bin/app-init.sh
 RUN sed -i 's/\r$//' /usr/local/bin/app-init.sh && chmod 0755 /usr/local/bin/app-init.sh
 
