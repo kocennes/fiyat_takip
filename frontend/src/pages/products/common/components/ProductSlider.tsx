@@ -11,7 +11,16 @@
 import { useColorScheme } from '$app/common/colors';
 import { endpoint } from '$app/common/helpers';
 import { sanitizeHTML } from '$app/common/helpers/html-string';
+import {
+  hasProductExchangeRate,
+  isCompanyCurrency,
+  productProfit,
+} from '$app/common/helpers/product-currency';
 import { useFormatMoney } from '$app/common/hooks/money/useFormatMoney';
+import {
+  useCurrencyLabel,
+  useFormatExchangeRate,
+} from '$app/common/hooks/useFormatExchangeRate';
 import { useCurrentCompany } from '$app/common/hooks/useCurrentCompany';
 import { useEntityAssigned } from '$app/common/hooks/useEntityAssigned';
 import { useEntityCustomFields } from '$app/common/hooks/useEntityCustomFields';
@@ -36,7 +45,7 @@ import classNames from 'classnames';
 import { atom, useAtom } from 'jotai';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useActions } from '../hooks';
+import { useActions, useFormatPercent } from '../hooks';
 
 export const productSliderAtom = atom<Product | null>(null);
 export const productSliderVisibilityAtom = atom(false);
@@ -50,9 +59,12 @@ export function ProductSlider() {
 
   const formatMoney = useFormatMoney();
   const formatNumber = useFormatNumber();
+  const currencyLabel = useCurrencyLabel();
+  const formatPercent = useFormatPercent();
   const taxCategories = useTaxCategories();
   const hasPermission = useHasPermission();
   const entityAssigned = useEntityAssigned();
+  const formatExchangeRate = useFormatExchangeRate();
   const formatCustomFieldValue = useFormatCustomFieldValue();
 
   const actions = useActions({ showEditAction: true });
@@ -71,17 +83,90 @@ export function ProductSlider() {
     $refetch(['products']);
   };
 
+  // BISAVUNMA: alış/satış fiyatı in the product currency, the manual rate, TL equivalents
+  // and profit (common/helpers/product-currency.ts).
+  const companyCurrencyId = company?.settings.currency_id;
+
+  const isForeignCurrency =
+    Boolean(product) &&
+    !isCompanyCurrency(product?.currency_id, companyCurrencyId);
+
+  const hasRate = Boolean(
+    product && hasProductExchangeRate(product, companyCurrencyId)
+  );
+
+  const profit = product
+    ? productProfit(product, companyCurrencyId)
+    : { cost: 0, price: 0, profit: 0, profitPercent: 0 };
+
+  const formatTry = (value: number) =>
+    hasRate ? (
+      <span className={classNames({ 'text-red-600': value < 0 })}>
+        {formatMoney(value, company?.settings.country_id, companyCurrencyId)}
+      </span>
+    ) : (
+      '—'
+    );
+
   const stats = product
     ? [
         {
-          label: t('price'),
-          value: formatMoney(product.price, undefined, undefined),
+          label: t('buy_price'),
+          value: formatMoney(
+            product.cost,
+            undefined,
+            product.currency_id || undefined
+          ),
           show: true,
         },
         {
-          label: t('cost'),
-          value: formatMoney(product.cost, undefined, undefined),
-          show: Boolean(company?.enable_product_cost),
+          label: t('bis_sale_price'),
+          value: formatMoney(
+            product.price,
+            undefined,
+            product.currency_id || undefined
+          ),
+          show: true,
+        },
+        {
+          label: t('exchange_rate'),
+          value: hasRate
+            ? `1 ${currencyLabel(product.currency_id)} = ${formatExchangeRate(
+                product.exchange_rate,
+                4
+              )} ${currencyLabel(companyCurrencyId)}`
+            : '—',
+          show: isForeignCurrency,
+        },
+        {
+          label: t('bis_purchase_price_try'),
+          value: formatTry(profit.cost),
+          show: isForeignCurrency,
+        },
+        {
+          label: t('bis_sale_price_try'),
+          value: formatTry(profit.price),
+          show: isForeignCurrency,
+        },
+        {
+          label: t('bis_profit_try'),
+          value: formatTry(profit.profit),
+          show: true,
+        },
+        {
+          label: t('bis_profit_percent'),
+          value: hasRate ? (
+            <span
+              className={classNames({
+                'text-red-600': profit.profitPercent < 0,
+              })}
+            >
+              {formatPercent(profit.profitPercent)}
+            </span>
+          ) : (
+            '—'
+          ),
+          show: true,
         },
         {
           label: t('default_quantity'),
@@ -122,10 +207,12 @@ export function ProductSlider() {
     ? [
         {
           label: t('tax_category'),
-          value:
-            taxCategories.find(
-              (taxCategory) => taxCategory.value === product.tax_id
-            )?.label ?? '',
+          // Only used by the automatic (US/EU) tax engine.
+          value: company?.calculate_taxes
+            ? (taxCategories.find(
+                (taxCategory) => taxCategory.value === product.tax_id
+              )?.label ?? '')
+            : '',
         },
         ...[
           { name: product.tax_name1, rate: product.tax_rate1 },

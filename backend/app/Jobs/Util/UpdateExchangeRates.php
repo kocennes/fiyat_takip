@@ -38,11 +38,18 @@ class UpdateExchangeRates implements ShouldQueue
      */
     public function handle(): void
     {
-        nlog('updating currencies');
-
+        /*
+         * BISAVUNMA: automatic exchange-rate fetching is opt-in. Without an
+         * Open Exchange Rates key (OPENEXCHANGE_APP_ID, empty by default) the
+         * job does nothing. It only refreshes the reference rates of the
+         * currencies table; the exchange rates entered on documents and
+         * products are never changed by it.
+         */
         if (empty(config('ninja.currency_converter_api_key'))) {
             return;
         }
+
+        nlog('updating currencies');
 
         $cc_endpoint = sprintf('https://openexchangerates.org/api/latest.json?app_id=%s', config('ninja.currency_converter_api_key'));
 
@@ -77,8 +84,11 @@ class UpdateExchangeRates implements ShouldQueue
 
             /* Update all currencies */
             Currency::all()->each(function ($currency) use ($currency_api) {
-                $currency->exchange_rate = $currency_api->rates->{$currency->code};
-                $currency->save();
+
+                if (isset($currency_api->rates->{$currency->code})) {
+                    $currency->exchange_rate = $currency_api->rates->{$currency->code};
+                    $currency->save();
+                }
             });
 
             /* Rebuild the cache */

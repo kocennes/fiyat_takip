@@ -33,9 +33,11 @@ class QuoteFactory
         $quote->partial_due_date = null;
         $quote->is_deleted = false;
         $quote->line_items = json_encode([]);
-        // Proforma / quotation default tax rate for Turkey.
-        $quote->tax_name1 = 'KDV';
-        $quote->tax_rate1 = 20;
+        // BISAVUNMA: KDV is charged per line item (new lines default to the
+        // company's KDV %20), so new proformas carry no document-level tax;
+        // a document-level KDV here would charge the tax twice.
+        $quote->tax_name1 = '';
+        $quote->tax_rate1 = 0;
         $quote->tax_name2 = '';
         $quote->tax_rate2 = 0;
         $quote->custom_value1 = '';

@@ -15,7 +15,7 @@ import { DesignSelector } from '$app/common/generic/DesignSelector';
 import { useHasPermission } from '$app/common/hooks/permissions/useHasPermission';
 import { Quote } from '$app/common/interfaces/quote';
 import { Card } from '$app/components/cards';
-import { NumberInputField } from '$app/components/forms/NumberInputField';
+import { DocumentExchangeRateField } from '$app/components/DocumentExchangeRateField';
 import Toggle from '$app/components/forms/Toggle';
 import { ProjectSelector } from '$app/components/projects/ProjectSelector';
 import { UserSelector } from '$app/components/users/UserSelector';
@@ -61,14 +61,11 @@ export default function Settings() {
               />
             </div>
 
-            <NumberInputField
-              label={t('exchange_rate')}
-              value={quote?.exchange_rate || 1.0}
-              onValueChange={(value) =>
-                handleChange('exchange_rate', parseFloat(value) || 1.0)
-              }
+            <DocumentExchangeRateField
+              resource={quote}
+              relationType="client_id"
+              onChange={(value) => handleChange('exchange_rate', value)}
               errorMessage={errors?.errors.exchange_rate}
-              disablePrecision
             />
 
             <div className="space-y-2">

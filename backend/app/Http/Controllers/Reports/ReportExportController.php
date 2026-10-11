@@ -37,11 +37,14 @@ class ReportExportController extends BaseController
         $report = base64_decode($report);
         Cache::forget($hash);
 
+        // BISAVUNMA: localized download name ("Rapor.csv"), ASCII so it is safe in the header.
+        $base_name = str_replace(['"', '\\', '/'], '', \Illuminate\Support\Str::ascii(ctrans('texts.report'))) ?: 'report';
+
         if ($this->isXlsxData($report)) {
             nlog("isXlsxData");
             return response($report, 200, [
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition' => 'inline; filename="report.xlsx"',
+                'Content-Disposition' => "inline; filename=\"{$base_name}.xlsx\"",
                 'Content-Length' => strlen($report),
             ]);
 
@@ -50,7 +53,7 @@ class ReportExportController extends BaseController
         // Check if the content starts with PDF signature (%PDF-)
         $isPdf = str_starts_with(trim($report), '%PDF-');
 
-        $attachment_name = $isPdf ? 'report.pdf' : 'report.csv';
+        $attachment_name = $isPdf ? "{$base_name}.pdf" : "{$base_name}.csv";
 
         $headers = [
             'Content-Disposition' => "attachment; filename=\"{$attachment_name}\"",

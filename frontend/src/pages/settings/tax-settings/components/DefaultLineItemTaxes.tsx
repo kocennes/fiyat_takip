@@ -19,6 +19,11 @@ import { SelectField } from '$app/components/forms';
 import { companySettingsErrorsAtom } from '../../common/atoms';
 import { useHandleCurrentCompanyChangeProperty } from '../../common/hooks/useHandleCurrentCompanyChange';
 
+/**
+ * BISAVUNMA: Turkish KDV is charged per line item with a single tax line,
+ * so only the first default line item tax (settings tax_name1 / tax_rate1,
+ * e.g. KDV %20) is offered.
+ */
 export function DefaultLineItemTaxes() {
   const [t] = useTranslation();
 
@@ -30,17 +35,13 @@ export function DefaultLineItemTaxes() {
 
   const handlePropertyChange = useHandleCurrentCompanyChangeProperty();
 
-  const handleChange = (
-    propertyIndex: '1' | '2' | '3',
-    nameValue: string,
-    rateValue: number
-  ) => {
+  const handleChange = (nameValue: string, rateValue: number) => {
     if (!nameValue) {
-      handlePropertyChange(`settings.tax_name${propertyIndex}`, '');
-      handlePropertyChange(`settings.tax_rate${propertyIndex}`, 0);
+      handlePropertyChange('settings.tax_name1', '');
+      handlePropertyChange('settings.tax_rate1', 0);
     } else {
-      handlePropertyChange(`settings.tax_name${propertyIndex}`, nameValue);
-      handlePropertyChange(`settings.tax_rate${propertyIndex}`, rateValue);
+      handlePropertyChange('settings.tax_name1', nameValue);
+      handlePropertyChange('settings.tax_rate1', rateValue);
     }
   };
 
@@ -53,8 +54,11 @@ export function DefaultLineItemTaxes() {
 
   return (
     <Card className="shadow-sm" style={{ borderColor: colors.$24 }}>
-      {companyChanges?.enabled_item_tax_rates > 0 && data && (
-        <Element leftSide={t('default_tax_rate')}>
+      {data && (
+        <Element
+          leftSide={t('default_tax_rate')}
+          leftSideHelp={t('bis_default_line_item_tax_help')}
+        >
           <SelectField
             value={
               companyChanges?.settings?.tax_name1
@@ -63,7 +67,6 @@ export function DefaultLineItemTaxes() {
             }
             onValueChange={(value) =>
               handleChange(
-                '1',
                 value.split('|%|')?.[0],
                 Number(value.split('|%|')?.[1] || 0)
               )
@@ -77,69 +80,7 @@ export function DefaultLineItemTaxes() {
                 key={taxRate.id}
                 value={`${taxRate.name}|%|${taxRate.rate}`}
               >
-                {taxRate.rate}% — {taxRate.name}
-              </option>
-            ))}
-          </SelectField>
-        </Element>
-      )}
-
-      {companyChanges?.enabled_item_tax_rates > 1 && data && (
-        <Element leftSide={t('default_tax_rate')}>
-          <SelectField
-            value={
-              companyChanges?.settings?.tax_name2
-                ? `${companyChanges?.settings?.tax_name2}|%|${companyChanges?.settings?.tax_rate2}`
-                : ''
-            }
-            onValueChange={(value) =>
-              handleChange(
-                '2',
-                value.split('|%|')?.[0],
-                Number(value.split('|%|')?.[1] || 0)
-              )
-            }
-            withBlank
-            errorMessage={errors?.errors['settings.tax_rate2']}
-            customSelector
-          >
-            {data.data.data.map((taxRate: TaxRate) => (
-              <option
-                key={taxRate.id}
-                value={`${taxRate.name}|%|${taxRate.rate}`}
-              >
-                {taxRate.rate}% — {taxRate.name}
-              </option>
-            ))}
-          </SelectField>
-        </Element>
-      )}
-
-      {companyChanges?.enabled_item_tax_rates > 2 && data && (
-        <Element leftSide={t('default_tax_rate')}>
-          <SelectField
-            value={
-              companyChanges?.settings?.tax_name3
-                ? `${companyChanges?.settings?.tax_name3}|%|${companyChanges?.settings?.tax_rate3}`
-                : ''
-            }
-            onValueChange={(value) =>
-              handleChange(
-                '3',
-                value.split('|%|')?.[0],
-                Number(value.split('|%|')?.[1] || 0)
-              )
-            }
-            withBlank
-            errorMessage={errors?.errors['settings.tax_rate3']}
-            customSelector
-          >
-            {data.data.data.map((taxRate: TaxRate) => (
-              <option
-                key={taxRate.id}
-                value={`${taxRate.name}|%|${taxRate.rate}`}
-              >
-                {taxRate.rate}% — {taxRate.name}
+                {taxRate.name} %{taxRate.rate}
               </option>
             ))}
           </SelectField>

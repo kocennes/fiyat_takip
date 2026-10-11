@@ -15,7 +15,7 @@ import { DesignSelector } from '$app/common/generic/DesignSelector';
 import { useHasPermission } from '$app/common/hooks/permissions/useHasPermission';
 import { Invoice } from '$app/common/interfaces/invoice';
 import { Card } from '$app/components/cards';
-import { NumberInputField } from '$app/components/forms/NumberInputField';
+import { DocumentExchangeRateField } from '$app/components/DocumentExchangeRateField';
 import Toggle from '$app/components/forms/Toggle';
 import { ProjectSelector } from '$app/components/projects/ProjectSelector';
 import { UserSelector } from '$app/components/users/UserSelector';
@@ -63,14 +63,11 @@ export default function Settings() {
               />
             </div>
 
-            <NumberInputField
-              label={t('exchange_rate')}
-              value={invoice?.exchange_rate || 1.0}
-              onValueChange={(value) =>
-                handleChange('exchange_rate', parseFloat(value) || 1.0)
-              }
+            <DocumentExchangeRateField
+              resource={invoice}
+              relationType="client_id"
+              onChange={(value) => handleChange('exchange_rate', value)}
               errorMessage={errors?.errors.exchange_rate}
-              disablePrecision
             />
 
             <Toggle

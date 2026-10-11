@@ -904,6 +904,15 @@ class CompanySettings extends BaseSettings
     ];
 
     /**
+     * BISAVUNMA: Turkish KDV. KDV is charged per line item only (no
+     * document-level taxes) and prices are entered KDV hariç; new line items
+     * default to the general rate. While document-level taxes are disabled
+     * (enabled_tax_rates = 0) the editors use settings tax_name1 / tax_rate1
+     * as the default tax of new line items.
+     */
+    public const TURKISH_DEFAULT_LINE_TAX = ['name' => 'KDV', 'rate' => 20];
+
+    /**
      * Returns the configured regional default for a setting, falling back to
      * the Turkish default when only the upstream fall-back is configured.
      *
@@ -954,6 +963,11 @@ class CompanySettings extends BaseSettings
         $data->country_id = self::regionalDefault('country_id');
         $data->translations = (object) [];
         $data->pdf_variables = (object) self::getEntityVariableDefaults();
+
+        // BISAVUNMA: new line items default to KDV %20, prices KDV hariç.
+        $data->tax_name1 = self::TURKISH_DEFAULT_LINE_TAX['name'];
+        $data->tax_rate1 = self::TURKISH_DEFAULT_LINE_TAX['rate'];
+        $data->inclusive_taxes = false;
 
         return self::setCasts($data, self::$casts);
     }

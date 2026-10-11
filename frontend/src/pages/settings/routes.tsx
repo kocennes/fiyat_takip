@@ -10,7 +10,6 @@
 
 import { Guard } from '$app/common/guards/Guard';
 import { admin, owner } from '$app/common/guards/guards/admin';
-import { companySettings } from '$app/common/guards/guards/company-settings';
 import { Navigate, Outlet, Route } from 'react-router-dom';
 import { plan } from '$app/common/guards/guards/plan';
 import * as Settings from './index';
@@ -198,14 +197,11 @@ export const settingsRoutes = (
         <Route path="messages" element={<Settings.Messages />} />
         <Route path="customize" element={<Settings.Customize />} />
       </Route>
+      {/* BISAVUNMA: no foreign e-invoicing standards (Peppol, ZUGFeRD,
+          XRechnung, Verifactu …); the e-invoicing settings screen is hidden. */}
       <Route
         path="e_invoice"
-        element={
-          <Guard
-            guards={[companySettings()]}
-            component={<Settings.EInvoice />}
-          />
-        }
+        element={<Navigate to="/settings/company_details" replace />}
       />
       <Route path="email_settings" element={<Settings.EmailSettings />} />
       <Route

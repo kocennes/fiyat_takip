@@ -41,6 +41,14 @@ class ProductDecorator implements DecoratorInterface
         return $product->tags->pluck('name')->implode(', ');
     }
 
+    /**
+     * ISO code of the currency of the product's cost and price (company currency when empty).
+     */
+    public function currency_id(Product $product): string
+    {
+        return $product->currencyCode();
+    }
+
     /*
         public const PRODUCT_TYPE_PHYSICAL = 1;
         public const PRODUCT_TYPE_SERVICE = 2;

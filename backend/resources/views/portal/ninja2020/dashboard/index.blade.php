@@ -16,7 +16,7 @@
             <p>{{ $client->address1 }}</p>
             <p>{{ $client->city }}, {{ $client->state }}</p>
             <p>{{ $client->postal_code }}</p>
-            <p>{{ App\Models\Country::find($client->country_id)?->name }}</p>
+            <p>{{ App\Models\Country::find($client->country_id)?->getName() }}</p>
         </div>
 
         <div class="w-full flex flex-row items-center rounded-md border border-[#E5E7EB] bg-white p-5 md:flex-col md:justify-center">
@@ -94,7 +94,7 @@
             <p>{{ $settings->address1 }}</p>
             <p>{{ $settings->city }} {{ $settings->state }}</p>
             <p>{{ $settings->postal_code }}</p>
-            <p>{{ $client->company->country()->name ?? '' }}</p>
+            <p>{{ $client->company->country()?->getName() ?? '' }}</p>
         </div>
 
         <div class="text-light-grey-text flex grow basis-full flex-col justify-center text-sm md:basis-1/2 md:pl-4 xl:basis-auto xl:px-5 space-y-2 mt-3 xl:mt-0">

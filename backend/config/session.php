@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
-
 return [
 
     /*
@@ -126,10 +124,10 @@ return [
     |
     */
 
-    'cookie' => env(
-        'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
-    ),
+    // BISAVUNMA: a fixed default instead of one derived from APP_NAME, so an upstream
+    // APP_NAME in an old .env can never name the cookie after the upstream product. It is
+    // the same name the image's APP_NAME ("BISAVUNMA Fiyat Takip") produced before.
+    'cookie' => env('SESSION_COOKIE', 'bisavunma_fiyat_takip_session'),
 
     /*
     |--------------------------------------------------------------------------

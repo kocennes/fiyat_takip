@@ -30,6 +30,10 @@ import { Spinner } from '$app/components/Spinner';
 import { ProductTableResource } from '$app/pages/invoices/common/components/ProductsTable';
 import { productAtom } from '../common/atoms';
 import { CreateProduct } from '../common/components/CreateProduct';
+import {
+  useProductCurrencyDefaults,
+  useValidateProductCurrency,
+} from '../common/hooks';
 
 export default function Create() {
   const { documentTitle } = useTitle('new_product');
@@ -40,6 +44,9 @@ export default function Create() {
 
   const currentCompany = useCurrentCompany();
   const [product, setProduct] = useAtom(productAtom);
+
+  const withCurrencyDefaults = useProductCurrencyDefaults();
+  const validateProductCurrency = useValidateProductCurrency();
 
   const { data } = useBlankProductQuery({
     enabled: typeof product === 'undefined',
@@ -56,6 +63,13 @@ export default function Create() {
 
   const handleSave = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const currencyErrors = validateProductCurrency(product);
+
+    if (currencyErrors) {
+      setErrors(currencyErrors);
+      return;
+    }
 
     if (!isFormBusy) {
       setIsFormBusy(true);
@@ -97,7 +111,7 @@ export default function Create() {
         typeof value === 'undefined' &&
         searchParams.get('action') !== 'clone'
       ) {
-        value = cloneDeep(data);
+        value = withCurrencyDefaults(cloneDeep(data));
 
         if (
           currentCompany?.quickbooks &&

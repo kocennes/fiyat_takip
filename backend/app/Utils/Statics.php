@@ -80,11 +80,20 @@ class Statics
         /** @var \Illuminate\Support\Collection<\App\Models\Country> */
         $countries = app('countries');
 
-        $data['countries'] = $countries->each(function ($country) {
-            $country->name = ctrans('texts.country_' . $country->name);
-        })->sortBy(function ($country) {
-            return $country->name;
-        })->values();
+        // BISAVUNMA: translate copies, so the shared app('countries') models keep their
+        // original names (getName() and the PDF engines translate from them), then list
+        // Turkey first and the other countries in Turkish alphabetical order.
+        $data['countries'] = TranslationHelper::sortCountries(
+            $countries->map(function ($country) {
+                $country = clone $country;
+                $country->name = ctrans('texts.country_' . $country->name);
+
+                return $country;
+            }),
+            function ($country): string {
+                return (string) $country->name;
+            }
+        );
 
 
         /** @var \Illuminate\Support\Collection<\App\Models\PaymentType> */

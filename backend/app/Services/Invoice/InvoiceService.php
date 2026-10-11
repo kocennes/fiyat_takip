@@ -632,6 +632,16 @@ class InvoiceService
             $this->invoice->public_notes = $this->invoice->client->public_notes;
         }
 
+        /* BISAVUNMA: an invoice generated from a recurring invoice takes the exchange rate entered on the recurring invoice (manual kur);
+           any rate on the generated invoice was only filled automatically a moment ago. */
+        if ($is_recurring && $this->invoice->recurring_invoice && $this->invoice->client->currency()->id != (int) $this->invoice->company->settings->currency_id) {
+            $recurring_exchange_rate = (float) $this->invoice->recurring_invoice->exchange_rate;
+
+            if ($recurring_exchange_rate > 0 && abs($recurring_exchange_rate - 1.0) > 0.000001) {
+                $this->invoice->exchange_rate = $recurring_exchange_rate;
+            }
+        }
+
         /* If client currency differs from the company default currency, then insert the client exchange rate on the model.*/
         if (! isset($this->invoice->exchange_rate) && $this->invoice->client->currency()->id != (int) $this->invoice->company->settings->currency_id) {
             $this->invoice->exchange_rate = $this->invoice->client->setExchangeRate();

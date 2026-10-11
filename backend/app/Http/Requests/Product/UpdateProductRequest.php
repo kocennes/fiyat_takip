@@ -19,6 +19,7 @@ use App\Utils\Traits\ChecksEntityStatus;
 class UpdateProductRequest extends Request
 {
     use ChecksEntityStatus;
+    use HandlesProductCurrency;
 
     /** @var class-string */
     protected ?string $tag_entity_type = Product::class;
@@ -53,7 +54,14 @@ class UpdateProductRequest extends Request
         $rules['stock_notification'] = 'sometimes|bool';
         $rules['income_account_id'] = 'bail|sometimes|nullable|string|max:64';
 
+        $rules = $this->currencyRules($rules, $this->product);
+
         return $this->globalRules($rules);
+    }
+
+    public function attributes()
+    {
+        return $this->currencyAttributes();
     }
 
     public function prepareForValidation()
@@ -73,6 +81,8 @@ class UpdateProductRequest extends Request
         }
 
         $input = $this->decodePrimaryKeys($input);
+
+        $input = $this->normalizeCurrencyInput($input, $this->product);
 
         if (array_key_exists('in_stock_quantity', $input) && request()->has('update_in_stock_quantity') && request()->input('update_in_stock_quantity') == 'true') {
         } elseif (array_key_exists('in_stock_quantity', $input)) {

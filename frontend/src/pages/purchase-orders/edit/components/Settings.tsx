@@ -15,7 +15,7 @@ import { DesignSelector } from '$app/common/generic/DesignSelector';
 import { PurchaseOrder } from '$app/common/interfaces/purchase-order';
 import { Card } from '$app/components/cards';
 import { ClientSelector } from '$app/components/clients/ClientSelector';
-import { NumberInputField } from '$app/components/forms/NumberInputField';
+import { DocumentExchangeRateField } from '$app/components/DocumentExchangeRateField';
 import Toggle from '$app/components/forms/Toggle';
 import { ProjectSelector } from '$app/components/projects/ProjectSelector';
 import { UserSelector } from '$app/components/users/UserSelector';
@@ -78,17 +78,12 @@ export default function Settings() {
           </div>
 
           <div className="col-span-12 lg:col-span-6 space-y-6">
-            <div className="space-y-2">
-              <NumberInputField
-                label={t('exchange_rate')}
-                value={purchaseOrder?.exchange_rate || 1.0}
-                onValueChange={(value) =>
-                  handleChange('exchange_rate', parseFloat(value) || 1.0)
-                }
-                errorMessage={errors?.errors.exchange_rate}
-                disablePrecision
-              />
-            </div>
+            <DocumentExchangeRateField
+              resource={purchaseOrder}
+              relationType="vendor_id"
+              onChange={(value) => handleChange('exchange_rate', value)}
+              errorMessage={errors?.errors.exchange_rate}
+            />
 
             <div className="space-y-2">
               <DesignSelector

@@ -22,7 +22,11 @@ import { useBlankProductQuery } from '$app/common/queries/products';
 import { Button } from '$app/components/forms';
 import { Modal } from '$app/components/Modal';
 import { ProductForm } from '$app/pages/products/common/components/ProductForm';
-import { useHandleChange } from '$app/pages/products/common/hooks';
+import {
+  useHandleChange,
+  useProductCurrencyDefaults,
+  useValidateProductCurrency,
+} from '$app/pages/products/common/hooks';
 
 interface Props {
   isModalOpen: boolean;
@@ -43,7 +47,17 @@ export function ProductCreate(props: Props) {
 
   const handleChange = useHandleChange({ setErrors, setProduct });
 
+  const withCurrencyDefaults = useProductCurrencyDefaults();
+  const validateProductCurrency = useValidateProductCurrency();
+
   const handleSave = () => {
+    const currencyErrors = validateProductCurrency(product);
+
+    if (currencyErrors) {
+      setErrors(currencyErrors);
+      return;
+    }
+
     if (!isFormBusy) {
       setIsFormBusy(true);
 
@@ -71,7 +85,7 @@ export function ProductCreate(props: Props) {
 
   useEffect(() => {
     if (blankProduct) {
-      setProduct(blankProduct);
+      setProduct(withCurrencyDefaults(blankProduct));
     }
   }, [blankProduct]);
 

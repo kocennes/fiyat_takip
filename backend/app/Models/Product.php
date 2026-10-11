@@ -38,6 +38,8 @@ use League\CommonMark\CommonMarkConverter;
  * @property string|null $hash
  * @property float $cost
  * @property float $price
+ * @property string|null $currency_id
+ * @property float $exchange_rate
  * @property float $quantity
  * @property string|null $tax_name1
  * @property string|null $income_account_id
@@ -95,6 +97,8 @@ class Product extends BaseModel
         'notes',
         'cost',
         'price',
+        'currency_id',
+        'exchange_rate',
         'quantity',
         'tax_name1',
         'tax_name2',
@@ -116,6 +120,8 @@ class Product extends BaseModel
         'created_at' => 'timestamp',
         'deleted_at' => 'timestamp',
         'sync' => ProductSync::class,
+        'currency_id' => 'string',
+        'exchange_rate' => 'float',
     ];
 
     public array $ubl_tax_map = [
@@ -217,6 +223,101 @@ class Product extends BaseModel
     public function translate_entity()
     {
         return ctrans('texts.product');
+    }
+
+    /**
+     * BISAVUNMA product pricing: cost (alış fiyatı) and price (satış fiyatı)
+     * are stored in the product currency (currency_id; NULL or '' = company
+     * currency) and exchange_rate is the manually entered rate:
+     * 1 unit of the product currency = exchange_rate units of the company
+     * currency (TRY).
+     *
+     * Returns the id of the product currency (the company currency when empty).
+     */
+    public function pricingCurrencyId(): string
+    {
+        $currency_id = trim((string) $this->currency_id);
+
+        return $currency_id !== '' ? $currency_id : $this->companyCurrencyId();
+    }
+
+    public function hasCompanyCurrency(): bool
+    {
+        return $this->pricingCurrencyId() === $this->companyCurrencyId();
+    }
+
+    /**
+     * ISO code of the product currency (company currency when empty), e.g. "USD".
+     */
+    public function currencyCode(): string
+    {
+        $currency_id = $this->pricingCurrencyId();
+
+        /** @var \Illuminate\Support\Collection<int, \App\Models\Currency> $currencies */
+        $currencies = app('currencies');
+
+        $currency = $currencies->first(function ($currency) use ($currency_id) {
+            return (string) $currency->id === $currency_id;
+        });
+
+        return $currency ? (string) $currency->code : '';
+    }
+
+    /**
+     * Company-currency (TRY) value of 1 unit of the product currency;
+     * always 1 for a company-currency product.
+     */
+    public function companyExchangeRate(): float
+    {
+        if ($this->hasCompanyCurrency()) {
+            return 1.0;
+        }
+
+        $rate = (float) $this->exchange_rate;
+
+        return $rate > 0 ? $rate : 1.0;
+    }
+
+    /**
+     * Converts an amount in the product currency (cost or price) into the
+     * currency of a document line.
+     *
+     * $document_exchange_rate is the document's own exchange_rate with the
+     * upstream semantics of invoices, quotes, credits, recurring invoices and
+     * purchase orders: document-currency units per 1 company-currency unit,
+     * so company amount = document amount / exchange_rate.
+     *
+     *  - same currency          => amount
+     *  - document in TRY        => amount * product exchange_rate
+     *  - otherwise (via TRY)    => amount * product exchange_rate * document exchange_rate
+     *
+     * @param  int|string|null $document_currency_id  document currency id; empty = company currency
+     */
+    public function convertToDocumentCurrency(float $amount, int|string|null $document_currency_id, float $document_exchange_rate = 1.0): float
+    {
+        $company_currency_id = $this->companyCurrencyId();
+        $document_currency_id = trim((string) $document_currency_id);
+
+        if ($document_currency_id === '') {
+            $document_currency_id = $company_currency_id;
+        }
+
+        if ($document_currency_id === $this->pricingCurrencyId()) {
+            return $amount;
+        }
+
+        $company_amount = $amount * $this->companyExchangeRate();
+
+        if ($document_currency_id === $company_currency_id) {
+            return $company_amount;
+        }
+
+        return $company_amount * ($document_exchange_rate > 0 ? $document_exchange_rate : 1.0);
+    }
+
+    private function companyCurrencyId(): string
+    {
+        return trim((string) ($this->company->settings->currency_id ?? ''));
     }
 
     /**

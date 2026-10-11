@@ -406,6 +406,21 @@ class Company extends BaseModel
         'smtp_port' => 'int',
     ];
 
+    /**
+     * BISAVUNMA: defaults of new companies. Turkish KDV is charged per line
+     * item only (no document-level taxes, no automatic US/EU tax engine) and
+     * the product purchase price (alış fiyatı) is always shown.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'enabled_tax_rates' => 0,
+        'enabled_item_tax_rates' => 1,
+        'enabled_expense_tax_rates' => 1,
+        'calculate_taxes' => false,
+        'enable_product_cost' => true,
+    ];
+
     protected $with = [];
 
     public function shouldCalculateTax()

@@ -29,6 +29,12 @@ class ProductRepository extends BaseRepository
         $tag_ids = $this->resolveTagIdsForSync($data, $product);
 
         $product->fill($data);
+
+        /* BISAVUNMA: cost and price are in the product currency; a company-currency product always has exchange rate 1. */
+        if ($product->hasCompanyCurrency() || (float) $product->exchange_rate <= 0) {
+            $product->exchange_rate = 1;
+        }
+
         $product->save();
 
         if (array_key_exists('documents', $data)) {

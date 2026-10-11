@@ -26,6 +26,17 @@ import { ErrorMessage } from '$app/components/ErrorMessage';
 import { IncomeAccountSelector } from '$app/components/IncomeAccountSelector';
 import { TagPillSelector } from '$app/components/tags/TagPillSelector';
 import { TAG_ENTITY_TYPES } from '$app/common/interfaces/tag';
+import { CurrencySelector } from '$app/components/CurrencySelector';
+import { useColorScheme } from '$app/common/colors';
+import { useFormatMoney } from '$app/common/hooks/money/useFormatMoney';
+import { useCurrencyLabel } from '$app/common/hooks/useFormatExchangeRate';
+import {
+  hasProductExchangeRate,
+  isCompanyCurrency,
+  productProfit,
+} from '$app/common/helpers/product-currency';
+import classNames from 'classnames';
+import { useFormatPercent } from '../hooks';
 
 interface Props {
   type?: 'create' | 'edit';
@@ -41,10 +52,33 @@ export function ProductForm(props: Props) {
   const [t] = useTranslation();
   const [, setSearchParams] = useSearchParams();
 
+  const colors = useColorScheme();
   const company = useCurrentCompany();
+  const formatMoney = useFormatMoney();
   const taxCategories = useTaxCategories();
+  const currencyLabel = useCurrencyLabel();
+  const formatPercent = useFormatPercent();
 
   const { errors, handleChange, type, product } = props;
+
+  // BISAVUNMA: alış/satış fiyatı in the product currency with a manually typed rate
+  // (1 product currency = exchange_rate TL); TL equivalents and profit are read-only.
+  const companyCurrencyId = company?.settings.currency_id;
+  const isForeignCurrency = !isCompanyCurrency(
+    product.currency_id,
+    companyCurrencyId
+  );
+  const hasRate = hasProductExchangeRate(product, companyCurrencyId);
+  const profit = productProfit(product, companyCurrencyId);
+
+  const formatTry = (value: number) =>
+    hasRate ? (
+      <span className={classNames({ 'text-red-600': value < 0 })}>
+        {formatMoney(value, company?.settings.country_id, companyCurrencyId)}
+      </span>
+    ) : (
+      '—'
+    );
 
   return (
     <>
@@ -81,7 +115,15 @@ export function ProductForm(props: Props) {
         />
       </Element>
 
-      <Element leftSide={t('price')}>
+      <Element leftSide={t('buy_price')}>
+        <NumberInputField
+          value={product.cost || ''}
+          onValueChange={(value) => handleChange('cost', parseFloat(value))}
+          errorMessage={errors?.errors.cost}
+        />
+      </Element>
+
+      <Element leftSide={t('bis_sale_price')}>
         <NumberInputField
           value={product.price || ''}
           onValueChange={(value) => handleChange('price', parseFloat(value))}
@@ -89,15 +131,72 @@ export function ProductForm(props: Props) {
         />
       </Element>
 
-      {company?.enable_product_cost && (
-        <Element leftSide={t('cost')}>
-          <NumberInputField
-            value={product.cost || ''}
-            onValueChange={(value) => handleChange('cost', parseFloat(value))}
-            errorMessage={errors?.errors.cost}
-          />
-        </Element>
-      )}
+      <Element leftSide={t('currency')}>
+        <CurrencySelector
+          value={product.currency_id || companyCurrencyId || ''}
+          onChange={(currencyId) => {
+            const isCompany = isCompanyCurrency(currencyId, companyCurrencyId);
+
+            handleChange('currency_id', isCompany ? '' : currencyId);
+            handleChange('exchange_rate', isCompany ? 1 : 0);
+          }}
+          errorMessage={errors?.errors.currency_id}
+          dismissable={false}
+        />
+      </Element>
+
+      <Element
+        leftSide={t('exchange_rate')}
+        leftSideHelp={
+          isForeignCurrency ? (
+            <span
+              className="text-xs"
+              style={{ color: colors.$22, opacity: 0.8 }}
+            >
+              {`1 ${currencyLabel(product.currency_id)} = ? ${currencyLabel(
+                companyCurrencyId
+              )}`}
+            </span>
+          ) : undefined
+        }
+        required={isForeignCurrency}
+      >
+        <NumberInputField
+          value={isForeignCurrency ? product.exchange_rate || '' : 1}
+          onValueChange={(value) =>
+            handleChange('exchange_rate', parseFloat(value) || 0)
+          }
+          disabled={!isForeignCurrency}
+          errorMessage={errors?.errors.exchange_rate}
+          disablePrecision
+        />
+      </Element>
+
+      <Element leftSide={t('bis_purchase_price_try')}>
+        {formatTry(profit.cost)}
+      </Element>
+
+      <Element leftSide={t('bis_sale_price_try')}>
+        {formatTry(profit.price)}
+      </Element>
+
+      <Element leftSide={t('bis_profit_try')}>
+        {formatTry(profit.profit)}
+      </Element>
+
+      <Element leftSide={t('bis_profit_percent')}>
+        {hasRate ? (
+          <span
+            className={classNames({
+              'text-red-600': profit.profitPercent < 0,
+            })}
+          >
+            {formatPercent(profit.profitPercent)}
+          </span>
+        ) : (
+          '—'
+        )}
+      </Element>
 
       {company?.enable_product_quantity && (
         <Element leftSide={t('default_quantity')}>
@@ -134,22 +233,25 @@ export function ProductForm(props: Props) {
           </Element>
         )}
 
-      <Element leftSide={t('tax_category')}>
-        <SelectField
-          value={product.tax_id}
-          onValueChange={(value) => handleChange('tax_id', value)}
-          customSelector
-          dismissable={false}
-        >
-          {taxCategories.map((taxCategory, index) => (
-            <option key={index} value={taxCategory.value as string}>
-              {taxCategory.label}
-            </option>
-          ))}
-        </SelectField>
+      {/* The tax category only feeds the automatic (US/EU) tax engine; KDV is set per line. */}
+      {company?.calculate_taxes && (
+        <Element leftSide={t('tax_category')}>
+          <SelectField
+            value={product.tax_id}
+            onValueChange={(value) => handleChange('tax_id', value)}
+            customSelector
+            dismissable={false}
+          >
+            {taxCategories.map((taxCategory, index) => (
+              <option key={index} value={taxCategory.value as string}>
+                {taxCategory.label}
+              </option>
+            ))}
+          </SelectField>
 
-        <ErrorMessage className="mt-2">{errors?.errors.tax_id}</ErrorMessage>
-      </Element>
+          <ErrorMessage className="mt-2">{errors?.errors.tax_id}</ErrorMessage>
+        </Element>
+      )}
 
       <Element leftSide={t('image_url')}>
         <InputField

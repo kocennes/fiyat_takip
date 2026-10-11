@@ -26,6 +26,8 @@ class ProductFactory
         $product->notes = '';
         $product->cost = 0;
         $product->price = 0;
+        $product->currency_id = null; // company currency (TRY)
+        $product->exchange_rate = 1;
         $product->quantity = 1;
         $product->tax_name1 = '';
         $product->tax_rate1 = 0;

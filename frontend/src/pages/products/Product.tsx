@@ -29,7 +29,7 @@ import { PreviousNextNavigation } from '$app/components/PreviousNextNavigation';
 import { ResourceActions } from '$app/components/ResourceActions';
 import { Tabs } from '$app/components/Tabs';
 import { useHandleCompanySave } from '../settings/common/hooks/useHandleCompanySave';
-import { useActions } from './common/hooks';
+import { useActions, useValidateProductCurrency } from './common/hooks';
 import { useTabs } from './common/hooks/useTabs';
 
 export default function Product() {
@@ -45,6 +45,8 @@ export default function Product() {
   const { data: productData } = useProductQuery({ id });
 
   const actions = useActions();
+
+  const validateProductCurrency = useValidateProductCurrency();
 
   const [productValue, setProductValue] = useState<ProductInterface>();
 
@@ -65,6 +67,13 @@ export default function Product() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSave = async () => {
+    const currencyErrors = validateProductCurrency(productValue);
+
+    if (currencyErrors) {
+      setErrors(currencyErrors);
+      return;
+    }
+
     if (!isFormBusy) {
       setErrors(undefined);
       setIsFormBusy(true);

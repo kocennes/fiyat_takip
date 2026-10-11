@@ -64,12 +64,14 @@ class CreateAccount extends Command
         $settings = CompanySettings::defaults();
 
         $settings->name = "BISAVUNMA Fiyat Takip";
-        $settings->currency_id = '1';
+        $settings->currency_id = '41'; // Turkish Lira (TRY)
         $settings->language_id = '25'; // Turkish - Turkey (tr_TR)
         $settings->timezone_id = '65'; // Europe/Istanbul
         $settings->date_format_id = '11'; // d.m.Y (DD.MM.YYYY)
         $settings->country_id = '792'; // Turkey
         $settings->military_time = true; // 24-hour clock
+        // CompanySettings::defaults() already makes new line items default to
+        // KDV %20 with prices entered KDV hariç.
 
         $account = Account::factory()->create();
         $company = Company::factory()->create([
@@ -77,6 +79,13 @@ class CreateAccount extends Command
             'portal_domain' => config('ninja.app_url'),
             'portal_mode' => 'domain',
             'settings' => $settings,
+            // KDV per line item only: no document-level taxes, no automatic
+            // US/EU tax engine; the product purchase price is always shown.
+            'enabled_tax_rates' => 0,
+            'enabled_item_tax_rates' => 1,
+            'enabled_expense_tax_rates' => 1,
+            'calculate_taxes' => false,
+            'enable_product_cost' => true,
         ]);
 
         $company->client_registration_fields = ClientRegistrationFields::generate();
@@ -120,6 +129,9 @@ class CreateAccount extends Command
             'notifications' => CompanySettings::notificationDefaults(),
             'settings' => null,
         ]);
+
+        // Turkish KDV rates 20 / 10 / 1 / 0 (CountryDefaults for Turkey).
+        $company->service()->localizeCompany($user);
 
         (new CreateCompanyPaymentTerms($company, $user))->handle();
         (new CreateCompanyTaskStatuses($company, $user))->handle();

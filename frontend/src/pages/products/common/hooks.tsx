@@ -54,13 +54,46 @@ import { useFormatNumber } from '$app/common/hooks/useFormatNumber';
 import classNames from 'classnames';
 import { normalizeColumnName } from '$app/common/helpers/data-table';
 import { TagPills } from '$app/components/tags/TagPills';
+import { useCurrentCompany } from '$app/common/hooks/useCurrentCompany';
+import { useResolveCurrency } from '$app/common/hooks/useResolveCurrency';
+import { useFormatExchangeRate } from '$app/common/hooks/useFormatExchangeRate';
+import {
+  hasProductExchangeRate,
+  isCompanyCurrency,
+  productExchangeRate,
+  productProfit,
+} from '$app/common/helpers/product-currency';
 
 export const defaultColumns: string[] = [
   'product_key',
   'description',
+  'buy_price',
   'price',
+  'currency',
+  'exchange_rate',
+  'bis_purchase_price_try',
+  'bis_sale_price_try',
+  'bis_profit_try',
+  'bis_profit_percent',
   'quantity',
 ];
+
+// BISAVUNMA "Fiyat envanteri": TL columns computed from cost/price × exchange_rate
+// (common/helpers/product-currency.ts); they are not stored, so the API ignores them as sort keys.
+type ProductTableRow = Product & {
+  bis_purchase_price_try?: number;
+  bis_sale_price_try?: number;
+  bis_profit_try?: number;
+  bis_profit_percent?: number;
+};
+
+/** Percentage in Turkish notation: %25,50 / -%4,00. */
+export function useFormatPercent() {
+  const formatNumber = useFormatNumber();
+
+  return (value: number) =>
+    `${value < 0 ? '-' : ''}%${formatNumber(Math.abs(value))}`;
+}
 
 export function useAllProductColumns() {
   const [firstCustom, secondCustom, thirdCustom, fourthCustom] =
@@ -71,7 +104,14 @@ export function useAllProductColumns() {
   const productColumns = [
     'product_key',
     'description',
+    'buy_price',
     'price',
+    'currency',
+    'exchange_rate',
+    'bis_purchase_price_try',
+    'bis_sale_price_try',
+    'bis_profit_try',
+    'bis_profit_percent',
     'quantity',
     'archived_at',
     // 'assigned_to', @Todo: Relationship not included.
@@ -107,10 +147,14 @@ export function useProductColumns() {
 
   const { dateFormat } = useCurrentCompanyDateFormats();
 
+  const company = useCurrentCompany();
   const formatMoney = useFormatMoney();
   const formatNumber = useFormatNumber();
+  const formatPercent = useFormatPercent();
   const reactSettings = useReactSettings();
+  const resolveCurrency = useResolveCurrency();
   const disableNavigation = useDisableNavigation();
+  const formatExchangeRate = useFormatExchangeRate();
   const formatCustomFieldValue = useFormatCustomFieldValue();
 
   const [firstCustom, secondCustom, thirdCustom, fourthCustom] =
@@ -118,7 +162,35 @@ export function useProductColumns() {
       entity: 'product',
     });
 
-  const columns: DataTableColumnsExtended<Product, ProductColumns> = [
+  const companyCurrencyId = company?.settings.currency_id;
+
+  // Alış / satış fiyatı are shown in the product currency.
+  const formatProductMoney = (value: string | number, product: Product) =>
+    formatMoney(
+      value,
+      product.company?.settings.country_id,
+      product.currency_id || product.company?.settings.currency_id
+    );
+
+  // TL amounts; a foreign-currency product without a rate has none.
+  const formatTryAmount = (
+    product: Product,
+    amount: 'cost' | 'price' | 'profit'
+  ) => {
+    if (!hasProductExchangeRate(product, companyCurrencyId)) {
+      return '—';
+    }
+
+    const value = productProfit(product, companyCurrencyId)[amount];
+
+    return (
+      <span className={classNames({ 'text-red-600': value < 0 })}>
+        {formatMoney(value, company?.settings.country_id, companyCurrencyId)}
+      </span>
+    );
+  };
+
+  const columns: DataTableColumnsExtended<ProductTableRow, ProductColumns> = [
     {
       column: 'product_key',
       id: 'product_key',
@@ -163,15 +235,76 @@ export function useProductColumns() {
       ),
     },
     {
+      column: 'buy_price',
+      id: 'cost',
+      label: t('buy_price'),
+      format: (value, product) => formatProductMoney(value, product),
+    },
+    {
       column: 'price',
       id: 'price',
-      label: t('price'),
+      label: t('bis_sale_price'),
+      format: (value, product) => formatProductMoney(value, product),
+    },
+    {
+      column: 'currency',
+      id: 'currency_id',
+      label: t('currency'),
+      format: (value, product) => {
+        const currency = resolveCurrency(
+          product.currency_id || companyCurrencyId || ''
+        );
+
+        return currency?.code ?? '';
+      },
+    },
+    {
+      column: 'exchange_rate',
+      id: 'exchange_rate',
+      label: t('exchange_rate'),
       format: (value, product) =>
-        formatMoney(
-          value,
-          product.company?.settings.country_id,
-          product.company?.settings.currency_id
-        ),
+        hasProductExchangeRate(product, companyCurrencyId)
+          ? formatExchangeRate(
+              productExchangeRate(product, companyCurrencyId),
+              4
+            )
+          : '—',
+    },
+    {
+      column: 'bis_purchase_price_try',
+      id: 'bis_purchase_price_try',
+      label: t('bis_purchase_price_try'),
+      format: (value, product) => formatTryAmount(product, 'cost'),
+    },
+    {
+      column: 'bis_sale_price_try',
+      id: 'bis_sale_price_try',
+      label: t('bis_sale_price_try'),
+      format: (value, product) => formatTryAmount(product, 'price'),
+    },
+    {
+      column: 'bis_profit_try',
+      id: 'bis_profit_try',
+      label: t('bis_profit_try'),
+      format: (value, product) => formatTryAmount(product, 'profit'),
+    },
+    {
+      column: 'bis_profit_percent',
+      id: 'bis_profit_percent',
+      label: t('bis_profit_percent'),
+      format: (value, product) => {
+        if (!hasProductExchangeRate(product, companyCurrencyId)) {
+          return '—';
+        }
+
+        const { profitPercent } = productProfit(product, companyCurrencyId);
+
+        return (
+          <span className={classNames({ 'text-red-600': profitPercent < 0 })}>
+            {formatPercent(profitPercent)}
+          </span>
+        );
+      },
     },
     {
       column: 'quantity',
@@ -438,5 +571,41 @@ export function useHandleChange(params: Params) {
     setErrors(undefined);
 
     setProduct((product) => product && { ...product, [property]: value });
+  };
+}
+
+/** BISAVUNMA: currency defaults of a new product ('' = company currency, rate 1). */
+export function useProductCurrencyDefaults() {
+  const company = useCurrentCompany();
+
+  return (product: Product): Product => ({
+    ...product,
+    currency_id: product.currency_id || '',
+    exchange_rate: isCompanyCurrency(
+      product.currency_id,
+      company?.settings.currency_id
+    )
+      ? 1
+      : Number(product.exchange_rate) || 0,
+  });
+}
+
+/** BISAVUNMA: a product in a foreign currency needs a manual exchange rate > 0. */
+export function useValidateProductCurrency() {
+  const [t] = useTranslation();
+
+  const company = useCurrentCompany();
+
+  return (product: Product | undefined): ValidationBag | undefined => {
+    if (
+      !product ||
+      hasProductExchangeRate(product, company?.settings.currency_id)
+    ) {
+      return undefined;
+    }
+
+    const message = t('bis_exchange_rate_required');
+
+    return { message, errors: { exchange_rate: [message] } };
   };
 }

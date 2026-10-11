@@ -19,6 +19,7 @@ use App\Models\Product;
 use App\Libraries\MultiDB;
 use Illuminate\Support\Facades\App;
 use App\Export\Decorators\Decorator;
+use App\Export\Decorators\ProductDecorator;
 use App\Transformers\ProductTransformer;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -38,6 +39,20 @@ class ProductExport extends BaseExport
         $this->input = $input;
         $this->entity_transformer = new ProductTransformer();
         $this->decorator = new Decorator();
+
+        /* BISAVUNMA product pricing: currency and manual exchange rate columns, right after the price. */
+        $product_report_keys = [];
+
+        foreach ($this->product_report_keys as $key => $value) {
+            $product_report_keys[$key] = $value;
+
+            if ($key === 'price') {
+                $product_report_keys['currency_id'] = 'currency_id';
+                $product_report_keys['exchange_rate'] = 'exchange_rate';
+            }
+        }
+
+        $this->product_report_keys = $product_report_keys;
     }
 
     public function returnJson()
@@ -119,6 +134,8 @@ class ProductExport extends BaseExport
 
     protected function buildRow(Product $product): array
     {
+        $product->setRelation('company', $this->company);
+
         $transformed_entity = $this->entity_transformer->transform($product);
 
         $entity = [];
@@ -126,7 +143,11 @@ class ProductExport extends BaseExport
         foreach (array_values($this->input['report_keys']) as $key) {
             $keyval = array_search($key, $this->product_report_keys);
 
-            if (array_key_exists($key, $transformed_entity)) {
+            if ($key == 'currency_id') {
+                $entity[$keyval] = (new ProductDecorator())->currency_id($product);
+            } elseif ($key == 'exchange_rate') {
+                $entity[$keyval] = $this->formatExchangeRate($product);
+            } elseif (array_key_exists($key, $transformed_entity)) {
                 $entity[$keyval] = $transformed_entity[$key];
             } else {
                 $entity[$key] = $this->decorator->transform($key, $product);
@@ -134,6 +155,21 @@ class ProductExport extends BaseExport
         }
 
         return $this->convertFloats($entity);
+    }
+
+    /**
+     * The manual exchange rate (1 unit of the product currency = rate in the
+     * company currency) with up to 6 decimals in the company number format,
+     * returned as a string so the 2-decimal money formatting does not round it.
+     */
+    private function formatExchangeRate(Product $product): string
+    {
+        $decimal_separator = (string) ($this->company->currency()->decimal_separator ?? '.');
+
+        $rate = number_format($product->companyExchangeRate(), 6, '.', '');
+        $rate = rtrim(rtrim($rate, '0'), '.');
+
+        return str_replace('.', $decimal_separator !== '' ? $decimal_separator : '.', $rate);
     }
 
 }

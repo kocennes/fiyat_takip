@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\VendorPortal\EditVendorContactRequest;
 use App\Http\Requests\VendorPortal\UpdateVendorContactRequest;
 use App\Models\VendorContact;
+use App\Utils\TranslationHelper;
 use App\Utils\Traits\MakesHash;
 
 class VendorContactController extends Controller
@@ -56,7 +57,7 @@ class VendorContactController extends Controller
     {
 
         if (!$vendor_contact->vendor->country_id) {
-            $vendor_contact->vendor->country_id = auth()->guard('vendor')->user()->company->country()->id ?? 840;
+            $vendor_contact->vendor->country_id = auth()->guard('vendor')->user()->company->country()->id ?? TranslationHelper::TURKEY_ID;
         }
 
         return $this->render('vendor_profile.edit', [
@@ -65,7 +66,7 @@ class VendorContactController extends Controller
             'settings' => $vendor_contact->vendor->company->settings,
             'company' => $vendor_contact->vendor->company,
             'sidebar' => $this->sidebarMenu(),
-            'countries' => app('countries'),
+            'countries' => TranslationHelper::getCountries(),
         ]);
     }
 

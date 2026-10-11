@@ -172,7 +172,7 @@ export default function Statement() {
 
     const link = document.createElement('a');
 
-    link.download = 'statement.pdf';
+    link.download = `${t('statement')}.pdf`;
     link.href = iframeRef.current.src;
     link.target = '_blank';
 

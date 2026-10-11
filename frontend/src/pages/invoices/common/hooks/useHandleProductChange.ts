@@ -8,9 +8,10 @@
  * @license https://www.elastic.co/licensing/elastic-license
  */
 
-import { useClientResolver } from '$app/common/hooks/clients/useClientResolver';
+import { productLineAmounts } from '$app/common/helpers/product-currency';
+import { toast } from '$app/common/helpers/toast/toast';
 import { useCurrentCompany } from '$app/common/hooks/useCurrentCompany';
-import { useResolveCurrency } from '$app/common/hooks/useResolveCurrency';
+import { useResolveDocumentCurrency } from '$app/common/hooks/useResolveDocumentCurrency';
 import { InvoiceItem } from '$app/common/interfaces/invoice-item';
 import { Product } from '$app/common/interfaces/product';
 import {
@@ -28,8 +29,7 @@ interface Props {
 export function useHandleProductChange(props: Props) {
   const company = useCurrentCompany();
 
-  const resolveCurrency = useResolveCurrency();
-  const resolveClient = useClientResolver();
+  const resolveDocumentCurrency = useResolveDocumentCurrency();
 
   const resource = props.resource;
 
@@ -49,10 +49,18 @@ export function useHandleProductChange(props: Props) {
       return props.onChange(index, lineItem);
     }
 
-    const currentPrice =
-      product?.cost > 0 && props.relationType === 'vendor_id'
-        ? product?.cost
-        : product?.price || 0;
+    // BISAVUNMA: product currency -> document currency with the product's manual rate
+    // and the document's exchange rate (common/helpers/product-currency.ts).
+    const amounts = productLineAmounts(
+      product,
+      await resolveDocumentCurrency(resource, props.relationType),
+      company?.settings.currency_id,
+      props.relationType === 'vendor_id'
+    );
+
+    if (amounts.missingDocumentRate) {
+      toast.info('bis_document_exchange_rate_missing');
+    }
 
     if (company.fill_products) {
       if (!company?.enable_product_quantity) {
@@ -63,43 +71,7 @@ export function useHandleProductChange(props: Props) {
           : (product?.quantity ?? 1);
       }
 
-      if (resource.client_id) {
-        // Use client from resource if available to avoid permission issues
-        const clientPromise =
-          'client' in resource && resource.client
-            ? Promise.resolve(resource.client)
-            : resolveClient.find(resource.client_id).catch(() => null);
-
-        await clientPromise.then((client) => {
-          if (!client) {
-            // Fall back to current price if client not available
-            lineItem.cost = currentPrice;
-            return;
-          }
-
-          const clientCurrencyId = client.settings.currency_id;
-
-          if (
-            company.convert_products &&
-            clientCurrencyId !== company.settings.currency_id
-          ) {
-            const clientCurrency = resolveCurrency(clientCurrencyId);
-            const companyCurrency = resolveCurrency(
-              company.settings.currency_id
-            );
-
-            if (clientCurrency && companyCurrency) {
-              lineItem.cost =
-                currentPrice *
-                (clientCurrency.exchange_rate / companyCurrency.exchange_rate);
-            }
-          } else {
-            lineItem.cost = currentPrice;
-          }
-        });
-      } else {
-        lineItem.cost = currentPrice;
-      }
+      lineItem.cost = amounts.cost;
     }
 
     if (!product) {
@@ -128,7 +100,7 @@ export function useHandleProductChange(props: Props) {
     lineItem.custom_value4 = product?.custom_value4 || '';
     lineItem.tax_id = product?.tax_id || '1';
 
-    lineItem.product_cost = product?.cost;
+    lineItem.product_cost = amounts.product_cost;
 
     if (import.meta.env.VITE_DISABLE_QUICKBOOKS_INTEGRATION !== 'true') {
       lineItem.income_account_id = product?.income_account_id || '';

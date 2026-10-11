@@ -65,6 +65,9 @@
     #table-totals .totals-table-right-side > * > :first-child { font-weight: 700; padding: .34rem .55rem; text-align: right; }
     #table-totals .totals-table-right-side > * > :last-child { padding: .34rem .55rem; text-align: right; white-space: nowrap; }
     [data-ref="totals_table-outstanding-label"], [data-ref="totals_table-outstanding"] { background: #e9f5ff; border-bottom: 2px solid var(--navy); border-top: 2px solid var(--navy); color: var(--navy); font-size: 1.02rem; font-weight: 800; }
+    /* KDV breakdown per rate (line taxes), then the grand total including KDV */
+    #table-totals .totals-table-right-side [data-ref^="totals-table-line_tax_"] { color: #344257; }
+    #table-totals .totals-table-right-side [data-ref="totals_table-total-label"], #table-totals .totals-table-right-side [data-ref="totals_table-total"] { border-top: 1px solid var(--navy); color: var(--navy); font-weight: 800; }
 
     .notice { background: var(--soft-orange); border: 1px solid #f4ddb8; border-left: 3px solid #f17a23; margin-top: .9rem; padding: .55rem .7rem; }
     .notice p { font-size: .77rem; line-height: 1.5; }

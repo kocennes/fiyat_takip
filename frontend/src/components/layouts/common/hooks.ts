@@ -140,12 +140,8 @@ export function useSettingsRoutes() {
       current: location.pathname.startsWith('/settings/client_portal'),
       enabled: isAdmin || isOwner || false,
     },
-    {
-      name: t('e_invoicing'),
-      href: '/settings/e_invoice',
-      current: location.pathname.startsWith('/settings/e_invoice'),
-      enabled: ((isAdmin || isOwner) && isCompanySettingsActive) || false,
-    },
+    // BISAVUNMA: no foreign e-invoicing standards (Peppol, ZUGFeRD,
+    // XRechnung, Verifactu …), so there is no e-invoicing settings entry.
     {
       name: t('email_settings'),
       href: '/settings/email_settings',

@@ -114,7 +114,8 @@ class UpdateRecurringInvoiceRequest extends Request
             unset($input['documents']);
         }
 
-        if (array_key_exists('exchange_rate', $input) && (is_null($input['exchange_rate']) || $input['exchange_rate'] == 0) || !isset($input['exchange_rate'])) {
+        // BISAVUNMA: an update without exchange_rate keeps the stored (manual) rate instead of resetting it to 1.
+        if (array_key_exists('exchange_rate', $input) && (is_null($input['exchange_rate']) || $input['exchange_rate'] == 0)) {
             $input['exchange_rate'] = 1;
         }
 

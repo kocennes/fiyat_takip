@@ -145,7 +145,7 @@ export function ChangeTemplateModal<T = any>({
   const handleDownload = (url: string) => {
     const link = document.createElement('a');
 
-    link.download = 'template.pdf';
+    link.download = `${t('template')}.pdf`;
     link.href = url;
     link.target = '_blank';
 

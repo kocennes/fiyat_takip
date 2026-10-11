@@ -183,7 +183,15 @@ class BaseRepository
         if (!$model->id) {
             $company_defaults = $client->setCompanyDefaults($data, lcfirst($resource));
 
-            if ($this->import_mode && isset($data['exchange_rate']) && (float) $data['exchange_rate'] !== 0.0) {
+            /* BISAVUNMA: a document exchange rate sent with the request (manual kur) is never replaced by the
+             * automatic rate. The automatic rate is only a fallback for a foreign-currency document sent without a
+             * rate: missing, empty, zero or the blank-document default 1 (the editors post 1 until a rate is typed).
+             * A company-currency document always gets the automatic rate (1). Imports keep any non-zero rate. */
+            $sent_exchange_rate = isset($data['exchange_rate']) && is_numeric($data['exchange_rate']) ? (float) $data['exchange_rate'] : 0.0;
+
+            if ($this->import_mode && $sent_exchange_rate !== 0.0) {
+                unset($company_defaults['exchange_rate']);
+            } elseif ($sent_exchange_rate > 0 && abs($sent_exchange_rate - 1.0) > 0.000001 && (string) $client->getSetting('currency_id') !== (string) $client->company->settings->currency_id) {
                 unset($company_defaults['exchange_rate']);
             }
 

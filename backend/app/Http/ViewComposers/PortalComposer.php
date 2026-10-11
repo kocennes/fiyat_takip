@@ -89,7 +89,7 @@ class PortalComposer
         $data['sidebar'] = $this->sidebarMenu();
         $data['header'] = [];
         $data['footer'] = [];
-        $data['countries'] = app('countries');
+        $data['countries'] = TranslationHelper::getCountries();
         $data['company'] = auth()->guard('contact')->user()->company;
         $data['client'] = auth()->guard('contact')->user()->client;
         $data['settings'] = $this->settings;

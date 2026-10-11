@@ -33,10 +33,11 @@ class InvoiceFactory
         $invoice->partial_due_date = null;
         $invoice->is_deleted = false;
         $invoice->line_items = json_encode([]);
-        // Turkey default: KDV is applied to new drafts. Individual invoices
-        // and line items can still override this rate when required.
-        $invoice->tax_name1 = 'KDV';
-        $invoice->tax_rate1 = 20;
+        // BISAVUNMA: KDV is charged per line item (new lines default to the
+        // company's KDV %20), so new documents carry no document-level tax;
+        // a document-level KDV here would charge the tax twice.
+        $invoice->tax_name1 = '';
+        $invoice->tax_rate1 = 0;
         $invoice->tax_name2 = '';
         $invoice->tax_rate2 = 0;
         $invoice->tax_name3 = '';

@@ -45,6 +45,7 @@ return [
     'mailer' => env('MAIL_MAILER', ''),
     'company_id' => 0,
     'hash_salt' => env('HASH_SALT', ''),
+    // Automatic exchange-rate fetching is opt-in: it only runs when OPENEXCHANGE_APP_ID is set (empty = off).
     'currency_converter_api_key' => env('OPENEXCHANGE_APP_ID', ''),
     'enabled_modules' => 65535,
     'phantomjs_key' => env('PHANTOMJS_KEY', 'a-demo-key-with-low-quota-per-ip-address'),

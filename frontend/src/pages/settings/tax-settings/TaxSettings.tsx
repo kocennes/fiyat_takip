@@ -12,14 +12,11 @@ import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useColorScheme } from '$app/common/colors';
-import { useCalculateTaxesRegion } from '$app/common/hooks/useCalculateTaxesRegion';
 import { useCompanyChanges } from '$app/common/hooks/useCompanyChanges';
-import { useCompanyVerifactu } from '$app/common/hooks/useCompanyVerifactu';
 import { useCurrentSettingsLevel } from '$app/common/hooks/useCurrentSettingsLevel';
 import { useInjectCompanyChanges } from '$app/common/hooks/useInjectCompanyChanges';
 import { useTitle } from '$app/common/hooks/useTitle';
 import { updateChanges } from '$app/common/stores/slices/company-users';
-import { Divider } from '$app/components/cards/Divider';
 import Toggle from '$app/components/forms/Toggle';
 import { Card, Element } from '../../../components/cards';
 import { SelectField } from '../../../components/forms';
@@ -32,9 +29,6 @@ import {
   useHandleCompanySave,
 } from '../common/hooks/useHandleCompanySave';
 import { useHandleCurrentCompanyChangeProperty } from '../common/hooks/useHandleCurrentCompanyChange';
-import { Selector } from './components';
-import { CalculateTaxes } from './components/calculate-taxes/CalculateTaxes';
-import { CalculateTaxesNotificationModal } from './components/calculate-taxes/components/CalculateTaxesNotificationModal';
 import { DefaultLineItemTaxes } from './components/DefaultLineItemTaxes';
 
 export function TaxSettings() {
@@ -49,15 +43,8 @@ export function TaxSettings() {
   useTitle('tax_settings');
 
   const colors = useColorScheme();
-  const verifactuEnabled = useCompanyVerifactu();
 
-  const calculateTaxesRegion = useCalculateTaxesRegion();
-
-  const {
-    isCompanySettingsActive,
-    isGroupSettingsActive,
-    isClientSettingsActive,
-  } = useCurrentSettingsLevel();
+  const { isCompanySettingsActive } = useCurrentSettingsLevel();
 
   const errors = useAtomValue(companySettingsErrorsAtom);
 
@@ -98,25 +85,9 @@ export function TaxSettings() {
             headerStyle={{ borderColor: colors.$20 }}
             withoutBodyPadding
           >
-            {!companyChanges.calculate_taxes && (
-              <Element leftSide={t('invoice_tax_rates')}>
-                <SelectField
-                  value={companyChanges?.enabled_tax_rates?.toString() || '0'}
-                  onValueChange={(value) =>
-                    handleChange('enabled_tax_rates', Number(value))
-                  }
-                  errorMessage={errors?.errors.enabled_tax_rates}
-                  customSelector
-                  dismissable={false}
-                >
-                  <option value="0">{t('disabled')}</option>
-                  <option value="1">{t('one_tax_rate')}</option>
-                  <option value="2">{t('two_tax_rates')}</option>
-                  <option value="3">{t('three_tax_rates')}</option>
-                </SelectField>
-              </Element>
-            )}
-
+            {/* BISAVUNMA: Turkish KDV is charged per line item with a single
+                tax line. There are no document-level taxes, no second or
+                third tax lines and no automatic (US/EU) tax engine. */}
             <Element leftSide={t('line_item_tax_rates')}>
               <SelectField
                 value={
@@ -131,8 +102,6 @@ export function TaxSettings() {
               >
                 <option value="0">{t('disabled')}</option>
                 <option value="1">{t('one_tax_rate')}</option>
-                <option value="2">{t('two_tax_rates')}</option>
-                <option value="3">{t('three_tax_rates')}</option>
               </SelectField>
             </Element>
 
@@ -150,58 +119,31 @@ export function TaxSettings() {
               >
                 <option value="0">{t('disabled')}</option>
                 <option value="1">{t('one_tax_rate')}</option>
-                <option value="2">{t('two_tax_rates')}</option>
-                <option value="3">{t('three_tax_rates')}</option>
               </SelectField>
             </Element>
 
-            {companyChanges.calculate_taxes ? null : (
-              <Element leftSide={t('inclusive_taxes')}>
-                <div className="flex items-center space-x-7">
-                  <Toggle
-                    onChange={(value: boolean) =>
-                      handleToggleChange('settings.inclusive_taxes', value)
-                    }
-                    checked={Boolean(companyChanges?.settings.inclusive_taxes)}
-                    cypressRef="inclusiveTaxToggle"
-                  />
+            <Element leftSide={t('inclusive_taxes')}>
+              <div className="flex items-center space-x-7">
+                <Toggle
+                  onChange={(value: boolean) =>
+                    handleToggleChange('settings.inclusive_taxes', value)
+                  }
+                  checked={Boolean(companyChanges?.settings.inclusive_taxes)}
+                  cypressRef="inclusiveTaxToggle"
+                />
 
-                  {companyChanges?.settings.inclusive_taxes ? (
-                    <span>{t('inclusive')}: 100 + 10% = 90.91 + 9.09</span>
-                  ) : (
-                    <span>{t('exclusive')}: 100 + 10% = 100 + 10</span>
-                  )}
-                </div>
-              </Element>
-            )}
-
-            {calculateTaxesRegion(companyChanges?.settings?.country_id) &&
-              !verifactuEnabled && (
-                <>
-                  <div className="px-4 sm:px-6 pt-4 pb-2">
-                    <Divider
-                      className="border-dashed"
-                      style={{ borderColor: colors.$20 }}
-                      withoutPadding
-                    />
-                  </div>
-
-                  <CalculateTaxesNotificationModal />
-
-                  {companyChanges.calculate_taxes && <CalculateTaxes />}
-                </>
-              )}
+                {companyChanges?.settings.inclusive_taxes ? (
+                  <span>{t('inclusive')}: 100 + %20 = 83,33 + 16,67</span>
+                ) : (
+                  <span>{t('exclusive')}: 100 + %20 = 100 + 20</span>
+                )}
+              </div>
+            </Element>
           </Card>
-
-          <Selector />
 
           {companyChanges.enabled_item_tax_rates > 0 &&
             !companyChanges.enabled_tax_rates && <DefaultLineItemTaxes />}
         </>
-      )}
-
-      {(isGroupSettingsActive || isClientSettingsActive) && (
-        <Selector title="tax_settings" />
       )}
 
       <TaxRates />

@@ -294,7 +294,7 @@ class RegisterOrLogin extends Component
     {
 
         /** @var \Illuminate\Support\Collection<\App\Models\Country> */
-        $countries = app('countries');
+        $countries = \App\Utils\TranslationHelper::getCountries();
 
         return view('billing-portal.v3.authentication.register-or-login', [
             'countries' => $countries,

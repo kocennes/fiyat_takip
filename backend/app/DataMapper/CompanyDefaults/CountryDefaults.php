@@ -419,9 +419,14 @@ class CountryDefaults
             'currency_id' => '41',
             'timezone_id' => '65',
             'date_format_id' => '11', // d.m.Y
+            // BISAVUNMA: KDV per line item only (no document-level taxes).
+            'enabled_tax_rates' => 0,
+            'enabled_item_tax_rates' => 1,
             'tax_rates' => [
-                ['name' => 'KDV', 'rate' => 20],
-                ['name' => 'KDV (indirimli)', 'rate' => 10],
+                ['name' => 'KDV', 'rate' => 20], // genel oran
+                ['name' => 'KDV', 'rate' => 10], // indirimli oran
+                ['name' => 'KDV', 'rate' => 1],  // indirimli oran
+                ['name' => 'KDV', 'rate' => 0],  // istisna
             ],
         ],
 

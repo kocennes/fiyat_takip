@@ -16,8 +16,14 @@ export interface Product {
   assigned_user_id: string;
   product_key: string;
   notes: string;
+  /** Purchase price (alış fiyatı), in `currency_id`. */
   cost: number;
+  /** Sale price (satış fiyatı), in `currency_id`. */
   price: number;
+  /** Currency of `cost` and `price`; '' (or null) = company currency. */
+  currency_id: string;
+  /** Manual rate: 1 unit of `currency_id` = `exchange_rate` units of the company currency (1 for the company currency). */
+  exchange_rate: number;
   quantity: number;
   max_quantity: number;
   tax_id: string;

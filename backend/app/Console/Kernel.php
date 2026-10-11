@@ -108,8 +108,11 @@ class Kernel extends ConsoleKernel
         /* Checks for large companies and marked them as is_large */
         $schedule->job(new CompanySizeCheck())->dailyAt('23:20')->withoutOverlapping()->name('company-size-job')->onOneServer();
 
-        /* Pulls in the latest exchange rates */
-        $schedule->job(new UpdateExchangeRates())->dailyAt('23:30')->withoutOverlapping()->name('exchange-rate-job')->onOneServer();
+        /* Pulls in the latest exchange rates - opt-in (BISAVUNMA): only scheduled when OPENEXCHANGE_APP_ID is set.
+           Document and product exchange rates are entered manually and are never changed by this job. */
+        if (! empty(config('ninja.currency_converter_api_key'))) {
+            $schedule->job(new UpdateExchangeRates())->dailyAt('23:30')->withoutOverlapping()->name('exchange-rate-job')->onOneServer();
+        }
 
         /* Runs cleanup code for subscriptions */
         $schedule->job(new SubscriptionCron())->hourlyAt(1)->withoutOverlapping()->name('subscription-job')->onOneServer();

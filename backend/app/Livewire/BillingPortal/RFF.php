@@ -72,7 +72,7 @@ class RFF extends Component
     {
         /** @var \App\Models\CompanyGateway $gateway */
         $gateway = CompanyGateway::find($this->context['form']['company_gateway_id']);
-        $countries = app('countries');
+        $countries = \App\Utils\TranslationHelper::getCountries();
 
         if ($gateway === null) {
             return view('billing-portal.v3.rff-basic');
