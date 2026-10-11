@@ -117,7 +117,7 @@
     <ninja>
         <table width="100%" cellspacing="0" cellpadding="0" class="" border="0">
             <tr>
-                <td align="left" class="doc-title">Delivery Note</td>
+                <td align="left" class="doc-title">{{ t('delivery_note') }}</td>
                 <td align="right">{{ img('$company.logo') }}</td>
             </tr>
         </table>
@@ -128,7 +128,7 @@
             <td align="left" class="">
                 <div class="">
                     <div class="client-details">
-                        <p class="section-title">Bill To:</p>
+                        <p class="section-title"><ninja>{{ t('bill_to') }}</ninja></p>
                     </div>
                     <div class="client-details">
                         <p>$client.name</p>
@@ -142,7 +142,7 @@
             <td align="left">
                 <div class="">
                     <div class="client-details">
-                        <p class="section-title">Ship To:</p>
+                        <p class="section-title"><ninja>{{ t('ship_to') }}:</ninja></p>
                     </div>
                     <div class="client-details">
                         <p>$client.name</p>
@@ -159,12 +159,12 @@
         <tr>
             <td align="left" class="">
                 <div class="">
-                    <p>Order # $invoice.po_number</p>
+                    <p><ninja>{{ t('po_number') }}</ninja>: $invoice.po_number</p>
                 </div>
             </td>
             <td align="left">
                 <div class="">
-                    <p>Order Date: $invoice.date</p>
+                    <p><ninja>{{ t('date') }}</ninja>: $invoice.date</p>
                 </div>
             </td>
         </tr>
@@ -177,9 +177,9 @@
         <table width="100%" cellspacing="0" cellpadding="0" class="">
             <thead class="table-header">
                 <tr class="table-header">
-                    <th class="">Item #</th>
-                    <th class="" width="50%">Description</th>
-                    <th class="totals-row-label centered">Delivered</th>
+                    <th class="">{{ t('item') }} #</th>
+                    <th class="" width="50%">{{ t('description') }}</th>
+                    <th class="totals-row-label centered">{{ t('delivered') }}</th>
                 </tr>
             </thead>
             <tbody class="table-body">
@@ -197,7 +197,7 @@
 
     <table width="100%" cellspacing="0" cellpadding="0" class="">
         <div class="container">
-            <p class="bottom-margin">Notes:</p>
+            <p class="bottom-margin"><ninja>{{ t('notes') }}:</ninja></p>
 
             $invoice.public_notes
         </div>

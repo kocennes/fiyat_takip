@@ -88,9 +88,9 @@ class Hosted implements MethodInterface, LivewireMethodInterface
         ]);
 
         if (! property_exists($this->razorpay->payment_hash->data, 'order_id')) {
-            $this->razorpay->sendFailureMail('Missing [order_id] property. ');
+            $this->razorpay->sendFailureMail(ctrans('texts.bis_pd_missing_parameter', ['parameter' => 'order_id', 'reference' => $this->razorpay->payment_hash->hash]));
 
-            throw new PaymentFailed('Missing [order_id] property. Please contact the administrator. Reference: ' . $this->razorpay->payment_hash->hash);
+            throw new PaymentFailed(ctrans('texts.bis_pd_missing_parameter', ['parameter' => 'order_id', 'reference' => $this->razorpay->payment_hash->hash]));
         }
 
         try {

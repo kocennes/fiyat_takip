@@ -76,7 +76,7 @@ class MigrationController extends BaseController
     public function purgeCompany(DefaultCompanyRequest $request, Company $company)
     {
         if (Ninja::isHosted() && config('ninja.ninja_default_company_id') == $company->id) {
-            return response()->json(['message' => 'Cannot purge this company'], 400);
+            return response()->json(['message' => ctrans('texts.bis_cannot_purge_company')], 400);
         }
 
         $account = $company->account;
@@ -94,7 +94,7 @@ class MigrationController extends BaseController
             }
         }
 
-        return response()->json(['message' => 'Company purged'], 200);
+        return response()->json(['message' => ctrans('texts.bis_company_purged')], 200);
     }
 
     /**
@@ -175,7 +175,7 @@ class MigrationController extends BaseController
         $company->settings = $settings;
         $company->save();
 
-        return response()->json(['message' => 'Settings preserved'], 200);
+        return response()->json(['message' => ctrans('texts.purge_successful')], 200);
     }
 
 }

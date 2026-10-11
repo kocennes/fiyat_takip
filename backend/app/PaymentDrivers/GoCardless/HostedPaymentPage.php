@@ -349,7 +349,7 @@ class HostedPaymentPage
     private function createLocalPayment(object $payment, int $gateway_type_id, int $payment_type_id): Payment
     {
         if (in_array(data_get($payment, 'status'), ['cancelled', 'charged_back', 'failed'], true)) {
-            throw new PaymentFailed('GoCardless could not process the payment.');
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_could_not_process', ['gateway' => 'GoCardless']));
         }
 
         $status = in_array(data_get($payment, 'status'), ['confirmed', 'paid_out'], true)

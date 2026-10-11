@@ -21,6 +21,6 @@ class PasswordTimeoutController extends Controller
     {
         $cached = Cache::get(auth()->user()->hashed_id . '_' . auth()->user()->account_id . '_logged_in');
 
-        return $cached ? response()->json(['message' => 'Password is valid'], 200) : response()->json(['message' => 'Invalid Password'], 412);
+        return $cached ? response()->json(['message' => ctrans('texts.bis_password_valid')], 200) : response()->json(['message' => ctrans('texts.bis_invalid_password')], 412);
     }
 }

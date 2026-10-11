@@ -122,7 +122,7 @@ class EwayPaymentDriver extends BaseDriver
                 }
             } else {
                 $refund_status = false;
-                $refund_message = 'Sorry, your refund failed';
+                $refund_message = ctrans('texts.bis_pd_refund_failed');
             }
         }
 

@@ -25,7 +25,7 @@ class UserPresenter extends EntityPresenter
     public function name(): string
     {
         if (! $this->entity) {
-            return 'No User Object Available';
+            return ctrans('texts.bis_no_user_available');
         }
 
         $first_name = $this->entity->first_name ?? '';
@@ -71,7 +71,7 @@ class UserPresenter extends EntityPresenter
     public function firstName(): string
     {
         if (! $this->entity) {
-            return 'No First Name Available';
+            return ctrans('texts.bis_no_first_name_available');
         }
 
         return $this->entity->first_name ?? ' ';
@@ -86,10 +86,10 @@ class UserPresenter extends EntityPresenter
     public function lastName(): string
     {
         if (! $this->entity) {
-            return 'No Last Name Available';
+            return ctrans('texts.bis_no_last_name_available');
         }
 
-        return $this->entity->last_name ?? 'Last Name';
+        return $this->entity->last_name ?? ctrans('texts.last_name');
     }
 
     public function phone(): string

@@ -200,9 +200,9 @@ class MolliePaymentDriver extends BaseDriver
         $invoice = Invoice::query()->whereIn('id', $this->transformKeys(array_column($payment_hash->invoices(), 'invoice_id')))->withTrashed()->first();
 
         if ($invoice) {
-            $description = "Invoice {$invoice->number} for {$amount} for client {$this->client->present()->name()}";
+            $description = ctrans('texts.bis_pd_desc_invoice_for_client', ['invoice' => $invoice->number, 'amount' => $amount, 'client' => $this->client->present()->name()]);
         } else {
-            $description = "Payment with no invoice for amount {$amount} for client {$this->client->present()->name()}";
+            $description = ctrans('texts.gateway_payment_text_no_invoice', ['amount' => $amount, 'client' => $this->client->present()->name()]);
         }
 
         $request = new PaymentResponseRequest();
@@ -400,7 +400,7 @@ class MolliePaymentDriver extends BaseDriver
                     $status_id = Payment::STATUS_FAILED;
 
                     if(in_array($payment->status, ['canceled', 'failed'])) {
-                        $this->sendFailureMail($payment->details->failureMessage ?? "There was a problem processing your payment.");
+                        $this->sendFailureMail($payment->details->failureMessage ?? ctrans('texts.payment_error'));
                     }
 
                 } else {

@@ -10,12 +10,13 @@
     styles from elsewhere, and at most one accounts row to pick the web client.
 --}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <title>{{ config('ninja.app_name') }}</title>
+    <title>{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}</title>
+    <link href="{{ asset('favicon.ico') }}" rel="icon" type="image/x-icon">
 
     <script>
         // Runs before the body paints, so desktop sees no flash. iPadOS reports
@@ -31,9 +32,9 @@
     </script>
 
     {{-- Messengers unfurl these links; without this the card is a bare URL. --}}
-    <meta property="og:title" content="{{ config('ninja.app_name') }}">
+    <meta property="og:title" content="{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}">
     <meta property="og:description" content="{{ ctrans('texts.open_in_app') }}">
-    <meta property="og:image" content="{{ config('ninja.app_logo') }}">
+    <meta property="og:image" content="{{ asset('brand/bisavunma-icon-512.png') }}">
     <meta name="twitter:card" content="summary">
 
     <style>
@@ -63,7 +64,7 @@
 </head>
 <body>
     <main>
-        <img src="{{ config('ninja.app_logo') }}" alt="">
+        <img src="{{ asset('brand/bisavunma-icon-192.png') }}" alt="">
         <h1>{{ ctrans('texts.open_in_app') }}</h1>
 
         <a class="primary" id="app-link" href="{{ $appUrl }}"

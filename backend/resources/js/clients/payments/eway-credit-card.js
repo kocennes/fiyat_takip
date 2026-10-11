@@ -423,7 +423,12 @@ class EwayRapid {
         let message = '';
 
         _errors.forEach((error) => {
-            message = message.concat(this.errorCodes.get(error) + '<br>');
+            const translated = window.BIS_I18N?.bis_gateway_error_code;
+            const text = translated
+                ? translated.replace(':code', error)
+                : this.errorCodes.get(error);
+
+            message = message.concat(text + '<br>');
         });
 
         document.getElementById('errors').innerHTML = message;

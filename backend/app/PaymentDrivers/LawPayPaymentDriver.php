@@ -261,7 +261,7 @@ class LawPayPaymentDriver extends BaseDriver
             return $payment;
         }
 
-        $error_message = $response->json()['message'] ?? $response->json()['error'] ?? 'Payment failed';
+        $error_message = $response->json()['message'] ?? $response->json()['error'] ?? ctrans('texts.failed_payment');
 
         SystemLogger::dispatch(
             ['server_response' => $response->json(), 'data' => $payload],

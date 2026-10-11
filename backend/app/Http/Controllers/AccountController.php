@@ -80,7 +80,7 @@ class AccountController extends BaseController
                 if ($r->json()['success'] === true) {
                     // Captcha passed
                 } else {
-                    return response()->json(['message' => 'Captcha Failed'], 400);
+                    return response()->json(['message' => ctrans('texts.bis_captcha_failed')], 400);
                 }
             }
 
@@ -89,7 +89,7 @@ class AccountController extends BaseController
         if ($request->has('hash') && config('ninja.cloudflare.turnstile.secret')) {
 
             if (Secure::decrypt($request->input('hash')) !== $request->input('email')) {
-                return response()->json(['message' => 'Invalid Signup Payload'], 400);
+                return response()->json(['message' => ctrans('texts.bis_invalid_signup_payload')], 400);
             }
 
         }

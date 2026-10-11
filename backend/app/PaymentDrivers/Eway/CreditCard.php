@@ -79,7 +79,7 @@ class CreditCard implements LivewireMethodInterface
 
             $this->logResponse($response);
 
-            throw new PaymentFailed($response_status['message'] ?? 'Unknown response from gateway, please contact you merchant.', 400); //@phpstan-ignore-line
+            throw new PaymentFailed($response_status['message'] ?? ctrans('texts.bis_pd_unknown_gateway_response_contact_merchant'), 400); //@phpstan-ignore-line
         }
 
         //success
@@ -168,10 +168,10 @@ class CreditCard implements LivewireMethodInterface
         if ($response->TransactionStatus) {
             $payment = $this->storePayment($response);
         } else {
-            $message = 'Error processing payment.';
+            $message = ctrans('texts.bis_pd_error_processing_payment');
 
             if (isset($response->ResponseMessage)) {
-                $message .= " Gateway Error Code = {$response->ResponseMessage}";
+                $message .= ' ' . ctrans('texts.bis_pd_gateway_error_code', ['code' => $response->ResponseMessage]);
             }
 
             if ($response->getErrors()) {
@@ -229,7 +229,7 @@ class CreditCard implements LivewireMethodInterface
             $invoice_numbers = collect($this->eway_driver->payment_hash->data->invoices)->pluck('invoice_number')->implode(',');
         }
 
-        $description = "Invoices: {$invoice_numbers} for {$amount} for client {$this->eway_driver->client->present()->name()}";
+        $description = ctrans('texts.gateway_payment_text', ['invoices' => $invoice_numbers, 'amount' => $amount, 'client' => $this->eway_driver->client->present()->name()]);
 
         $transaction = [
             'Customer' => [
@@ -250,10 +250,10 @@ class CreditCard implements LivewireMethodInterface
             $this->logResponse($response, true);
             $payment = $this->storePayment($response);
         } else {
-            $message = 'Error processing payment.';
+            $message = ctrans('texts.bis_pd_error_processing_payment');
 
             if (isset($response->ResponseMessage)) {
-                $message .= " Gateway Error Code = {$response->ResponseMessage}";
+                $message .= ' ' . ctrans('texts.bis_pd_gateway_error_code', ['code' => $response->ResponseMessage]);
             }
 
             if ($response->getErrors()) {

@@ -31,10 +31,10 @@ class StripeController extends BaseController
         if ($user->isAdmin()) {
             StripeUpdatePaymentMethods::dispatch($user->company());
 
-            return response()->json(['message' => 'Processing'], 200);
+            return response()->json(['message' => ctrans('texts.processing')], 200);
         }
 
-        return response()->json(['message' => 'Unauthorized'], 403);
+        return response()->json(['message' => ctrans('texts.not_authorized')], 403);
     }
 
     public function import()
@@ -45,10 +45,10 @@ class StripeController extends BaseController
         if ($user->isAdmin()) {
             ImportStripeCustomers::dispatch($user->company());
 
-            return response()->json(['message' => 'Processing'], 200);
+            return response()->json(['message' => ctrans('texts.processing')], 200);
         }
 
-        return response()->json(['message' => 'Unauthorized'], 403);
+        return response()->json(['message' => ctrans('texts.not_authorized')], 403);
     }
 
     public function verify()
@@ -68,7 +68,7 @@ class StripeController extends BaseController
             return $company_gateway->driver(new Client())->verifyConnect();
         }
 
-        return response()->json(['message' => 'Unauthorized'], 403);
+        return response()->json(['message' => ctrans('texts.not_authorized')], 403);
     }
 
     public function disconnect(DisconnectStripeRequest $request)

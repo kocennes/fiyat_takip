@@ -1,7 +1,7 @@
-@extends('portal.ninja2020.layout.payments', ['gateway_title' => 'Credit card', 'card_title' => 'Credit card'])
+@extends('portal.ninja2020.layout.payments', ['gateway_title' => ctrans('texts.credit_card'), 'card_title' => ctrans('texts.credit_card')])
 
 @section('gateway_content')
-    @component('portal.ninja2020.components.general.card-element-single', ['title' => 'Credit card', 'show_title' => false])
+    @component('portal.ninja2020.components.general.card-element-single', ['title' => ctrans('texts.credit_card'), 'show_title' => false])
         {{ __('texts.payment_method_cannot_be_authorized_first') }}
     @endcomponent
 @endsection

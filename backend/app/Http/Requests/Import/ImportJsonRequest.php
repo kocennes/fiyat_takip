@@ -55,23 +55,23 @@ class ImportJsonRequest extends Request
             }
             foreach (['fileHash', 'fileName', 'totalChunks', 'currentChunk'] as $key) {
                 if (! array_key_exists($key, $metadata)) {
-                    $validator->errors()->add('metadata', "Missing metadata field: {$key}");
+                    $validator->errors()->add('metadata', ctrans('texts.bis_import_metadata_missing_field', ['field' => $key]));
                 }
             }
             if (isset($metadata['fileName']) && ! preg_match('/\.zip$/i', basename((string) $metadata['fileName']))) {
-                $validator->errors()->add('metadata', 'Import filename must end with .zip');
+                $validator->errors()->add('metadata', ctrans('texts.bis_import_filename_zip'));
             }
             if (isset($metadata['fileHash']) && ! preg_match('/^[a-zA-Z0-9]+$/', (string) $metadata['fileHash'])) {
-                $validator->errors()->add('metadata', 'Invalid file hash format');
+                $validator->errors()->add('metadata', ctrans('texts.bis_invalid_file_hash_format'));
             }
             if (isset($metadata['currentChunk'], $metadata['totalChunks'])) {
                 $current = (int) $metadata['currentChunk'];
                 $total = (int) $metadata['totalChunks'];
 
                 if ($total < 1 || $total > 1000) {
-                    $validator->errors()->add('metadata', 'Invalid chunk metadata');
+                    $validator->errors()->add('metadata', ctrans('texts.bis_invalid_chunk_metadata'));
                 } elseif ($current < 0 || $current >= $total) {
-                    $validator->errors()->add('metadata', 'Invalid chunk metadata');
+                    $validator->errors()->add('metadata', ctrans('texts.bis_invalid_chunk_metadata'));
                 }
             }
         });

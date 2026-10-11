@@ -327,7 +327,7 @@ class Email implements ShouldQueue
 
                 $email = $address_object->address ?? '';
 
-                $message = "Recipient {$email} has been suppressed and cannot receive emails from you.";
+                $message = ctrans('texts.bis_mail_recipient_suppressed', ['email' => $email]);
 
                 $this->logMailError($message);
                 $this->cleanUpMailers();
@@ -369,7 +369,7 @@ class Email implements ShouldQueue
 
             if ($e->getCode() == '429') {
 
-                $message = "Google rate limiting triggered, we are queueing based on Gmail requirements.";
+                $message = ctrans('texts.bis_mail_gmail_rate_limited');
                 $this->logMailError($message);
                 sleep(rand(1, 2));
                 $this->release(900);
@@ -378,7 +378,7 @@ class Email implements ShouldQueue
 
         } catch (\ErrorException $e) { //@todo - remove after symfony/mailer is updated with bug fix
 
-            $message = "Attachment size is too large.";
+            $message = ctrans('texts.bis_mail_attachment_too_large');
             $this->logMailError($message);
             $this->cleanUpMailers();
 
@@ -391,7 +391,7 @@ class Email implements ShouldQueue
 
 
             if (stripos($e->getMessage(), 'code 300') !== false || stripos($e->getMessage(), 'code 413') !== false) {
-                $message = "Either Attachment too large, or recipient has been suppressed.";
+                $message = ctrans('texts.bis_mail_attachment_or_suppressed');
 
                 $this->logMailError($e->getMessage());
                 $this->cleanUpMailers();
@@ -423,7 +423,7 @@ class Email implements ShouldQueue
                     }
                 } catch (\Exception $jsonError) {
                     // If JSON decode fails, use the original message
-                    $message = "Unknown issue sending via Postmark, please try again later.";
+                    $message = ctrans('texts.bis_mail_postmark_unknown_error');
                 }
 
                 $this->entityEmailFailed($message);

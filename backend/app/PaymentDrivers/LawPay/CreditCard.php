@@ -66,7 +66,7 @@ class CreditCard implements LivewireMethodInterface
 
         $this->lawpay->storeGatewayToken($data, []);
 
-        return redirect()->route('client.payment_methods.index')->withSuccess('Payment Method added.');
+        return redirect()->route('client.payment_methods.index')->withSuccess(ctrans('texts.payment_method_added'));
     }
 
     public function paymentView(array $data)
@@ -152,7 +152,7 @@ class CreditCard implements LivewireMethodInterface
 
         // Handle failure
         $error = $response->json();
-        $error_message = $error['message'] ?? $error['error'] ?? 'Payment failed';
+        $error_message = $error['message'] ?? $error['error'] ?? ctrans('texts.failed_payment');
 
         SystemLogger::dispatch(
             ['server_response' => $error, 'data' => $payment_hash->data],

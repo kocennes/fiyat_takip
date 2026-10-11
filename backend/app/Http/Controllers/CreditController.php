@@ -548,7 +548,7 @@ class CreditController extends BaseController
         $action = $request->input('action');
 
         if (Ninja::isHosted() && (stripos($action, 'email') !== false) && !$user->company()->account->account_sms_verified) {
-            return response(['message' => 'Please verify your account to send emails.'], 400);
+            return response(['message' => ctrans('texts.authorization_sms_failure')], 400);
         }
 
         if (Ninja::isHosted() && $user->account->emailQuotaExceeded()) {
@@ -704,7 +704,7 @@ class CreditController extends BaseController
                 $credit->service()->sendEmail();
 
                 if (! $bulk) {
-                    return response()->json(['message' => 'email sent'], 200);
+                    return response()->json(['message' => ctrans('texts.emailed_credit')], 200);
                 }
                 break;
 
@@ -761,7 +761,7 @@ class CreditController extends BaseController
         $invitation = $this->credit_repository->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $credit = $invitation->credit;
@@ -829,7 +829,7 @@ class CreditController extends BaseController
         $invitation = $this->credit_repository->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $contact = $invitation->contact;

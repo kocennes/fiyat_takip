@@ -150,7 +150,7 @@ class TaskRepository extends BaseRepository
         }
 
         throw ValidationException::withMessages([
-            'meta.calendar_event_id' => 'A task already exists for this calendar event.',
+            'meta.calendar_event_id' => ctrans('texts.bis_task_exists_for_calendar_event'),
         ]);
     }
 
@@ -191,7 +191,7 @@ class TaskRepository extends BaseRepository
                     });
             } catch (LockTimeoutException) {
                 throw ValidationException::withMessages([
-                    'meta.calendar_event_id' => 'A task is already being created for this calendar event.',
+                    'meta.calendar_event_id' => ctrans('texts.bis_task_being_created_for_calendar_event'),
                 ]);
             }
         } else {

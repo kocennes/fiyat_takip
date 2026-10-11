@@ -1,4 +1,4 @@
-@extends('portal.ninja2020.layout.payments', ['gateway_title' => 'Direct Debit', 'card_title' => 'Direct Debit'])
+@extends('portal.ninja2020.layout.payments', ['gateway_title' => ctrans('texts.direct_debit'), 'card_title' => ctrans('texts.direct_debit')])
 
 @section('gateway_content')
     <div id="gocardless-direct-debit-payment">

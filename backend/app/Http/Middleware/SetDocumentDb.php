@@ -29,7 +29,7 @@ class SetDocumentDb
     public function handle($request, Closure $next)
     {
         $error = [
-            'message' => 'Document not set or not found',
+            'message' => ctrans('texts.document_not_found'),
             'errors' => new stdClass(),
         ];
 

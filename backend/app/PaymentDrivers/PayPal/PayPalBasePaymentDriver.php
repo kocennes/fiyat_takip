@@ -199,7 +199,7 @@ class PayPalBasePaymentDriver extends BaseDriver
             $this->access_token = $response->json()['access_token'];
             $this->token_expiry = now()->addSeconds($response->json()['expires_in'] - 60);
         } else {
-            throw new PaymentFailed('Unable to gain access token from Paypal. Check your configuration', 401);
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'PayPal']), 401);
         }
 
         return $this;
@@ -332,13 +332,13 @@ class PayPalBasePaymentDriver extends BaseDriver
         $body = $response instanceof \Illuminate\Http\Client\Response ? ($response->json() ?? []) : $response;
 
         if (! is_array($body)) {
-            return 'Payment failed. Please try again.';
+            return ctrans('texts.bis_pd_payment_failed_try_again');
         }
 
         return $body['details'][0]['description']
             ?? $body['message']
             ?? $body['error_description']
-            ?? 'Payment failed. Please try again.';
+            ?? ctrans('texts.bis_pd_payment_failed_try_again');
     }
 
     /**
@@ -604,11 +604,11 @@ class PayPalBasePaymentDriver extends BaseDriver
 
         switch ($response['name']) {
             case 'NOT_AUTHORIZED':
-                throw new PaymentFailed("There was a permissions issue processing this payment, please contact the merchant. ", 401);
+                throw new PaymentFailed(ctrans('texts.bis_pd_permission_issue_contact_merchant'), 401);
 
 
             default:
-                throw new PaymentFailed("Unknown error occurred processing payment. Please contact merchant.", 500);
+                throw new PaymentFailed(ctrans('texts.bis_pd_unknown_error_contact_merchant'), 500);
 
         }
     }
@@ -651,7 +651,7 @@ class PayPalBasePaymentDriver extends BaseDriver
             return $r->json()['client_token'];
         }
 
-        throw new PaymentFailed('Unable to gain client token from Paypal. Check your configuration', 401);
+        throw new PaymentFailed(ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'PayPal']), 401);
 
     }
 
@@ -1032,7 +1032,7 @@ class PayPalBasePaymentDriver extends BaseDriver
             return $payment;
         }
 
-        $this->processInternallyFailedPayment($this, new \Exception('Auto billing failed.', 400));
+        $this->processInternallyFailedPayment($this, new \Exception(ctrans('texts.bis_pd_auto_billing_failed'), 400));
 
         SystemLogger::dispatch($response_array, SystemLog::CATEGORY_GATEWAY_RESPONSE, SystemLog::EVENT_GATEWAY_FAILURE, static::SYSTEM_LOG_TYPE, $this->client, $this->client->company);
     }

@@ -78,6 +78,7 @@ class PdfBuilder
     public function build(): self
     {
         $this->getTemplate()
+            ->setDocumentLanguage()
             ->buildSections()
             ->getEmptyElements()
             ->updateElementProperties()
@@ -202,6 +203,24 @@ class PdfBuilder
         // @$document->loadHTML(mb_convert_encoding($this->service->designer->template, 'HTML-ENTITIES', 'UTF-8'));
 
         $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Declares the document language (e.g. tr-TR) when the design does not,
+     * so the PDF renderer applies the correct casing rules (i -> İ for Turkish).
+     *
+     * @return self
+     */
+    private function setDocumentLanguage(): self
+    {
+        $root = $this->document->documentElement;
+
+        if ($root && strtolower($root->nodeName) === 'html' && ! $root->hasAttribute('lang')) {
+            $locale = isset($this->service->config->locale) ? $this->service->config->locale : app()->getLocale();
+            $root->setAttribute('lang', str_replace('_', '-', (string) $locale));
+        }
 
         return $this;
     }
@@ -1438,7 +1457,7 @@ class PdfBuilder
         return [
             ['element' => 'div', 'properties' => ['style' => 'display: flex; flex-direction: column;'], 'elements' => [
                 ['element' => 'div', 'properties' => ['style' => 'display: block; align-items: flex-start; page-break-inside: avoid; visible !important;'], 'elements' => [
-                    ['element' => 'img', 'properties' => ['src' => '$invoiceninja.whitelabel', 'style' => 'height: 2.5rem; margin-top: 1.5rem;', 'hidden' => $this->service->company->account->isPaid() ? 'true' : 'false', 'id' => 'invoiceninja-whitelabel-logo']],
+                    ['element' => 'img', 'properties' => ['src' => '$invoiceninja.whitelabel', 'style' => 'height: 2.5rem; margin-top: 1.5rem;', 'hidden' => 'true', 'id' => 'invoiceninja-whitelabel-logo']],
                 ]],
             ]],
         ];
@@ -1513,7 +1532,7 @@ class PdfBuilder
                 ]],
                 ['element' => 'img', 'properties' => ['style' => 'max-width: 50%; height: auto;', 'src' => '$contact.signature', 'id' => 'contact-signature']],
                 ['element' => 'div', 'properties' => ['style' => 'display: flex; align-items: flex-start; page-break-inside: auto;'], 'elements' => [
-                    ['element' => 'img', 'properties' => ['src' => '$invoiceninja.whitelabel', 'style' => 'height: 2.5rem; margin-top: 1.5rem;', 'hidden' => $this->service->company->account->isPaid() ? 'true' : 'false', 'id' => 'invoiceninja-whitelabel-logo']],
+                    ['element' => 'img', 'properties' => ['src' => '$invoiceninja.whitelabel', 'style' => 'height: 2.5rem; margin-top: 1.5rem;', 'hidden' => 'true', 'id' => 'invoiceninja-whitelabel-logo']],
                 ]],
             ]],
             ['element' => 'div', 'properties' => ['class' => 'totals-table-right-side', 'dir' => '$dir'], 'elements' => []],

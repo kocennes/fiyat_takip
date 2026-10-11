@@ -39,7 +39,7 @@ class PurchaseOrderTransformer extends BaseTransformer
         }
 
         if (isset($purchase_order_data['purchase_order.number']) && $this->hasPurchaseOrder($purchase_order_data['purchase_order.number'])) {
-            throw new ImportException('Purchase order number already exists');
+            throw new ImportException(ctrans('texts.bis_import_po_number_exists'));
         }
 
         $purchaseOrderStatusMap = [

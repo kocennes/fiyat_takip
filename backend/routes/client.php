@@ -180,13 +180,14 @@ Route::fallback(function () {
 
         $account = Account::first();
 
-        return $account->set_react_as_default_ap ? response()->view('react.index', [
+        // Always serve the React UI, never the legacy upstream Flutter build.
+        return response()->view('react.index', [
             'rc' => request()->input('rc', ''),
             'login' => request()->input('login', ''),
             'signup' => request()->input('signup', ''),
-            'report_errors' => $account->report_errors,
+            'report_errors' => $account?->report_errors ?? false,
             'user_agent' => request()->server('HTTP_USER_AGENT'),
-        ])->header('X-Frame-Options', 'SAMEORIGIN', false) : abort(404);
+        ])->header('X-Frame-Options', 'SAMEORIGIN', false);
     }
 
     abort(404);

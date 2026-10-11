@@ -64,7 +64,7 @@ class Blockonomics {
     async refreshBTCPrice() {
         const refreshIcon = document.querySelector('.icon-refresh');
         refreshIcon.classList.add('rotating');
-        document.getElementsByClassName("btc-value")[0].innerHTML = "Refreshing...";
+        document.getElementsByClassName("btc-value")[0].innerHTML = (window.BIS_I18N?.bis_refreshing ?? 'Refreshing...');
 
         const getBTCPrice = async () => {
             try {
@@ -86,7 +86,10 @@ class Blockonomics {
             if (newPrice) {
                 // Update the text content of the countdown span to the new bitcoin price
                 const currency = document.querySelector('meta[name="currency"]').content;
-                document.getElementsByClassName("btc-value")[0].innerHTML = "1 BTC = " + (newPrice || "N/A") + " " + currency + ", updates in <span id='countdown'></span>";
+                const priceLabel = window.BIS_I18N?.bis_btc_price_updates_in
+                    ? window.BIS_I18N.bis_btc_price_updates_in.replace(':price', newPrice || "N/A").replace(':currency', currency)
+                    : "1 BTC = " + (newPrice || "N/A") + " " + currency + ", updates in";
+                document.getElementsByClassName("btc-value")[0].innerHTML = priceLabel + " <span id='countdown'></span>";
                 const newBtcAmount = (document.querySelector('meta[name="amount"]').content / newPrice).toFixed(10);
 
                 // set the value of the input field and the text content of the span to the new bitcoin amount

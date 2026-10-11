@@ -25,6 +25,7 @@ import { Button, Link } from '$app/components/forms';
 import { Modal } from '$app/components/Modal';
 import { useResolveConfigValue } from '$app/pages/settings/gateways/create/hooks/useResolveConfigValue';
 import { useFormatGatewayFieldLabel } from '../helpers/format-label';
+import { gatewayWebsite } from '../helpers/upstream-link';
 import { useResolveInputField } from '../hooks/useResolveInputField';
 import { Payware } from './gateways/Payware';
 
@@ -102,9 +103,9 @@ export function Credentials(props: Props) {
 
   return (
     <>
-      {props.gateway.site_url && props.gateway.site_url.length >= 1 && (
+      {gatewayWebsite(props.gateway.site_url).length >= 1 && (
         <Element leftSide={t('help')}>
-          <Link external to={props.gateway.site_url}>
+          <Link external to={gatewayWebsite(props.gateway.site_url)}>
             {t('learn_more')}
           </Link>
         </Element>

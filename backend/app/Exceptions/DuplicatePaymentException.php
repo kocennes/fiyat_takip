@@ -43,7 +43,7 @@ class DuplicatePaymentException extends Exception
         }
 
         return response()->json([
-            'message' => 'Duplicate request',
+            'message' => ctrans('texts.bis_duplicate_request'),
         ], $status_code);
 
     }

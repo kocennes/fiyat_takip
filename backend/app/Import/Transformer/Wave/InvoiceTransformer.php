@@ -39,7 +39,7 @@ class InvoiceTransformer extends BaseTransformer
         }
 
         if ($this->hasInvoice($invoice_data['Invoice Number'])) {
-            throw new ImportException('Invoice number already exists');
+            throw new ImportException(ctrans('texts.bis_import_invoice_number_exists'));
         }
 
         if (array_key_exists('Invoice Date', $invoice_data)) {
@@ -103,7 +103,7 @@ class InvoiceTransformer extends BaseTransformer
                 }
 
                 $line_items[] = [
-                    'notes'     => 'Imported Invoice',
+                    'notes'     => ctrans('texts.bis_import_imported_invoice'),
                     'cost'      => $this->getFloat($record, 'Invoice Total'),
                     'tax_name1' => 'Tax',
                     'tax_rate1' => $calculated_tax_rate,

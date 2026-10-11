@@ -43,7 +43,7 @@ class PromptPay implements LivewireMethodInterface
      */
     public function authorizeView(array $data)
     {
-        throw new PaymentFailed('PromptPay does not support payment method tokenization');
+        throw new PaymentFailed(ctrans('texts.bis_pd_tokenization_not_supported', ['gateway' => 'PromptPay']));
     }
 
     /**
@@ -53,7 +53,7 @@ class PromptPay implements LivewireMethodInterface
      */
     public function authorizeResponse($request)
     {
-        throw new PaymentFailed('PromptPay does not support payment method tokenization');
+        throw new PaymentFailed(ctrans('texts.bis_pd_tokenization_not_supported', ['gateway' => 'PromptPay']));
     }
 
     public function paymentView(array $data)
@@ -198,6 +198,6 @@ class PromptPay implements LivewireMethodInterface
             $this->stripe->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
 }

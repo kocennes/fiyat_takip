@@ -522,7 +522,7 @@ class InvoiceController extends BaseController
 
         if (Ninja::isHosted() && (stripos($action, 'email') !== false) && !$user->company()->account->account_sms_verified) {
             Atomic::del($request->lock_key);
-            return response(['message' => 'Please verify your account to send emails.'], 400);
+            return response(['message' => ctrans('texts.authorization_sms_failure')], 400);
         }
 
         if (Ninja::isHosted() && $user->account->emailQuotaExceeded()) {
@@ -544,7 +544,7 @@ class InvoiceController extends BaseController
 
         if ($invoices->count() == 0) {
             Atomic::del($request->lock_key);
-            return response()->json(['message' => 'No Invoices Found']);
+            return response()->json(['message' => ctrans('texts.no_invoices_found')]);
         }
 
         if ($action == 'convert_to_purchase_order') {
@@ -908,7 +908,7 @@ class InvoiceController extends BaseController
         $invitation = $this->invoice_repo->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $invoice = $invitation->invoice;
@@ -979,7 +979,7 @@ class InvoiceController extends BaseController
         $invitation = $this->invoice_repo->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $contact = $invitation->contact;
@@ -1131,7 +1131,7 @@ class InvoiceController extends BaseController
 
         UpdateReminders::dispatch($user->company());
 
-        return response()->json(['message' => 'Updating reminders'], 200);
+        return response()->json(['message' => ctrans('texts.bis_updating_reminders')], 200);
     }
     
     /**

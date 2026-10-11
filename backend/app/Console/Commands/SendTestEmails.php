@@ -55,17 +55,17 @@ class SendTestEmails extends Command
         $to_user = User::first();
 
         $nmo = new NinjaMailerObject();
-        $nmo->mailable = new TestMailServer('Email Server Works!', config('mail.from.address'));
+        $nmo->mailable = new TestMailServer(ctrans('texts.bis_email_server_works'), config('mail.from.address'));
         $nmo->company = $to_user->account->companies()->first();
         $nmo->settings = $to_user->account->companies()->first()->settings;
         $nmo->to_user = $to_user;
 
         try {
 
-            Mail::raw("Test Message", function ($message) {
+            Mail::raw(ctrans('texts.bis_email_server_works'), function ($message) {
                 $message->to(config('mail.from.address'))
                         ->from(config('mail.from.address'), config('mail.from.name'))
-                        ->subject('Test Email');
+                        ->subject(ctrans('texts.bis_test_email_subject'));
             });
 
 

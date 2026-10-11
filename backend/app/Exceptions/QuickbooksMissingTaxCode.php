@@ -26,7 +26,7 @@ class QuickbooksMissingTaxCode extends Exception
             array_values($componentGroups)
         );
 
-        return new self('QuickBooks requires a TaxCode for taxes (' . implode(', ', $labels) . '). Create or sync the matching QuickBooks tax code, then retry.', 0, $previous);
+        return new self(ctrans('texts.bis_quickbooks_missing_tax_code', ['taxes' => implode(', ', $labels)]), 0, $previous);
     }
 
     /**
@@ -34,7 +34,7 @@ class QuickbooksMissingTaxCode extends Exception
      */
     public static function forComponents(array $components, ?Throwable $previous = null): self
     {
-        return new self('QuickBooks requires a TaxCode for taxes (' . self::componentGroupLabel($components) . '). Create or sync the matching QuickBooks tax code, then retry.', 0, $previous);
+        return new self(ctrans('texts.bis_quickbooks_missing_tax_code', ['taxes' => self::componentGroupLabel($components)]), 0, $previous);
     }
 
     /**

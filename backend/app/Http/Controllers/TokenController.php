@@ -94,7 +94,7 @@ class TokenController extends BaseController
     public function index(TokenFilters $filters)
     {
         if(!auth()->user()->isAdmin()){
-            abort(403, 'Unauthorized action.');
+            abort(403, ctrans('texts.not_authorized'));
         }
         
         $this->entity_transformer = CompanyTokenHashedTransformer::class;

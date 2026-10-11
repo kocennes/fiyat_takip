@@ -43,7 +43,7 @@ class ActionPurchaseOrderRequest extends Request
         if ($this->action) {
             $input['action'] = $this->action;
         } elseif (! array_key_exists('action', $input)) {
-            $this->error_msg = 'Action is a required field';
+            $this->error_msg = ctrans('texts.bis_action_required');
         }
 
         $this->replace($input);

@@ -48,6 +48,7 @@ export function Logo({ isSettingsPage = true }: Props) {
   const dispatch = useDispatch();
 
   const logo = useLogo();
+  const logoOnDark = useLogo({ darkBackground: true });
   const colors = useColorScheme();
   const company = useCurrentCompany();
   const companyChanges = useCompanyChanges();
@@ -227,15 +228,15 @@ export function Logo({ isSettingsPage = true }: Props) {
                 <img
                   className="w-full h-auto object-contain"
                   src={logo}
-                  alt={t('company_logo') ?? 'Company logo'}
+                  alt={t('company_logo') as string}
                 />
               </div>
 
               <div className="col-span-12 lg:col-span-5 bg-gray-900 rounded-lg p-6">
                 <img
                   className="w-full h-auto object-contain"
-                  src={logo}
-                  alt={t('company_logo') ?? 'Company logo'}
+                  src={logoOnDark}
+                  alt={t('company_logo') as string}
                 />
               </div>
             </div>
@@ -255,7 +256,7 @@ export function Logo({ isSettingsPage = true }: Props) {
 
                 <span className="mt-2 block text-sm font-medium">
                   {isDragActive
-                    ? 'drop_your_logo_here'
+                    ? t('drop_your_logo_here')
                     : t('dropzone_default_message')}
                 </span>
               </div>
@@ -296,15 +297,15 @@ export function Logo({ isSettingsPage = true }: Props) {
               <img
                 className="w-full h-auto object-contain"
                 src={logo}
-                alt={t('company_logo') ?? 'Company logo'}
+                alt={t('company_logo') as string}
               />
             </div>
 
             <div className="col-span-6 bg-gray-900 rounded-lg p-6">
               <img
                 className="w-full h-auto object-contain"
-                src={logo}
-                alt={t('company_logo') ?? 'Company logo'}
+                src={logoOnDark}
+                alt={t('company_logo') as string}
               />
             </div>
           </div>
@@ -323,7 +324,7 @@ export function Logo({ isSettingsPage = true }: Props) {
 
                 <span className="mt-2 block text-sm font-medium">
                   {isDragActive
-                    ? 'drop_your_logo_here'
+                    ? t('drop_your_logo_here')
                     : t('dropzone_default_message')}
                 </span>
               </div>

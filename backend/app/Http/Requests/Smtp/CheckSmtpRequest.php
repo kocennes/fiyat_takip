@@ -83,36 +83,36 @@ class CheckSmtpRequest extends Request
             $host = $this->normalizeHost((string) $this->input('smtp_host'));
 
             if ($host === '') {
-                $validator->errors()->add('smtp_host', 'Invalid hostname');
+                $validator->errors()->add('smtp_host', ctrans('texts.bis_invalid_hostname'));
                 return;
             }
 
             if (Ninja::isHosted() && $this->isRebindingDomain($host)) {
-                $validator->errors()->add('smtp_host', 'Invalid hostname');
+                $validator->errors()->add('smtp_host', ctrans('texts.bis_invalid_hostname'));
                 return;
             }
 
             $ips = $this->resolveHost($host);
 
             if (empty($ips)) {
-                $validator->errors()->add('smtp_host', 'Unable to resolve hostname.');
+                $validator->errors()->add('smtp_host', ctrans('texts.bis_unable_to_resolve_hostname'));
                 return;
             }
 
             foreach ($ips as $ip) {
                 if (in_array($ip, self::BLOCKED_METADATA_IPS, true)) {
-                    $validator->errors()->add('smtp_host', 'Invalid hostname');
+                    $validator->errors()->add('smtp_host', ctrans('texts.bis_invalid_hostname'));
                     return;
                 }
 
                 if (Ninja::isHosted() && !$this->isPublicIp($ip)) {
-                    $validator->errors()->add('smtp_host', 'Invalid hostname');
+                    $validator->errors()->add('smtp_host', ctrans('texts.bis_invalid_hostname'));
                     return;
                 }
             }
 
             if (Ninja::isHosted() && !in_array((int) $this->input('smtp_port'), self::ALLOWED_PORTS, true)) {
-                $validator->errors()->add('smtp_port', 'Invalid port');
+                $validator->errors()->add('smtp_port', ctrans('texts.bis_invalid_port'));
                 return;
             }
         });

@@ -128,7 +128,7 @@ class ForteAuthorizeACH {
 
                 if (!accountHolderName.value.trim()) {
                     isValid = false;
-                    errors.push('Account holder name is required');
+                    errors.push((window.BIS_I18N?.missing_account_holder_name ?? 'Account holder name is required'));
                     accountHolderName.classList.add('border-red-500');
                 }
                 else {
@@ -137,7 +137,7 @@ class ForteAuthorizeACH {
 
                 if (!routingNumber.value.trim() || !/^\d{9}$/.test(routingNumber.value)) {
                     isValid = false;
-                    errors.push('Valid 9-digit routing number is required');
+                    errors.push((window.BIS_I18N?.bis_routing_number_required ?? 'Valid 9-digit routing number is required'));
                     routingNumber.classList.add('border-red-500');
                 }
                 else {
@@ -146,7 +146,7 @@ class ForteAuthorizeACH {
 
                 if (!accountNumber.value.trim() || !/^\d{4,17}$/.test(accountNumber.value)) {
                     isValid = false;
-                    errors.push('Valid account number is required (4-17 digits)');
+                    errors.push((window.BIS_I18N?.bis_account_number_required ?? 'Valid account number is required (4-17 digits)'));
                     accountNumber.classList.add('border-red-500');
                 }
                 else {

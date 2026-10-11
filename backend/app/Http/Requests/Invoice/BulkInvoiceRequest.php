@@ -69,15 +69,15 @@ class BulkInvoiceRequest extends Request
                 ->cursor()
                 ->each(function (Invoice $invoice) use ($validator, $action): void {
                     if ($action ==  'delete' && ! $this->invoiceDeletable($invoice)) {
-                        $validator->errors()->add('action', 'This invoice cannot be deleted');
+                        $validator->errors()->add('action', ctrans('texts.bis_invoice_cannot_be_deleted'));
                     } elseif ($action == 'cancel' && ! $this->invoiceCancellable($invoice)) {
-                        $validator->errors()->add('action', 'This invoice cannot be cancelled');
+                        $validator->errors()->add('action', ctrans('texts.bis_invoice_cannot_be_cancelled'));
                     } elseif ($action == 'reverse' && ! $this->invoiceReversable($invoice)) {
-                        $validator->errors()->add('action', 'This invoice cannot be reversed');
+                        $validator->errors()->add('action', ctrans('texts.bis_invoice_cannot_be_reversed'));
                     } elseif ($action == 'restore' && ! $this->invoiceRestorable($invoice)) {
-                        $validator->errors()->add('action', 'This invoice cannot be restored');
+                        $validator->errors()->add('action', ctrans('texts.bis_invoice_cannot_be_restored'));
                     } elseif ($action == 'mark_paid' && ! $this->invoicePayable($invoice)) {
-                        $validator->errors()->add('action', 'This invoice cannot be marked as paid');
+                        $validator->errors()->add('action', ctrans('texts.invoice_cannot_be_marked_paid'));
                     }
                 });
         });

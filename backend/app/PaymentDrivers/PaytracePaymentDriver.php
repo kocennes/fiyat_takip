@@ -203,7 +203,7 @@ class PaytracePaymentDriver extends BaseDriver
         $auth_data = json_decode($response);
 
         if (!isset($auth_data) || ! property_exists($auth_data, 'access_token')) {
-            throw new SystemError('Error authenticating with PayTrace');
+            throw new SystemError(ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'PayTrace']));
         }
 
         $headers = [];

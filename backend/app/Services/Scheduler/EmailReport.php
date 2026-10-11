@@ -54,6 +54,8 @@ class EmailReport
 
     public function run()
     {
+        // Attachment names follow the user's language (e.g. Rapor.csv / Rapor.pdf).
+        $this->file_name = str_replace(' ', '_', ctrans('texts.report')) . '.csv';
 
         $start_end_dates = $this->calculateStartAndEndDates($this->scheduler->parameters, $this->scheduler->company);
         $data = $this->scheduler->parameters;
@@ -126,7 +128,7 @@ class EmailReport
         if (isset($data['template_id']) && !empty($data['template_id'])) {
             $builder = $export->init();
             $pdf = $export->exportTemplate($builder, $data['template_id']);
-            $files[] = ['file' => base64_encode($pdf), 'file_name' => "report.pdf", 'mime' => 'application/pdf'];
+            $files[] = ['file' => base64_encode($pdf), 'file_name' => str_replace('.csv', '.pdf', $this->file_name), 'mime' => 'application/pdf'];
         } else {
             $csv = base64_encode($export->run());
             $files = [];

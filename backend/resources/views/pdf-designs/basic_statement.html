@@ -188,7 +188,7 @@
                                 <td class="">{{ payment.number }}</td>
                                 <td class="">{{ payment.date }}</td>
                                 {%if payment.is_credit %}
-                                <td class="">Credit {{ payment.number }}</td>
+                                <td class="">{{ t('credit') }} {{ payment.number }}</td>
                                 {%else%}
                                 <td class="">{{ payment.method }}</td>
                                 {%endif%}
@@ -204,7 +204,7 @@
     <ninja>
         {% if credits|e %}
         <div class="entity-container">
-            <h2>Credits<h2>
+            <h2>{{ t('credits') }}<h2>
                     <table width="100%" cellspacing="0" cellpadding="0" class="">
                         <thead class="">
                             <tr class="">

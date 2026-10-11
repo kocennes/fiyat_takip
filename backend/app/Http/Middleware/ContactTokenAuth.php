@@ -32,7 +32,7 @@ class ContactTokenAuth
     {
         if ($request->header('X-API-TOKEN') && ($client_contact = ClientContact::with(['company','client'])->where('token', $request->header('X-API-TOKEN'))->first())) {
             $error = [
-                'message' => 'Authentication disabled for user.',
+                'message' => ctrans('texts.bis_authentication_disabled'),
                 'errors' => new stdClass(),
             ];
 
@@ -42,7 +42,7 @@ class ContactTokenAuth
             }
 
             $error = [
-                'message' => 'Access is locked.',
+                'message' => ctrans('texts.bis_access_locked'),
                 'errors' => new stdClass(),
             ];
 
@@ -57,7 +57,7 @@ class ContactTokenAuth
             event(new ContactLoggedIn($client_contact, $client_contact->company, Ninja::eventVars()));
         } else {
             $error = [
-                'message' => 'Invalid token',
+                'message' => ctrans('texts.bis_invalid_token'),
                 'errors' => new stdClass(),
             ];
 

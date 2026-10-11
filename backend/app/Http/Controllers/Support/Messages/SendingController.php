@@ -11,21 +11,21 @@
 namespace App\Http\Controllers\Support\Messages;
 
 use App\Http\Controllers\Controller;
-use App\Mail\SupportMessageSent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class SendingController extends Controller
 {
     /**
-     * Send a support message.
+     * Support messages to an external vendor are not available in this
+     * installation: nothing is sent anywhere, users contact their system
+     * administrator instead.
      *
      * @OA\Post(
      *      path="/api/v1/support/messages/send",
      *      operationId="supportMessage",
      *      tags={"support"},
-     *      summary="Sends a support message to Invoice Ninja team",
-     *      description="Allows a user to send a support message to the Invoice Ninja Team",
+     *      summary="Support messages are not available in this installation",
+     *      description="Always answers that the feature is not available; no message is sent",
      *      @OA\Parameter(ref="#/components/parameters/X-API-TOKEN"),
      *      @OA\Parameter(ref="#/components/parameters/X-Requested-With"),
      *      @OA\RequestBody(
@@ -72,21 +72,9 @@ class SendingController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $request->validate([
-            'message' => ['required'],
-        ]);
-
-        $send_logs = false;
-
-        if ($request->has('send_logs')) {
-            $send_logs = $request->input('send_logs');
-        }
-
-        Mail::to(config('ninja.contact.ninja_official_contact'))
-            ->send(new SupportMessageSent($request->all(), $send_logs));
-
         return response()->json([
-            'success' => true,
-        ], 200);
+            'success' => false,
+            'message' => ctrans('texts.bis_support_contact_admin'),
+        ], 403);
     }
 }

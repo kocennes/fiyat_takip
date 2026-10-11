@@ -88,7 +88,7 @@ class CreditCard implements LivewireMethodInterface
 
             $this->forte->storeGatewayToken($data, ['gateway_customer_reference' => $cst]);
 
-            return redirect()->route('client.payment_methods.index')->withSuccess('Payment Method added.');
+            return redirect()->route('client.payment_methods.index')->withSuccess(ctrans('texts.payment_method_added'));
 
         }
 
@@ -108,7 +108,7 @@ class CreditCard implements LivewireMethodInterface
             $this->forte->client->company,
         );
 
-        throw new \App\Exceptions\PaymentFailed("Unable to store payment method: {$error->response->response_desc}", 400);
+        throw new \App\Exceptions\PaymentFailed(ctrans('texts.bis_pd_unable_to_store_payment_method', ['error' => $error->response->response_desc]), 400);
 
     }
 

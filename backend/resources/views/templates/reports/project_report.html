@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
-    <title>Project Report</title>
+    <title>Proje Raporu</title>
     <style>
         @page {
             size: landscape;
@@ -158,10 +158,10 @@
         <div class="page-break">
         
         <h1>{{ project.name }}</h1>
-        <h3>Due: {{ project.due_date }}</h3>
-        <h6>{{ project.current_hours }} / {{ project.budgeted_hours }}: (Hours / Budgeted Hours @ {{ project.task_rate
+        <h3>{{ t('due_date') }}: {{ project.due_date }}</h3>
+        <h6>{{ project.current_hours }} / {{ project.budgeted_hours }}: ({{ t('hours') }} / {{ t('budgeted_hours') }} @ {{ project.task_rate
             }}) -
-            Report generated on {{ "now"|date('Y-m-d') }}</h6>
+            {{ t('created_on') }}: {{ "now"|date('Y-m-d') }}</h6>
 
         {% if project.tasks is not empty %}
         <table>

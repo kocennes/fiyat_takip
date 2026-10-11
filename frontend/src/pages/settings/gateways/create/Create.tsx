@@ -37,6 +37,7 @@ import { DuplicatingGatewayModal } from './components/DuplicatingGatewayModal';
 import { LimitsAndFees } from './components/LimitsAndFees';
 import { RequiredFields } from './components/RequiredFields';
 import { Settings as GatewaySettings } from './components/Settings';
+import { gatewayWebsite } from './helpers/upstream-link';
 import { useHandleCreate } from './hooks/useHandleCreate';
 import { blankFeesAndLimitsRecord } from './hooks/useHandleMethodToggle';
 
@@ -412,12 +413,12 @@ export function Create() {
 
                     <div
                       className={classNames('flex flex-col pt-4 flex-1', {
-                        'justify-between': gateway.site_url,
-                        'justify-end': !gateway.site_url,
+                        'justify-between': gatewayWebsite(gateway.site_url),
+                        'justify-end': !gatewayWebsite(gateway.site_url),
                       })}
                     >
-                      {gateway.site_url && (
-                        <Link external to={gateway.site_url}>
+                      {gatewayWebsite(gateway.site_url) && (
+                        <Link external to={gatewayWebsite(gateway.site_url)}>
                           {t('website')}
                         </Link>
                       )}

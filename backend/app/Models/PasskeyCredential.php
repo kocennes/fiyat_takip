@@ -64,7 +64,7 @@ class PasskeyCredential extends BaseModel
     public function resolveRouteBinding($value, $field = null)
     {
         if (is_numeric($value)) {
-            throw new ModelNotFoundException("Record with value {$value} not found");
+            throw new ModelNotFoundException(ctrans('texts.bis_record_with_value_not_found', ['value' => $value]));
         }
 
         return $this

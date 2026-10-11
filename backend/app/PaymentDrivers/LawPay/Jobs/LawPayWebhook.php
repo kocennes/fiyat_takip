@@ -138,7 +138,7 @@ class LawPayWebhook implements ShouldQueue
             $payment->save();
 
             if ($payment->client) {
-                $error_message = "LawPay payment {$status}: {$payment->transaction_reference}";
+                $error_message = ctrans('texts.bis_pd_payment_failed_with_status', ['gateway' => 'LawPay', 'status' => "{$status} ({$payment->transaction_reference})"]);
 
                 $company_gateway->driver($payment->client)->sendFailureMail($error_message);
             }

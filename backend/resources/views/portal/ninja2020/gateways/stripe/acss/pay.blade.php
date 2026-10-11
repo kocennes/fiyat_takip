@@ -1,4 +1,4 @@
-@extends('portal.ninja2020.layout.payments', ['gateway_title' => 'Pre-authorized debit payments', 'card_title' => 'Pre-authorized debit payments'])
+@extends('portal.ninja2020.layout.payments', ['gateway_title' => ctrans('texts.bis_pre_authorized_debit'), 'card_title' => ctrans('texts.bis_pre_authorized_debit')])
 
 @section('gateway_head')
 

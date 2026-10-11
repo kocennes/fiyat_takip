@@ -56,7 +56,7 @@ class PasskeyService
     public function registerCredential(User $user, string $challengeToken, array $payload, ?string $name = null): ?PasskeyCredential
     {
         if ($user->passkey_credentials()->count() >= self::MAX_CREDENTIALS_PER_USER) {
-            throw new \RuntimeException('Maximum number of passkeys reached.');
+            throw new \RuntimeException(ctrans('texts.bis_passkey_limit_reached'));
         }
 
         $challengeData = $this->getChallenge($challengeToken, 'registration', $user->id);
@@ -80,7 +80,7 @@ class PasskeyService
 
 
         if ($credential) {
-            throw new \RuntimeException('Passkey credential already exists.');
+            throw new \RuntimeException(ctrans('texts.bis_passkey_exists'));
         }
 
         $credential = new PasskeyCredential();
@@ -146,7 +146,7 @@ class PasskeyService
         $credential = $credentialQuery->first();
 
         if (!$credential) {
-            throw new \RuntimeException('Passkey credential not found.');
+            throw new \RuntimeException(ctrans('texts.bis_passkey_not_found'));
         }
 
         $webAuthn = $this->makeWebAuthn();
@@ -202,11 +202,11 @@ class PasskeyService
         $payload = Cache::pull(self::CACHE_PREFIX . $token);
 
         if (!$payload || ($payload['action'] ?? null) !== $action) {
-            throw new \RuntimeException('Invalid passkey challenge.');
+            throw new \RuntimeException(ctrans('texts.bis_passkey_invalid_challenge'));
         }
 
         if (!is_null($userId) && (int) ($payload['user_id'] ?? 0) !== $userId) {
-            throw new \RuntimeException('Passkey challenge does not match user.');
+            throw new \RuntimeException(ctrans('texts.bis_passkey_challenge_user_mismatch'));
         }
 
         return $payload;
@@ -215,7 +215,7 @@ class PasskeyService
     private function decodeBase64Input(?string $value): string
     {
         if (!$value) {
-            throw new \RuntimeException('Invalid passkey payload.');
+            throw new \RuntimeException(ctrans('texts.bis_passkey_invalid_payload'));
         }
 
         $normalized = str_replace(['-', '_'], ['+', '/'], $value);
@@ -226,7 +226,7 @@ class PasskeyService
 
         $decoded = base64_decode($normalized, true);
         if ($decoded === false) {
-            throw new \RuntimeException('Invalid base64 value.');
+            throw new \RuntimeException(ctrans('texts.bis_passkey_invalid_encoding'));
         }
 
         return $decoded;

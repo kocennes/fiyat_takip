@@ -67,7 +67,7 @@
         @endif
 
         @if($transaction_count)
-            <p><b>{{ ctrans('texts.documents') }}:</b> {{ $transaction_count }} </p>
+            <p><b>{{ ctrans('texts.transactions') }}:</b> {{ $transaction_count }} </p>
         @endif
 
         @if(!empty($errors) )
@@ -76,16 +76,16 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Data</th>
-                    <th>Error</th>
+                    <th>{{ ctrans('texts.type') }}</th>
+                    <th>{{ ctrans('texts.data') }}</th>
+                    <th>{{ ctrans('texts.error') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($errors as $entityType=>$entityErrors)
                     @foreach($entityErrors as $error)
                         <tr>
-                            <td>{{$entityType}}</td>
+                            <td>{{ \Illuminate\Support\Facades\Lang::has("texts.{$entityType}") ? ctrans("texts.{$entityType}") : $entityType }}</td>
                             <td>{{json_encode($error[$entityType]??null)}}</td>
                             <td>{{json_encode($error['error'])}}</td>
                         </tr>
@@ -121,7 +121,7 @@
 
 
         <p>{{ ctrans('texts.email_signature')}}</p>
-        <p>{{ ctrans('texts.email_from') }}</p>
+        <p>{{ ctrans('texts.bis_email_from') }}</p>
     </div>
 @endcomponent
 

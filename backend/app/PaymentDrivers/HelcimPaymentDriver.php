@@ -123,7 +123,7 @@ class HelcimPaymentDriver extends BaseDriver
     public function initializeAchPaymentCheckout(string $expectedFingerprint): array
     {
         if (! $this->payment_method instanceof ACH) {
-            throw new PaymentFailed('Helcim ACH is not the selected payment method.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_method_not_selected'), 400);
         }
 
         return $this->payment_method->initializePaymentCheckout($expectedFingerprint);
@@ -144,7 +144,7 @@ class HelcimPaymentDriver extends BaseDriver
         }
 
         if (empty($payment->transaction_reference)) {
-            $error = 'Missing transaction reference for refund';
+            $error = ctrans('texts.bis_pd_refund_missing_reference');
 
             if ($return_client_response) {
                 return [
@@ -382,7 +382,7 @@ class HelcimPaymentDriver extends BaseDriver
         $acceptedStatuses = ['APPROVED', 'PENDING', 'QUEUED', 'SUBMITTED', 'OPENED', 'CLEARED', 'SETTLED', 'COMPLETED', 'SUCCESS'];
         if ($status !== '' && ! in_array($status, $acceptedStatuses, true)) {
             throw new \App\Exceptions\PaymentFailed(
-                "Helcim transaction {$transactionId} has status '{$status}' — not approved.",
+                ctrans('texts.bis_pd_transaction_not_approved', ['transaction' => $transactionId, 'status' => $status]),
                 400
             );
         }
@@ -407,7 +407,7 @@ class HelcimPaymentDriver extends BaseDriver
             );
 
             throw new \App\Exceptions\PaymentFailed(
-                "Helcim transaction amount mismatch: expected {$expectedAmount}, got {$returnedAmount}.",
+                ctrans('texts.bis_pd_transaction_amount_mismatch', ['expected' => $expectedAmount, 'received' => $returnedAmount]),
                 400
             );
         }
@@ -417,7 +417,7 @@ class HelcimPaymentDriver extends BaseDriver
 
         if ($returnedCurrency !== '' && $returnedCurrency !== strtoupper($expectedCurrency)) {
             throw new \App\Exceptions\PaymentFailed(
-                "Helcim transaction currency mismatch: expected {$expectedCurrency}, got {$returnedCurrency}.",
+                ctrans('texts.bis_pd_transaction_currency_mismatch', ['expected' => $expectedCurrency, 'received' => $returnedCurrency]),
                 400
             );
         }
@@ -458,12 +458,12 @@ class HelcimPaymentDriver extends BaseDriver
         bool $requireFinancialFields = true
     ): HelcimAchTransaction {
         if (! $transaction->transactionId) {
-            throw new PaymentFailed('Helcim ACH response did not include a transactionId.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_no_transaction_id', ['gateway' => 'Helcim']), 400);
         }
 
         if ($expectedTransactionId !== null && $transaction->transactionId !== $expectedTransactionId) {
             throw new PaymentFailed(
-                "Helcim ACH transaction mismatch: expected {$expectedTransactionId}, got {$transaction->transactionId}.",
+                ctrans('texts.bis_pd_transaction_mismatch', ['expected' => $expectedTransactionId, 'received' => $transaction->transactionId]),
                 400
             );
         }
@@ -472,11 +472,7 @@ class HelcimPaymentDriver extends BaseDriver
             || ($transaction->amount !== null
                 && (int) round($transaction->amount * 100) !== (int) round($expectedAmount * 100))) {
             throw new PaymentFailed(
-                'Helcim ACH transaction amount mismatch: expected '
-                    . $expectedAmount
-                    . ', got '
-                    . ($transaction->amount ?? 'no amount')
-                    . '.',
+                ctrans('texts.bis_pd_transaction_amount_mismatch', ['expected' => $expectedAmount, 'received' => $transaction->amount ?? '-']),
                 400
             );
         }
@@ -484,25 +480,21 @@ class HelcimPaymentDriver extends BaseDriver
         if (($requireFinancialFields && $transaction->currency === null)
             || ($transaction->currency !== null && $transaction->currency !== strtoupper($expectedCurrency))) {
             throw new PaymentFailed(
-                'Helcim ACH transaction currency mismatch: expected '
-                    . strtoupper($expectedCurrency)
-                    . ', got '
-                    . ($transaction->currency ?? 'no currency')
-                    . '.',
+                ctrans('texts.bis_pd_transaction_currency_mismatch', ['expected' => strtoupper($expectedCurrency), 'received' => $transaction->currency ?? '-']),
                 400
             );
         }
 
         if ($requireAccepted && ! $transaction->isAccepted()) {
             throw new PaymentFailed(
-                "Helcim ACH transaction {$transaction->transactionId} has status '{$transaction->statusDescription()}'.",
+                ctrans('texts.bis_pd_transaction_status', ['transaction' => $transaction->transactionId, 'status' => $transaction->statusDescription()]),
                 400
             );
         }
 
         if (! $requireAccepted && ! ($transaction->isAccepted() || $transaction->isFailed())) {
             throw new PaymentFailed(
-                "Helcim ACH transaction {$transaction->transactionId} has unknown status '{$transaction->statusDescription()}'.",
+                ctrans('texts.bis_pd_transaction_unknown_status', ['transaction' => $transaction->transactionId, 'status' => $transaction->statusDescription()]),
                 400
             );
         }
@@ -572,7 +564,7 @@ class HelcimPaymentDriver extends BaseDriver
                     $paymentHash,
                     $client->company,
                     $client,
-                    "Helcim ACH payment {$transaction->transactionId} failed with status {$transaction->statusDescription()}."
+                    ctrans('texts.bis_pd_payment_failed_with_status', ['gateway' => 'Helcim', 'status' => "{$transaction->statusDescription()} ({$transaction->transactionId})"])
                 );
 
                 return 'failed';
@@ -648,7 +640,7 @@ class HelcimPaymentDriver extends BaseDriver
                 return 'ok';
             }
 
-            $error = $response->json('errors') ?? $response->json('message') ?? 'Helcim credential check failed';
+            $error = $response->json('errors') ?? $response->json('message') ?? ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'Helcim']);
 
             return is_array($error) ? json_encode($error) : (string) $error;
         } catch (\Throwable $e) {

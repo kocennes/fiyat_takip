@@ -580,7 +580,7 @@ class DesignController extends BaseController
                         ->exists();
 
         if (! $design) {
-            return response()->json(['message' => 'Design does not exist.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_design_not_found')], 400);
         }
 
         switch ($entity) {
@@ -692,6 +692,6 @@ class DesignController extends BaseController
                 break;
         }
 
-        return response()->json(['message' => 'success'], 200);
+        return response()->json(['message' => ctrans('texts.success')], 200);
     }
 }

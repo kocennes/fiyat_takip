@@ -184,7 +184,7 @@ export function LogoCropModal({
               <img
                 ref={imgRef}
                 src={imageSrc}
-                alt={t('company_logo') ?? 'Company logo'}
+                alt={t('company_logo') as string}
                 onLoad={handleImageLoad}
                 style={{ maxHeight: '18rem', maxWidth: '100%' }}
               />

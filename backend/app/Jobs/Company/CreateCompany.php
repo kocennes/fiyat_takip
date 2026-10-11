@@ -158,6 +158,12 @@ class CreateCompany
      */
     private function resolveCountry(): string
     {
+        // BISAVUNMA: self-hosted companies use the configured regional default
+        // (Turkey) instead of geolocating the visitor's IP with a third party service.
+        if (! Ninja::isHosted()) {
+            return CompanySettings::regionalDefault('country_id');
+        }
+
         try {
 
             $ip = request()->ip();

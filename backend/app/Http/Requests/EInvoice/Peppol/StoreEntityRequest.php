@@ -64,7 +64,7 @@ class StoreEntityRequest extends FormRequest
                 $siret = preg_replace("/[^0-9]/", "", (string) $value);
 
                 if (! (new StorecoveIdentifierValidator())->validFormat('FR:SIRET', $siret)) {
-                    $fail('When supplied, id_number must be a valid 14-digit SIRET (FR:SIRET). The SIREN is derived from the VAT number.');
+                    $fail(ctrans('texts.bis_invalid_siret'));
                 }
             };
 
@@ -73,7 +73,7 @@ class StoreEntityRequest extends FormRequest
                 $siren = strlen($vat) >= 9 ? substr($vat, -9) : '';
 
                 if (! (new StorecoveIdentifierValidator())->validFormat('FR:SIRENE', $siren)) {
-                    $fail('vat_number must contain a valid 9-digit SIREN for French CTC registration.');
+                    $fail(ctrans('texts.bis_invalid_siren'));
                 }
             };
         }
@@ -104,7 +104,7 @@ class StoreEntityRequest extends FormRequest
     protected function failedAuthorization(): void
     {
         throw new AuthorizationException(
-            message: ctrans('texts.peppol_not_paid_message'),
+            message: ctrans('texts.bis_feature_not_available'),
         );
     }
 

@@ -119,19 +119,19 @@
                         <table class="min-w-full text-left text-sm font-light">
                             <thead class="border-b font-medium dark:border-neutral-500">
                                 <tr class="text-sm leading-normal">
-                                    <th scope="col" class="px-6 py-4">Doc #</th>
-                                    <th scope="col" class="px-6 py-4">Date</th>
-                                    <th scope="col" class="px-6 py-4">Due Date</th>
-                                    <th scope="col" class="px-6 py-4">Total</th>
-                                    <th scope="col" class="px-6 py-4">Transaction</th>
-                                    <th scope="col" class="px-6 py-4">Outstanding</th>
+                                    <th scope="col" class="px-6 py-4">{{ t('number') }}</th>
+                                    <th scope="col" class="px-6 py-4">{{ t('date') }}</th>
+                                    <th scope="col" class="px-6 py-4">{{ t('due_date') }}</th>
+                                    <th scope="col" class="px-6 py-4">{{ t('total') }}</th>
+                                    <th scope="col" class="px-6 py-4">{{ t('transaction') }}</th>
+                                    <th scope="col" class="px-6 py-4">{{ t('outstanding') }}</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 {% for invoice in invoices %}
                                 <tr class="border-b dark:border-neutral-500">
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">Invoice - {{ invoice.number }}
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ t('invoice') }} - {{ invoice.number }}
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ invoice.date }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ invoice.due_date }}</td>
@@ -147,7 +147,7 @@
                                 {% for pivot in payment.paymentables %}
 
                                 <tr class="border-b dark:border-neutral-500">
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">Payment - {{ payment.number }}
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ t('payment') }} - {{ payment.number }}
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ payment.date }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium"></td>

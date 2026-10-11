@@ -127,22 +127,24 @@
         <div>
         </div>
         <div id="statement-details">
-            <h2>Statement</h2>
-            <p>$start_date - $end_date</p>
+            <ninja>
+                <h2>{{ t('statement') }}</h2>
+                <p>$start_date - $end_date</p>
+            </ninja>
         </div>
     </div>
     <ninja>
         {% if invoices is defined and invoices is not empty %}
         <div class="entity-container">
-            <h2>Invoices<h2>
+            <h2>{{ t('invoices') }}<h2>
                 <table width="100%" cellspacing="0" cellpadding="0" class="">
                     <thead class="">
                         <tr class="">
-                            <th class="">Invoice #</th>
-                            <th class="">Invoice Date</th>
-                            <th class="">Invoice Due Date</th>
-                            <th class="">Total</th>
-                            <th class="">Balance</th>
+                            <th class="">{{ t('invoice') }} #</th>
+                            <th class="">{{ t('invoice_date') }}</th>
+                            <th class="">{{ t('invoice_due_date') }}</th>
+                            <th class="">{{ t('total') }}</th>
+                            <th class="">{{ t('balance') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -164,14 +166,14 @@
     <ninja>
         {% if payments is defined and payments is not empty %}
         <div class="entity-container">
-            <h2>Payments<h2>
+            <h2>{{ t('payments') }}<h2>
                     <table width="100%" cellspacing="0" cellpadding="0" class="">
                         <thead class="">
                             <tr class="">
-                                <th class="">Invoice #</th>
-                                <th class="">Payment Date</th>
-                                <th class="">Method</th>
-                                <th class="">Amount</th>
+                                <th class="">{{ t('invoice') }} #</th>
+                                <th class="">{{ t('payment_date') }}</th>
+                                <th class="">{{ t('method') }}</th>
+                                <th class="">{{ t('amount') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -180,7 +182,7 @@
                                 <td class="">{{ payment.number }}</td>
                                 <td class="">{{ payment.date }}</td>
                                 {%if payment.is_credit %}
-                                <td class="">Credit {{ payment.number }}</td>
+                                <td class="">{{ t('credit') }} {{ payment.number }}</td>
                                 {%else%}
                                 <td class="">{{ payment.method }}</td>
                                 {%endif%}
@@ -196,14 +198,14 @@
     <ninja>
         {% if credits is defined and credits is not empty %}
         <div class="entity-container">
-            <h2>Credits<h2>
+            <h2>{{ t('credits') }}<h2>
                     <table width="100%" cellspacing="0" cellpadding="0" class="">
                         <thead class="">
                             <tr class="">
-                                <th class="">Credit #</th>
-                                <th class="">Credit Date</th>
-                                <th class="">Total</th>
-                                <th class="">Balance</th>
+                                <th class="">{{ t('credit') }} #</th>
+                                <th class="">{{ t('credit_date') }}</th>
+                                <th class="">{{ t('total') }}</th>
+                                <th class="">{{ t('balance') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -224,7 +226,7 @@
     <ninja>
         {% if aging is defined %}
         <div class="entity-container">
-            <h2>Aging<h2>
+            <h2>{{ t('aging') }}<h2>
                     <table width="100%" cellspacing="0" cellpadding="0" class="">
                         <thead class="">
                             <tr class="">

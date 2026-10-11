@@ -60,7 +60,7 @@ class UpdateUserLastLogin implements ShouldQueue
         $user->save();
 
         $event_vars = $event->event_vars;
-        $ip = array_key_exists('ip', $event->event_vars) ? $event->event_vars['ip'] : 'IP address not resolved';
+        $ip = array_key_exists('ip', $event->event_vars) ? $event->event_vars['ip'] : ctrans('texts.bis_ip_not_resolved');
         $key = "user_logged_in_{$user->id}{$event->company->db}";
 
         if ($user->ip != $ip && is_null(Cache::get($key)) && $user->user_logged_in_notification && strlen($user->oauth_provider_id ?? '') == 0) {

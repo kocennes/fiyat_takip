@@ -98,7 +98,7 @@ class SquarePaymentDriver extends BaseDriver
             $this->company_gateway->save();
         } else {
             nlog('Square OAuth token refresh failed: ' . $response->body());
-            throw new PaymentFailed('Square token refresh failed. Please reconnect your Square account.', 401);
+            throw new PaymentFailed(ctrans('texts.bis_pd_square_reconnect'), 401);
         }
     }
 
@@ -265,9 +265,9 @@ class SquarePaymentDriver extends BaseDriver
         $invoice = Invoice::query()->whereIn('id', $this->transformKeys(array_column($payment_hash->invoices(), 'invoice_id')))->withTrashed()->first();
 
         if ($invoice) {
-            $description = "Invoice {$invoice->number} for {$amount} for client {$this->client->present()->name()}";
+            $description = ctrans('texts.bis_pd_desc_invoice_for_client', ['invoice' => $invoice->number, 'amount' => $amount, 'client' => $this->client->present()->name()]);
         } else {
-            $description = "Payment with no invoice for amount {$amount} for client {$this->client->present()->name()}";
+            $description = ctrans('texts.gateway_payment_text_no_invoice', ['amount' => $amount, 'client' => $this->client->present()->name()]);
         }
 
         $amount_money = new \Square\Models\Money();
@@ -313,7 +313,7 @@ class SquarePaymentDriver extends BaseDriver
             return $payment;
         }
 
-        $error = $body->errors[0]->detail ?? ($response->getBody() ?: 'Unknown error from Square.');
+        $error = $body->errors[0]->detail ?? ($response->getBody() ?: ctrans('texts.bis_pd_unknown_gateway_error', ['gateway' => 'Square']));
 
         $this->sendFailureMail($error);
 
@@ -640,7 +640,7 @@ class SquarePaymentDriver extends BaseDriver
         $body->setEmailAddress($this->client->present()->email());
         $body->setAddress($billing_address);
         $body->setReferenceId($this->client->number);
-        $body->setNote('Created by Invoice Ninja.');
+        $body->setNote(ctrans('texts.bis_pd_created_by_app'));
 
         $api_response = $this->init()
                              ->square

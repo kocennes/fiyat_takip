@@ -50,7 +50,7 @@ class BulkProjectRequest extends Request
                 $clientId = $projects->first()->client_id;
 
                 if ($this->action == 'invoice' && $projects->contains('client_id', '!=', $clientId)) {
-                    $fail('All selected projects must belong to the same client.');
+                    $fail(ctrans('texts.bis_projects_same_client'));
                 }
 
             }],

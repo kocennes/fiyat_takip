@@ -29,7 +29,7 @@ class InvoiceTransformer extends BaseTransformer
     public function transform($data)
     {
         if (isset($data['Details']) && $this->hasInvoice($data['Details'])) {
-            throw new ImportException('Invoice number already exists');
+            throw new ImportException(ctrans('texts.bis_import_invoice_number_exists'));
         }
 
         $transformed = [

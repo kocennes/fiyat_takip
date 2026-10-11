@@ -61,7 +61,7 @@ class BECS implements LivewireMethodInterface
         }
 
         //@phpstan-ignore-next-line
-        $error = $gateway_response->last_payment_error?->message ?? "BECS payment failed with status: " . ($gateway_response->status ?? 'unknown');
+        $error = $gateway_response->last_payment_error?->message ?? ctrans('texts.bis_pd_payment_failed_with_status', ['gateway' => 'BECS', 'status' => $gateway_response->status ?? ctrans('texts.unknown')]);
 
         return $this->processUnsuccessfulPayment($error);
     }
@@ -94,7 +94,7 @@ class BECS implements LivewireMethodInterface
     {
         $server_response = $this->stripe->payment_hash->data;
 
-        $this->stripe->sendFailureMail($error ?: 'BECS payment was not successful');
+        $this->stripe->sendFailureMail($error ?: ctrans('texts.bis_pd_payment_not_successful', ['gateway' => 'BECS']));
 
         $message = [
             'server_response' => $server_response,
@@ -110,7 +110,7 @@ class BECS implements LivewireMethodInterface
             $this->stripe->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
 
     private function storePaymentMethod($intent)

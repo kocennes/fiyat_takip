@@ -77,6 +77,4 @@ Route::get('square/oauth/connect/{token}', [SquareController::class, 'connect'])
 Route::get('square/callback', [SquareController::class, 'callback'])->name('square.oauth.callback');
 Route::post('square/oauth/location', [SquareController::class, 'selectLocation'])->name('square.oauth.select_location');
 
-Route::redirect('buy_now', 'https://invoiceninja.invoicing.co/client/subscriptions/O5xe7Rwd7r/purchase', 301);
-
 \Illuminate\Support\Facades\Broadcast::routes(['middleware' => ['token_auth']]);

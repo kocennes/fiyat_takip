@@ -88,12 +88,12 @@ class StorePaymentRequest extends Request
             foreach ($invoices as $index => $invoice) {
                 // Check amount exists (if not caught by basic rules)
                 if (!array_key_exists('amount', $invoice)) {
-                    $validator->errors()->add("invoices.{$index}.amount", ctrans('texts.amount') . ' required');
+                    $validator->errors()->add("invoices.{$index}.amount", ctrans('validation.required', ['attribute' => ctrans('texts.amount')]));
                     continue;
                 }
 
                 if (!array_key_exists('invoice_id', $invoice)) {
-                    $validator->errors()->add("invoices.{$index}.invoice_id", ctrans('texts.invoice_id') . ' required');
+                    $validator->errors()->add("invoices.{$index}.invoice_id", ctrans('validation.required', ['attribute' => ctrans('texts.invoice')]));
                     continue;
                 }
 
@@ -115,13 +115,13 @@ class StorePaymentRequest extends Request
                 if ($inv->status_id == Invoice::STATUS_DRAFT && $invoice['amount'] <= $inv->amount) {
                     //catch here nothing to do - we need this to prevent the last elseif triggering
                 } elseif ($invoice['amount'] <= 0 && $inv->amount > 0) {
-                    $validator->errors()->add("invoices.{$index}.amount", 'Amount cannot be less than or equal to zero');
+                    $validator->errors()->add("invoices.{$index}.amount", ctrans('texts.bis_amount_must_be_positive'));
                 } elseif ($inv->status_id == Invoice::STATUS_DRAFT && BcMath::greaterThan($invoice['amount'], $inv->amount)) {
-                    $validator->errors()->add("invoices.{$index}.amount", 'Amount cannot be greater than invoice balance');
+                    $validator->errors()->add("invoices.{$index}.amount", ctrans('texts.bis_amount_exceeds_invoice_balance'));
                 } elseif (BcMath::greaterThan($invoice['amount'], $inv->balance)) {
                     $validator->errors()->add("invoices.{$index}.amount", ctrans('texts.amount_greater_than_balance_v5'));
                 } elseif ($inv->is_deleted) {
-                    $validator->errors()->add("invoices.{$index}", 'One or more invoices in this request have since been deleted');
+                    $validator->errors()->add("invoices.{$index}", ctrans('texts.bis_invoices_deleted_since'));
                 }
             }
 

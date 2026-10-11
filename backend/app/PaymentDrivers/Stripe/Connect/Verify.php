@@ -34,7 +34,7 @@ class Verify
         $this->stripe->init();
 
         if ($this->stripe->stripe_connect && strlen($this->stripe->company_gateway->getConfigField('account_id')) < 1) {
-            throw new StripeConnectFailure('Stripe Connect has not been configured');
+            throw new StripeConnectFailure(ctrans('texts.bis_pd_stripe_connect_not_configured'));
         }
 
         $total_stripe_customers = 0;

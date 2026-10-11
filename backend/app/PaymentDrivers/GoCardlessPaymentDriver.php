@@ -203,9 +203,9 @@ class GoCardlessPaymentDriver extends BaseDriver
         $this->init();
 
         if ($payment_hash->fee_invoice) {
-            $description = "Invoice {$payment_hash->fee_invoice->number} for {$amount} for client {$this->client->present()->name()}";
+            $description = ctrans('texts.bis_pd_desc_invoice_for_client', ['invoice' => $payment_hash->fee_invoice->number, 'amount' => $amount, 'client' => $this->client->present()->name()]);
         } else {
-            $description = "Amount {$amount} from client {$this->client->present()->name()}";
+            $description = ctrans('texts.gateway_payment_text_no_invoice', ['amount' => $amount, 'client' => $this->client->present()->name()]);
         }
 
         try {

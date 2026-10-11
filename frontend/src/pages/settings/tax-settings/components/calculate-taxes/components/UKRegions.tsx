@@ -166,7 +166,11 @@ export function UKRegions() {
       />
 
       <Element
-        leftSide={<p className="lg:pl-5">(UK) {t('sales_above_threshold')}</p>}
+        leftSide={
+          <p className="lg:pl-5">
+            ({t('bis_region_uk_short')}) {t('sales_above_threshold')}
+          </p>
+        }
       >
         <Toggle
           id="tax_data.regions.UK.has_sales_above_threshold"

@@ -181,7 +181,7 @@ class NinjaMailerJob implements ShouldQueue
 
                 $email = $this->nmo->to_user->email ?? '';
 
-                $message = "Recipient {$email} has been suppressed and cannot receive emails from you.";
+                $message = ctrans('texts.bis_mail_recipient_suppressed', ['email' => $email]);
 
                 $this->cleanUpMailers();
                 $this->logMailError($message);
@@ -225,7 +225,7 @@ class NinjaMailerJob implements ShouldQueue
 
             if ($e->getCode() == '429') {
 
-                $message = "Google rate limiting triggered, we are queueing based on Gmail requirements.";
+                $message = ctrans('texts.bis_mail_gmail_rate_limited');
                 $this->logMailError($message);
                 sleep(rand(1, 2));
                 $this->release(900);
@@ -235,7 +235,7 @@ class NinjaMailerJob implements ShouldQueue
         } catch (\ErrorException $e) { //@todo - remove after symfony/mailer is updated with bug fix
 
             nlog("Mailer failed with an Error Exception {$e->getMessage()}");
-            $message = "Attachment size is too large.";
+            $message = ctrans('texts.bis_mail_attachment_too_large');
             $this->logMailError($message);
             $this->entityEmailFailed($message);
             $this->cleanUpMailers();
@@ -252,7 +252,7 @@ class NinjaMailerJob implements ShouldQueue
              * need to harvest the ->Message property using the following
              */
             if (stripos($e->getMessage(), 'code 300') !== false || stripos($e->getMessage(), 'code 413') !== false) {
-                $message = "Either Attachment too large, or recipient has been suppressed.";
+                $message = ctrans('texts.bis_mail_attachment_or_suppressed');
 
                 $this->logMailError($e->getMessage());
 
@@ -288,7 +288,7 @@ class NinjaMailerJob implements ShouldQueue
                     }
                 } catch (\Exception $jsonError) {
                     // If JSON decode fails, use the original message
-                    $message = "Unknown issue sending via Postmark, please try again later.";
+                    $message = ctrans('texts.bis_mail_postmark_unknown_error');
                 }
 
                 nlog("PostmarkException: {$message}");

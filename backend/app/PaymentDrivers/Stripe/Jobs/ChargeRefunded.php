@@ -127,12 +127,12 @@ class ChargeRefunded implements ShouldQueue
 
         } elseif ($invoice_collection->sum('amount') != $amount_refunded) {
 
-            $refund_text = "A partial refund was processed for Payment #{$payment_hash->payment->number}. <br><br> This payment is associated with multiple invoices, so you will need to manually apply the refund to the correct invoice/s.";
-
             App::setLocale($payment_hash->payment->company->getLocale());
 
+            $refund_text = ctrans('texts.bis_pd_refund_multiple_invoices_body', ['number' => $payment_hash->payment->number]);
+
             $mo = new EmailObject();
-            $mo->subject = "Refund processed in Stripe for multiple invoices, action required.";
+            $mo->subject = ctrans('texts.bis_pd_refund_multiple_invoices_subject', ['gateway' => 'Stripe']);
             $mo->body = $refund_text;
             $mo->text_body = $refund_text;
             $mo->company_key = $payment_hash->payment->company->company_key;
@@ -160,7 +160,7 @@ class ChargeRefunded implements ShouldQueue
 
         $payment->refund($data);
 
-        $payment->private_notes .= 'Refunded via Stripe  ';
+        $payment->private_notes .= ctrans('texts.bis_pd_refunded_via_gateway', ['gateway' => 'Stripe']) . '  ';
 
         $payment->saveQuietly();
 

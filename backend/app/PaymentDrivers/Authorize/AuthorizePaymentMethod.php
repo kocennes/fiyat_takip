@@ -255,7 +255,7 @@ class AuthorizePaymentMethod
         } else {
             $errorMessages = $response->getMessages()->getMessage();
 
-            $message = 'Unable to add customer to Authorize.net gateway';
+            $message = ctrans('texts.bis_pd_unable_to_create_customer', ['gateway' => 'Authorize.net']);
 
             if (is_array($errorMessages)) {
                 $message = $errorMessages[0]->getCode() . '  ' . $errorMessages[0]->getText();
@@ -289,7 +289,7 @@ class AuthorizePaymentMethod
         } elseif ($response) {
             $errorMessages = $response->getMessages()->getMessage();
 
-            $message = 'Unable to add payment method to Authorize.net gateway';
+            $message = ctrans('texts.bis_pd_unable_to_add_payment_method', ['gateway' => 'Authorize.net']);
 
             if (is_array($errorMessages)) {
                 $message = $errorMessages[0]->getCode() . '  ' . $errorMessages[0]->getText();
@@ -297,7 +297,7 @@ class AuthorizePaymentMethod
 
             throw new GenericPaymentDriverFailure($message);
         } else {
-            throw new GenericPaymentDriverFailure('Error communicating with Authorize.net');
+            throw new GenericPaymentDriverFailure(ctrans('texts.bis_pd_gateway_communication_error', ['gateway' => 'Authorize.net']));
         }
     }
 

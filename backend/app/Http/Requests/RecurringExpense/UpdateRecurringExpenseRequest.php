@@ -70,10 +70,10 @@ class UpdateRecurringExpenseRequest extends Request
     public function messages()
     {
         return [
-            'unique' => ctrans('validation.unique', ['attribute' => 'email']),
-            'email' => ctrans('validation.email', ['attribute' => 'email']),
-            'name.required' => ctrans('validation.required', ['attribute' => 'name']),
-            'required' => ctrans('validation.required', ['attribute' => 'email']),
+            'unique' => ctrans('validation.unique', ['attribute' => ctrans('texts.email')]),
+            'email' => ctrans('validation.email', ['attribute' => ctrans('texts.email')]),
+            'name.required' => ctrans('validation.required', ['attribute' => ctrans('texts.name')]),
+            'required' => ctrans('validation.required', ['attribute' => ctrans('texts.email')]),
         ];
     }
 

@@ -61,7 +61,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
                 $this->helcim_driver->client->company
             );
 
-            throw new PaymentFailed('Failed to initialize payment form: ' . $e->getMessage(), 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_failed_to_initialize_form', ['error' => $e->getMessage()]), 400);
         }
 
         return render('gateways.helcim.credit_card.authorize', $data);
@@ -82,7 +82,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
 
         // Validate required fields
         if (empty($transactionData) || empty($secretToken)) {
-            throw new PaymentFailed('Invalid payment response', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_gateway_response'), 400);
         }
 
         try {
@@ -90,19 +90,19 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
             $data = json_decode($transactionData, true);
 
             if (! $data) {
-                throw new PaymentFailed('Invalid transaction data format', 400);
+                throw new PaymentFailed(ctrans('texts.bis_pd_invalid_transaction_data'), 400);
             }
 
             // Check client-side transaction status first (fast-fail)
             if (! isset($data['status']) || $data['status'] !== 'APPROVED') {
-                throw new PaymentFailed('Card verification failed: ' . ($data['warning'] ?? 'Unknown error'), 400);
+                throw new PaymentFailed(ctrans('texts.bis_pd_card_verification_failed', ['reason' => $data['warning'] ?? ctrans('texts.bis_pd_unknown_error')]), 400);
             }
 
             // A transactionId is required for card verification — use it to confirm
             // the verify transaction server-side (tamper-proof check).
             $transactionId = $data['transactionId'] ?? null;
             if (empty($transactionId)) {
-                throw new PaymentFailed('No transactionId returned by HelcimPay.js — cannot verify card authorization.', 400);
+                throw new PaymentFailed(ctrans('texts.bis_pd_no_transaction_id', ['gateway' => 'Helcim']), 400);
             }
 
             // SERVER-SIDE TAMPER-PROOF VERIFICATION:
@@ -118,7 +118,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
 
             // Extract card token from response
             if (! isset($data['cardToken'])) {
-                throw new PaymentFailed('No card token received', 400);
+                throw new PaymentFailed(ctrans('texts.bis_pd_no_card_token'), 400);
             }
 
             // Store the payment method
@@ -196,7 +196,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
                 $this->helcim_driver->client->company
             );
 
-            throw new PaymentFailed('Failed to initialize payment form: ' . $e->getMessage(), 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_failed_to_initialize_form', ['error' => $e->getMessage()]), 400);
         }
 
         return render('gateways.helcim.credit_card.pay', $data);
@@ -283,7 +283,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
             return redirect()->route('client.payments.show', ['payment' => $this->helcim_driver->encodePrimaryKey($payment->id)]);
         }
 
-        throw new PaymentFailed($response['message'] ?? 'Payment failed', 400);
+        throw new PaymentFailed($response['message'] ?? ctrans('texts.failed_payment'), 400);
     }
 
     /**
@@ -301,25 +301,25 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
 
         // Validate required fields
         if (empty($transactionData) || empty($secretToken)) {
-            throw new PaymentFailed('Invalid payment response', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_gateway_response'), 400);
         }
 
         // Decode transaction data
         $data = json_decode($transactionData, true);
 
         if (! $data) {
-            throw new PaymentFailed('Invalid transaction data format', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_transaction_data'), 400);
         }
 
         // Check client-side transaction status (fast-fail before the API call)
         if (! isset($data['status']) || $data['status'] !== 'APPROVED') {
-            throw new PaymentFailed('Payment failed: ' . ($data['warning'] ?? 'Unknown error'), 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_reason', ['reason' => $data['warning'] ?? ctrans('texts.bis_pd_unknown_error')]), 400);
         }
 
         // A transactionId is always present for card purchases — require it.
         $transactionId = $data['transactionId'] ?? null;
         if (empty($transactionId)) {
-            throw new PaymentFailed('No transactionId returned by HelcimPay.js — cannot verify payment.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_no_transaction_id', ['gateway' => 'Helcim']), 400);
         }
 
         $amount   = $paymentHash->data->amount_with_fee;
@@ -461,6 +461,6 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
             $this->helcim_driver->client->company
         );
 
-        throw new PaymentFailed($response['message'] ?? 'Payment failed', 400);
+        throw new PaymentFailed($response['message'] ?? ctrans('texts.failed_payment'), 400);
     }
 }

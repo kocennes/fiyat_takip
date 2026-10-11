@@ -90,7 +90,7 @@ class BraintreeCreditCard {
                         console.log(err);
                         dropin.clearSelectedPaymentMethod();
                         alert(
-                            'There was a problem verifying this card, please contact your merchant'
+                            (window.BIS_I18N?.bis_card_verification_problem ?? 'There was a problem verifying this card, please contact your merchant')
                         );
                         return;
                     }
@@ -102,7 +102,7 @@ class BraintreeCreditCard {
                     ) {
                         console.log('Liability did not shift', payload);
                         alert(
-                            'There was a problem verifying this card, please contact your merchant'
+                            (window.BIS_I18N?.bis_card_verification_problem ?? 'There was a problem verifying this card, please contact your merchant')
                         );
                         return;
                     }

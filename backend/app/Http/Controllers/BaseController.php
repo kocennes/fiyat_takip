@@ -303,12 +303,12 @@ class BaseController extends Controller
      */
     public function notFoundClient()
     {
-        abort(404, 'Page not found in the client portal.');
+        abort(404, ctrans('texts.bis_page_not_found_client_portal'));
     }
 
     public function notFoundVendor()
     {
-        abort(404, 'Page not found in the vendor portal.');
+        abort(404, ctrans('texts.bis_page_not_found_vendor_portal'));
     }
 
     /**
@@ -1404,8 +1404,8 @@ class BaseController extends Controller
             //pass report errors bool to front end
             $data['report_errors'] = Ninja::isSelfHost() ? $account->report_errors : true;
 
-            //pass whitelabel bool to front end
-            $data['white_label'] = Ninja::isSelfHost() ? $account->isPaid() : false;
+            //pass whitelabel bool to front end (always white-labelled: no upstream branding)
+            $data['white_label'] = true;
 
             //pass referral code to front end
             $data['rc'] = request()->has('rc') && is_string(request()->input('rc')) ? request()->input('rc') : '';
@@ -1426,11 +1426,8 @@ class BaseController extends Controller
 
             $data['path'] = $this->setBuild();
 
-            if (Ninja::isSelfHost() && $account->set_react_as_default_ap) {
-                return response()->view('react.index', $data)->header('X-Frame-Options', 'SAMEORIGIN', false);
-            } else {
-                return response()->view('index.index', $data)->header('X-Frame-Options', 'SAMEORIGIN', false);
-            }
+            // Always serve the React UI; the legacy upstream Flutter build (index.index) is never shown.
+            return response()->view('react.index', $data)->header('X-Frame-Options', 'SAMEORIGIN', false);
         }
 
         return redirect('/setup');
@@ -1489,7 +1486,7 @@ class BaseController extends Controller
      */
     public function featureFailure()
     {
-        return response()->json(['message' => 'Upgrade to a paid plan for this feature.'], 403);
+        return response()->json(['message' => ctrans('texts.bis_feature_not_available')], 403);
     }
 
 

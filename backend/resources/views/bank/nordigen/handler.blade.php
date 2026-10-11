@@ -60,10 +60,10 @@
             url = new URL(window.location.href);
 
         container.innerHTML = '';
-        _changeHeading(@json(ctrans('texts.bis_select_transaction_history', [], $lang ?? 'en')));
+        _changeHeading({!! json_encode(ctrans('texts.bis_select_transaction_history', [], $lang ?? 'en'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!});
 
         clone.classList.replace('ob-list-institution', 'ob-history-option');
-        clone.querySelector('.ob-span-text').innerText = `${max_history} ` + @json(ctrans('texts.days', [], $lang ?? 'en'));
+        clone.querySelector('.ob-span-text').innerText = `${max_history} ` + {!! json_encode(ctrans('texts.days', [], $lang ?? 'en'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!};
         url.searchParams.set('institution_id', institution.id);
 
         // When we come from the renew button we need to replace the country flag
@@ -86,7 +86,7 @@
 
             url.searchParams.set('tx_days', i == 360 ? 365 : i);
 
-            option.querySelector('.ob-span-text').innerText = `${i == 360 ? 365 : i} ` + @json(ctrans('texts.days', [], $lang ?? 'en'));
+            option.querySelector('.ob-span-text').innerText = `${i == 360 ? 365 : i} ` + {!! json_encode(ctrans('texts.days', [], $lang ?? 'en'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!};
             option.querySelector('a').href = url.href;
             container.append(option);
 

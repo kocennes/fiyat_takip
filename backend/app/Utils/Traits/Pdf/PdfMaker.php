@@ -94,6 +94,6 @@ trait PdfMaker
             return $generated;
         }
 
-        throw new InternalPDFFailure('There was an issue generating the PDF locally');
+        throw new InternalPDFFailure(ctrans('texts.bis_pdf_generation_failed'));
     }
 }

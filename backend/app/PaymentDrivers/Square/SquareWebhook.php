@@ -122,7 +122,7 @@ class SquareWebhook implements ShouldQueue
                     'amount' => Number::formatMoney($payment_hash->amount_with_fee(), $client),
                 ]);
             } else {
-                $error = 'Payment for ' . $client->present()->name() . " for {$payment->amount} failed";
+                $error = ctrans('texts.bis_pd_payment_for_client_failed', ['client' => $client->present()->name(), 'amount' => $payment->amount]);
             }
 
             PaymentFailedMailer::dispatch(

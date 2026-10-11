@@ -608,7 +608,7 @@ class QbTaxRate implements SyncInterface
 
         $name = trim($component['name']);
 
-        return $name !== '' ? $name . ' Tax Agency' : 'Ninja Tax Agency';
+        return $name !== '' ? $name . ' Tax Agency' : 'BISAVUNMA Tax Agency';
     }
 
     /**
@@ -617,12 +617,12 @@ class QbTaxRate implements SyncInterface
     private function taxCodeName(array $components, bool $unique = false): string
     {
         if ($unique) {
-            return 'Ninja Tax ' . substr(sha1(TaxCodeComponentKey::fromComponents($components) . microtime(true)), 0, 10);
+            return 'BISAVUNMA Tax ' . substr(sha1(TaxCodeComponentKey::fromComponents($components) . microtime(true)), 0, 10);
         }
 
         $name = implode(' + ', array_map(fn (array $component): string => $this->taxRateName($component), $components));
 
-        return strlen($name) <= 31 ? $name : 'Ninja Tax ' . substr(sha1(TaxCodeComponentKey::fromComponents($components)), 0, 10);
+        return strlen($name) <= 31 ? $name : 'BISAVUNMA Tax ' . substr(sha1(TaxCodeComponentKey::fromComponents($components)), 0, 10);
     }
 
     /**

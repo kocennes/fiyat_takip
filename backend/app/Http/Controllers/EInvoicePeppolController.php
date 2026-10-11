@@ -227,7 +227,7 @@ class EInvoicePeppolController extends BaseController
         }
 
         if (!is_null($additional_vat) && !empty($additional_vat)) {
-            return response()->json(['message' => 'Identifier already exists for this region.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_identifier_exists_for_region')], 400);
         }
 
         $response = $storecove
@@ -250,7 +250,7 @@ class EInvoicePeppolController extends BaseController
         $company->tax_data = $tax_data;
         $company->save();
 
-        return response()->json(['message' => 'ok'], 200);
+        return response()->json(['message' => ctrans('texts.ok')], 200);
     }
 
     public function removeAdditionalTaxIdentifier(RemoveTaxIdentifierRequest $request, Storecove $storecove): JsonResponse
@@ -304,7 +304,7 @@ class EInvoicePeppolController extends BaseController
             return response()->json(data_get($response, 'message'), status: $response['code']);
         }
 
-        return response()->json(['message' => 'ok'], 200);
+        return response()->json(['message' => ctrans('texts.ok')], 200);
     }
 
     public function c5Deactivate(C5DeactivateRequest $request, Storecove $storecove): JsonResponse
@@ -320,7 +320,7 @@ class EInvoicePeppolController extends BaseController
             return response()->json(data_get($response, 'message'), status: $response['code']);
         }
 
-        return response()->json(['message' => 'ok'], 200);
+        return response()->json(['message' => ctrans('texts.ok')], 200);
     }
 
     public function c5Cancel(C5CancelRequest $request, Storecove $storecove): JsonResponse
@@ -336,7 +336,7 @@ class EInvoicePeppolController extends BaseController
             return response()->json(data_get($response, 'message'), status: $response['code']);
         }
 
-        return response()->json(['message' => 'ok'], 200);
+        return response()->json(['message' => ctrans('texts.ok')], 200);
     }
 
     public function retrySend(RetrySendRequest $request)
@@ -347,7 +347,7 @@ class EInvoicePeppolController extends BaseController
             SendEDocument::dispatch($request->entity, $request->entity_id, auth()->user()->company()->db);
         }
 
-        return response()->json(['message' => 'trying....'], 200);
+        return response()->json(['message' => ctrans('texts.bis_retrying_send')], 200);
     }
 
     private function unsetVatNumbers(mixed $taxData): mixed

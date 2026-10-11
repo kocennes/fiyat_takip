@@ -39,7 +39,7 @@ class QuoteTransformer extends BaseTransformer
         }
 
         if (isset($quote_data['quote.number']) && $this->hasQuote($quote_data['quote.number'])) {
-            throw new ImportException('Quote number already exists');
+            throw new ImportException(ctrans('texts.bis_import_quote_number_exists'));
         }
 
         $quoteStatusMap = [

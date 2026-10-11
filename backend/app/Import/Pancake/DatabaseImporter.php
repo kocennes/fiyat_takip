@@ -185,11 +185,11 @@ class DatabaseImporter
         $payload = is_array($record['payload'] ?? null) ? $record['payload'] : [];
 
         if ($entity === DatabaseEntity::Users && array_key_exists('contacts', $payload)) {
-            throw new RuntimeException('A Pancake client/contact payload cannot be imported as an Invoice Ninja user.');
+            throw new RuntimeException('A Pancake client/contact payload cannot be imported as a BISAVUNMA Fiyat Takip user.');
         }
 
         if ($entity === DatabaseEntity::Clients && array_key_exists('company_user', $payload)) {
-            throw new RuntimeException('A Pancake user payload cannot be imported as an Invoice Ninja client.');
+            throw new RuntimeException('A Pancake user payload cannot be imported as a BISAVUNMA Fiyat Takip client.');
         }
     }
 

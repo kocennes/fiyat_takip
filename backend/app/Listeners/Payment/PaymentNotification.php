@@ -163,7 +163,7 @@ class PaymentNotification implements ShouldQueue
 
         $base = "v=1&tid={$analytics_id}&cid={$client->id}&cu={$currency_code}&ti={$entity_number}";
 
-        $url = $base . "&t=transaction&ta=ninja&tr={$amount}";
+        $url = $base . "&t=transaction&ta=bisavunma&tr={$amount}";
         $this->sendAnalytics($url);
 
         $url = $base . "&t=item&in={$item}&ip={$amount}&iq=1";

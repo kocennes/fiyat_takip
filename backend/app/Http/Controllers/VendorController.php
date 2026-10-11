@@ -610,11 +610,11 @@ class VendorController extends BaseController
                             ->first();
 
         if (!$m_vendor) {
-            return response()->json(['message' => "Vendor not found"], 400);
+            return response()->json(['message' => ctrans('texts.bis_vendor_not_found')], 400);
         }
 
         if ($m_vendor->id == $vendor->id) {
-            return response()->json(['message' => "Attempting to merge the same vendor is not possible."], 400);
+            return response()->json(['message' => ctrans('texts.bis_merge_same_vendor')], 400);
         }
 
         $merged_vendor = $vendor->service()->merge($m_vendor)->save();

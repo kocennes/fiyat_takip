@@ -234,7 +234,7 @@ class HtmlEngine
         $data['$contact.signature']         = ['value' => '', 'label' => ctrans('texts.signature')];
         $data['$vendor_name']                = ['value' => '', 'label' => ctrans('texts.vendor_name')];
         $data['$vendor.name']               = ['value' => '', 'label' => ctrans('texts.vendor_name')];
-        $data['$vendor.number']             = ['value' => '', 'label' => ctrans('texts.vendor_number')];
+        $data['$vendor.number']             = ['value' => '', 'label' => ctrans('texts.bis_vendor_number')];
         $data['$vendor.address1']           = ['value' => '', 'label' => ctrans('texts.address1')];
         $data['$vendor.address2']           = ['value' => '', 'label' => ctrans('texts.address2')];
         $data['$vendor_address']            = ['value' => '', 'label' => ctrans('texts.address')];
@@ -370,7 +370,7 @@ class HtmlEngine
 
             $data['$entity'] = ['value' => ctrans('texts.credit'), 'label' => ctrans('texts.credit')];
             $data['$number'] = ['value' => $this->entity->number ?: '', 'label' => ctrans('texts.credit_number')];
-            $data['$number_short'] = ['value' => $this->entity->number ?: '', 'label' => ctrans('texts.credit_number_short')];
+            $data['$number_short'] = ['value' => $this->entity->number ?: '', 'label' => ctrans('texts.bis_credit_number_short')];
             $data['$entity.terms'] = ['value' => Helpers::processReservedKeywords(\nl2br($this->entity->terms ?: ''), $this->client) ?: '', 'label' => ctrans('texts.credit_terms')];
             $data['$terms'] = &$data['$entity.terms'];
             $data['$view_link'] = ['value' => $this->buildViewButton($this->invitation->getLink(), ctrans('texts.view_credit')), 'label' => ctrans('texts.view_credit')];
@@ -565,7 +565,7 @@ class HtmlEngine
         $data['$phone'] = ['value' => $this->client->present()->phone() ?: ' ', 'label' => ctrans('texts.phone')];
         $data['$country'] = ['value' => ctrans('texts.country_' . $locationData['country_name']), 'label' => ctrans('texts.country')];
         $data['$country_2'] = ['value' => $locationData['country_code'], 'label' => ctrans('texts.country')];
-        $data['$email'] = ['value' => isset($this->contact) ? $this->contact->email : 'no contact email on record', 'label' => ctrans('texts.email')];
+        $data['$email'] = ['value' => isset($this->contact) ? $this->contact->email : ctrans('texts.bis_no_contact_email'), 'label' => ctrans('texts.email')];
 
         if (str_contains($data['$email']['value'] ?? '', 'example.com')) {
             $data['$email'] = ['value' => '', 'label' => ctrans('texts.email')];
@@ -607,7 +607,7 @@ class HtmlEngine
         $data['$client.billing_postal_code'] = &$data['$client.postal_code'];
         $data['$client.billing_country'] = &$data['$client.country'];
 
-        $data['$client.shipping_location_name'] = ['value' => $locationData['shipping_location_name'], 'label' => ctrans('texts.shipping_location_name')];
+        $data['$client.shipping_location_name'] = ['value' => $locationData['shipping_location_name'], 'label' => ctrans('texts.location_name')];
         $data['$client.shipping_address'] = ['value' => $locationData['shipping_address'], 'label' => ctrans('texts.shipping_address')];
         $data['$client.shipping_address1'] = ['value' => $locationData['shipping_address1'], 'label' => ctrans('texts.shipping_address1')];
         $data['$client.shipping_address2'] = ['value' => $locationData['shipping_address2'], 'label' => ctrans('texts.shipping_address2')];
@@ -813,7 +813,7 @@ class HtmlEngine
         $data['$secondary_font_name'] = ['value' => Helpers::resolveFont($this->settings->secondary_font)['name'], 'label' => ''];
         $data['$secondary_font_url'] = ['value' => Helpers::resolveFont($this->settings->secondary_font)['url'], 'label' => ''];
 
-        $data['$invoiceninja.whitelabel'] = ['value' => 'https://invoicing.co/images/new_logo.png', 'label' => ''];
+        $data['$invoiceninja.whitelabel'] = ['value' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'label' => '']; // no third-party badge
 
         $data['$primary_color'] = ['value' => $this->settings->primary_color, 'label' => ''];
         $data['$secondary_color'] = ['value' => $this->settings->secondary_color, 'label' => ''];

@@ -60,8 +60,8 @@ class UpdateUserLoginFailed implements ShouldQueue
 
         if ($user->failed_logins > 3) {
             $content = [
-                "Multiple Logins failed for user: {$user->email}",
-                "IP address: {$event->ip}",
+                ctrans('texts.bis_multiple_logins_failed', ['email' => $user->email]),
+                ctrans('texts.bis_ip_address_value', ['ip' => $event->ip]),
             ];
 
             $company = Company::first();

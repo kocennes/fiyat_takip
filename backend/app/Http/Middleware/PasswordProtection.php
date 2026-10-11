@@ -34,7 +34,7 @@ class PasswordProtection
     public function handle($request, Closure $next)
     {
         $error = [
-            'message' => 'Invalid Password',
+            'message' => ctrans('texts.bis_invalid_password'),
             'errors' => new stdClass(),
         ];
 
@@ -98,7 +98,7 @@ class PasswordProtection
                 } catch (\Exception $e) {
                     nlog("Exception:: PasswordProtection::" . $e->getMessage());
                     nlog("could not decode microsoft response");
-                    return response()->json(['message' => 'Could not decode the response from Microsoft'], 412);
+                    return response()->json(['message' => ctrans('texts.bis_microsoft_response_decode_failed')], 412);
                 }
 
                 if ($user && $user->getEmail() === auth()->user()->email) {

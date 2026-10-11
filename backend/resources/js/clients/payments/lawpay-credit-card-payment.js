@@ -56,7 +56,7 @@ class LawPayCreditCard {
         const expYear = document.getElementById('lawpay_exp_year')?.value.replace(/[^\d]/g, '');
 
         if (!expMonth || !expYear) {
-            this.showError('Please enter a valid expiration date.');
+            this.showError((window.BIS_I18N?.invalid_expiry ?? 'Please enter a valid expiration date.'));
             return;
         }
 
@@ -97,7 +97,7 @@ class LawPayCreditCard {
     };
 
     failedResponseHandler = (error) => {
-        this.showError(error.message || 'Tokenization failed.');
+        this.showError(error.message || (window.BIS_I18N?.bis_tokenization_failed ?? 'Tokenization failed.'));
 
         let payNowButton = document.getElementById('pay-now');
         if (payNowButton) {

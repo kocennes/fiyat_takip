@@ -40,7 +40,7 @@ class Token
             $invoice_numbers = collect($this->eway_driver->payment_hash->data->invoices)->pluck('invoice_number')->implode(',');
         }
 
-        $description = "Invoices: {$invoice_numbers} for {$amount} for client {$this->eway_driver->client->present()->name()}";
+        $description = ctrans('texts.gateway_payment_text', ['invoices' => $invoice_numbers, 'amount' => $amount, 'client' => $this->eway_driver->client->present()->name()]);
 
         $this->eway_driver->payment_hash = $payment_hash;
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -472,7 +472,7 @@
             <div class="w-full md:w-1/2 bg-white flex items-center justify-center">
                 <div class="max-w-sm m-8">
                     <div class="text-black text-5xl md:text-15xl font-black">
-                        @yield('code', __('Oh no'))
+                        @yield('code', ctrans('texts.error'))
                     </div>
 
                     <div class="w-16 h-1 bg-purple-light my-3 md:my-6"></div>

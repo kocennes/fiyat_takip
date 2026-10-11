@@ -41,7 +41,7 @@ class AuthorizeAuthorizeCard {
             const $errors = document.getElementById('errors');
             
             if ($errors) {
-                $errors.innerText = 'CVV is required';
+                $errors.innerText = (window.BIS_I18N?.bis_cvv_required ?? 'CVV is required');
                 $errors.style.display = 'block';
             }
 

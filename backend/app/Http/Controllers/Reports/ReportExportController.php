@@ -31,7 +31,7 @@ class ReportExportController extends BaseController
         $report = Cache::get($hash);
 
         if (!$report) {
-            return response()->json(['message' => 'Still working.....'], 409);
+            return response()->json(['message' => ctrans('texts.bis_still_working')], 409);
         }
 
         $report = base64_decode($report);

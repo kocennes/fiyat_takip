@@ -200,7 +200,13 @@ class PaymentDecorator extends Decorator implements DecoratorInterface
 
     public function gateway_type_id(Payment $payment)
     {
-        return $payment->gateway_type ? $payment->gateway_type->name : 'Unknown Type';
+        if (! $payment->gateway_type) {
+            return ctrans('texts.unknown');
+        }
+
+        $alias = trim((string) \App\Models\GatewayType::getAlias($payment->gateway_type->id));
+
+        return $alias !== '' ? $alias : $payment->gateway_type->name;
     }
 
     public function client_id(Payment $payment)

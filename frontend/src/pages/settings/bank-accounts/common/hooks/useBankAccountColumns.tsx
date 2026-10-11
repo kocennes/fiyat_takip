@@ -47,19 +47,6 @@ export const useBankAccountColumns = () => {
     });
   };
 
-  const handleConnectYodlee = () => {
-    request('POST', endpoint('/api/v1/one_time_token'), {
-      context: 'yodlee',
-      platform: 'react',
-    }).then((tokenResponse) => {
-      window.open(
-        route('https://invoicing.co/yodlee/onboard/:hash', {
-          hash: tokenResponse?.data?.hash,
-        })
-      );
-    });
-  };
-
   const columns: DataTableColumns<BankAccount> = [
     {
       id: 'bank_account_name',
@@ -74,8 +61,7 @@ export const useBankAccountColumns = () => {
             {bankAccount?.bank_account_name}
           </Link>
 
-          {(bankAccount.integration_type === IntegrationType.Nordigen ||
-            bankAccount.integration_type === IntegrationType.Yodlee) &&
+          {bankAccount.integration_type === IntegrationType.Nordigen &&
             bankAccount.disabled_upstream && (
               <Tooltip
                 message={t('reconnect') as string}
@@ -87,19 +73,7 @@ export const useBankAccountColumns = () => {
                   onClick={(event) => {
                     event.stopPropagation();
 
-                    if (
-                      bankAccount.integration_type === IntegrationType.Nordigen
-                    ) {
-                      handleConnectNordigen(
-                        bankAccount.nordigen_institution_id
-                      );
-                    }
-
-                    if (
-                      bankAccount.integration_type === IntegrationType.Yodlee
-                    ) {
-                      handleConnectYodlee();
-                    }
+                    handleConnectNordigen(bankAccount.nordigen_institution_id);
                   }}
                 >
                   <MdWarning color="red" size={22} />

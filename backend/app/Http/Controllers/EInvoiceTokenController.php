@@ -49,6 +49,6 @@ class EInvoiceTokenController extends BaseController
 
         nlog($response->body());
 
-        return response()->json(['message' => 'Failed to update token'], 422);
+        return response()->json(['message' => ctrans('texts.bis_einvoice_token_update_failed')], 422);
     }
 }

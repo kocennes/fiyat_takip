@@ -42,7 +42,7 @@ class ContactRegister
 
             if ($company) {
                 if (! $company->client_can_register) {
-                    abort(400, 'Registration disabled');
+                    abort(400, ctrans('texts.bis_registration_disabled'));
                 }
 
                 session()->put('company_key', $company->company_key);
@@ -60,7 +60,7 @@ class ContactRegister
 
             if ($company = Company::query()->where($query)->first()) {
                 if (! $company->client_can_register) {
-                    abort(400, 'Registration disabled');
+                    abort(400, ctrans('texts.bis_registration_disabled'));
                 }
 
                 // $request->merge(['key' => $company->company_key]);
@@ -75,7 +75,7 @@ class ContactRegister
 
         if ($request->company_key && Ninja::isSelfHost() && $company = Company::query()->where('company_key', $request->company_key)->first()) {
             if (! (bool) $company->client_can_register) {
-                abort(400, 'Registration disabled');
+                abort(400, ctrans('texts.bis_registration_disabled'));
             }
 
             //$request->merge(['key' => $company->company_key]);
@@ -90,7 +90,7 @@ class ContactRegister
             $company = Account::query()->first()->default_company ?? Account::query()->first()->companies->first();
 
             if (! $company->client_can_register) {
-                abort(400, 'Registration disabled');
+                abort(400, ctrans('texts.bis_registration_disabled'));
             }
 
             //$request->merge(['key' => $company->company_key]);
@@ -99,6 +99,6 @@ class ContactRegister
             return $next($request);
         }
 
-        abort(404, 'ContactRegister Middleware');
+        abort(404, ctrans('texts.bis_page_not_found_client_portal'));
     }
 }

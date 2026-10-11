@@ -29,7 +29,7 @@ class VendorTransformer extends BaseTransformer
     public function transform($data)
     {
         if (isset($data['vendor_name']) && $this->hasVendor($data['vendor_name'])) {
-            throw new ImportException('Vendor already exists');
+            throw new ImportException(ctrans('texts.bis_import_vendor_exists'));
         }
 
         return [

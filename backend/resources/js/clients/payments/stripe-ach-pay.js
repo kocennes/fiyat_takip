@@ -74,7 +74,7 @@ function ach() {
     newBank.addEventListener('click', (ev) => {
         if (!document.getElementById('accept-terms').checked) {
             errors.textContent =
-                'You must accept the mandate terms prior to making payment.';
+                (window.BIS_I18N?.bis_accept_mandate_terms ?? 'You must accept the mandate terms prior to making payment.');
             errors.hidden = false;
             return;
         }
@@ -94,7 +94,7 @@ function ach() {
 
         if (!address) {
             errors.textContent =
-                'A complete billing address is required to pay by bank account.';
+                (window.BIS_I18N?.bis_billing_address_required_bank ?? 'A complete billing address is required to pay by bank account.');
             errors.hidden = false;
             return;
         }
@@ -107,7 +107,7 @@ function ach() {
         try {
             stripe = stripeClient();
         } catch (error) {
-            showError(error.message || 'An unexpected error occurred.');
+            showError(error.message || (window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.'));
             resetButtons();
             return;
         }
@@ -137,7 +137,7 @@ function ach() {
                 }
 
                 if (!paymentIntent) {
-                    showError('An unexpected error occurred.');
+                    showError((window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.'));
                     resetButtons();
                     return;
                 }
@@ -147,7 +147,7 @@ function ach() {
                     // payment method type options.
 
                     showError(
-                        'We were unable to process the payment with this account, please try another one.'
+                        (window.BIS_I18N?.bis_bank_account_payment_failed_try_other ?? 'We were unable to process the payment with this account, please try another one.')
                     );
                     resetButtons();
                     return;
@@ -162,11 +162,11 @@ function ach() {
                     return confirmPayment(stripe, clientSecret);
                 }
 
-                showError('We were unable to process this payment.');
+                showError((window.BIS_I18N?.bis_unable_to_process_payment ?? 'We were unable to process this payment.'));
                 resetButtons();
             })
             .catch((error) => {
-                showError(error.message || 'An unexpected error occurred.');
+                showError(error.message || (window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.'));
                 resetButtons();
             });
     });
@@ -176,7 +176,7 @@ function ach() {
 
         if (!acceptance?.checked) {
             errors.textContent =
-                'You must accept the mandate terms prior to making payment.';
+                (window.BIS_I18N?.bis_accept_mandate_terms ?? 'You must accept the mandate terms prior to making payment.');
             errors.hidden = false;
             return;
         }
@@ -187,7 +187,7 @@ function ach() {
 
         if (!clientSecret) {
             errors.textContent =
-                'We were unable to renew the bank account authorization.';
+                (window.BIS_I18N?.bis_bank_authorization_renew_failed ?? 'We were unable to renew the bank account authorization.');
             errors.hidden = false;
             return;
         }
@@ -200,7 +200,7 @@ function ach() {
         try {
             stripe = stripeClient();
         } catch (error) {
-            showError(error.message || 'An unexpected error occurred.');
+            showError(error.message || (window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.'));
             setButtonLoading(payNowButton, false);
             return;
         }
@@ -213,7 +213,7 @@ function ach() {
                 if (error || setupIntent?.status !== 'succeeded') {
                     errors.textContent =
                         error?.message ||
-                        'We were unable to renew the bank account authorization.';
+                        (window.BIS_I18N?.bis_bank_authorization_renew_failed ?? 'We were unable to renew the bank account authorization.');
                     errors.hidden = false;
                     setButtonLoading(payNowButton, false);
                     return;
@@ -224,7 +224,7 @@ function ach() {
                 document.getElementById('server-response').submit();
             })
             .catch((error) => {
-                showError(error.message || 'An unexpected error occurred.');
+                showError(error.message || (window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.'));
                 setButtonLoading(payNowButton, false);
             });
     }
@@ -255,7 +255,7 @@ function ach() {
                 }
 
                 if (!paymentIntent) {
-                    showError('An unexpected error occurred.');
+                    showError((window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.'));
                     resetButtons();
                     return;
                 }
@@ -264,7 +264,7 @@ function ach() {
                     // Confirmation failed. Attempt again with a different payment method.
 
                     showError(
-                        'We were unable to process the payment with this account, please try another one.'
+                        (window.BIS_I18N?.bis_bank_account_payment_failed_try_other ?? 'We were unable to process the payment with this account, please try another one.')
                     );
                     resetButtons();
                     return;
@@ -286,7 +286,7 @@ function ach() {
                     paymentIntent.next_action?.type === 'requires_source_action'
                 ) {
                     errors.textContent =
-                        'You will receive an email with details on how to verify your bank account and process payment.';
+                        (window.BIS_I18N?.bis_bank_verification_email ?? 'You will receive an email with details on how to verify your bank account and process payment.');
                     errors.hidden = false;
                     document.getElementById('new-bank').style.visibility =
                         'hidden';
@@ -298,11 +298,11 @@ function ach() {
                     return;
                 }
 
-                showError('We were unable to process this payment.');
+                showError((window.BIS_I18N?.bis_unable_to_process_payment ?? 'We were unable to process this payment.'));
                 resetButtons();
             })
             .catch((error) => {
-                showError(error.message || 'An unexpected error occurred.');
+                showError(error.message || (window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.'));
                 resetButtons();
             });
     }

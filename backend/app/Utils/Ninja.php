@@ -90,6 +90,11 @@ class Ninja
 
     public static function registerNinjaUser($user)
     {
+        // BISAVUNMA: never send user names / e-mail addresses to the upstream vendor.
+        if (! self::isHosted()) {
+            return false;
+        }
+
         if (! $user || $user->email == self::TEST_USERNAME || self::isNinjaDev()) {
             return false;
         }

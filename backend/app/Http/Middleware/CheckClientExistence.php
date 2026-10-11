@@ -61,7 +61,7 @@ class CheckClientExistence
         if (count($multiple_contacts) == 0) {
             Auth::logout();
 
-            return redirect()->route('client.login')->with('message', 'Login disabled');
+            return redirect()->route('client.login')->with('message', ctrans('texts.bis_login_disabled'));
         }
 
         if (count($multiple_contacts) == 1 && ! Auth::guard('contact')->check()) {

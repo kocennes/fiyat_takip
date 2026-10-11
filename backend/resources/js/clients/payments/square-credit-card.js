@@ -43,7 +43,7 @@ export async function tokenizeCard(
     if (result.status !== 'OK') {
         throw new Error(
             result.errors?.[0]?.message ??
-                'An error occurred during payment processing.'
+                (window.BIS_I18N?.bis_payment_processing_error ?? 'An error occurred during payment processing.')
         );
     }
 
@@ -116,7 +116,7 @@ class SquareCreditCard {
             return document.getElementById('server_response').submit();
         } catch (error) {
             this.showError(
-                error.message ?? 'An error occurred during payment processing.'
+                error.message ?? (window.BIS_I18N?.bis_payment_processing_error ?? 'An error occurred during payment processing.')
             );
             this.resetPayButton();
         }
@@ -161,7 +161,7 @@ class SquareCreditCard {
             return document.getElementById('server_response').submit();
         } catch (error) {
             this.showError(
-                error.message ?? 'An error occurred during payment processing.'
+                error.message ?? (window.BIS_I18N?.bis_payment_processing_error ?? 'An error occurred during payment processing.')
             );
             this.resetPayButton();
         }
@@ -188,7 +188,7 @@ class SquareCreditCard {
             return document.getElementById('server_response').submit();
         } catch (error) {
             this.showError(
-                error.message ?? 'An error occurred while authorizing the card.'
+                error.message ?? (window.BIS_I18N?.bis_card_authorization_error ?? 'An error occurred while authorizing the card.')
             );
             this.resetPayButton();
         }
@@ -331,7 +331,7 @@ export async function bootSquareCreditCard(
         if (errors) {
             errors.textContent =
                 error?.message ??
-                'Square could not initialize. Please refresh and try again.';
+                (window.BIS_I18N?.bis_square_init_failed ?? 'Square could not initialize. Please refresh and try again.');
             errors.hidden = false;
         }
 

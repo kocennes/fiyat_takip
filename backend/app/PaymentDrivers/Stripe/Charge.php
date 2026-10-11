@@ -156,7 +156,7 @@ class Charge
 
 
         if (!in_array($response?->status, ['succeeded', 'processing'])) {
-            $this->stripe->processInternallyFailedPayment($this->stripe, new \Exception('Auto billing failed.', 400));
+            $this->stripe->processInternallyFailedPayment($this->stripe, new \Exception(ctrans('texts.bis_pd_auto_billing_failed'), 400));
         }
 
         $data = [

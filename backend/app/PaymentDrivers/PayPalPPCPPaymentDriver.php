@@ -89,7 +89,7 @@ class PayPalPPCPPaymentDriver extends PayPalBasePaymentDriver
                 }
             }
 
-            throw new PaymentFailed('Unable to accept payments at this time, please contact PayPal for more information.', 401);
+            throw new PaymentFailed(ctrans('texts.bis_pd_paypal_unable_to_accept'), 401);
         }
 
         return $this;

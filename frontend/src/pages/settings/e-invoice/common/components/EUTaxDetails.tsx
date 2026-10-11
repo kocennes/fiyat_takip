@@ -199,7 +199,9 @@ function Configure() {
               get(e.response.data, '0.source') !== '' &&
               get(e.response.data, '0.source') !== undefined
             ) {
-              toast.error(`Error: ${get(e.response.data, '0.details')}`);
+              toast.error(
+                `${t('error')}: ${get(e.response.data, '0.details')}`
+              );
             } else {
               setErrors(e.response.data);
 

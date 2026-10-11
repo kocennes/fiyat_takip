@@ -307,7 +307,7 @@ class NordigenController extends BaseController
     public function institutions(Request $request): JsonResponse
     {
         if (!(config('ninja.nordigen.secret_id') && config('ninja.nordigen.secret_key'))) {
-            return response()->json(['message' => 'Not yet authenticated with Nordigen Bank Integration service'], 400);
+            return response()->json(['message' => ctrans('texts.bis_nordigen_not_authenticated')], 400);
         }
 
         $nordigen = new Nordigen();

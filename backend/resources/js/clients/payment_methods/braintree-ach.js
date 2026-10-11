@@ -23,7 +23,7 @@ function boot() {
             ?.addEventListener('click', (e) => {
 
                 if (!document.getElementById('accept-terms').checked) {
-                    errors.textContent = "You must accept the mandate terms prior to making payment.";
+                    errors.textContent = (window.BIS_I18N?.bis_accept_mandate_terms ?? 'You must accept the mandate terms prior to making payment.');
                     errors.hidden = false;
                     return;
                 }

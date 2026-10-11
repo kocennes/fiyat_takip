@@ -35,16 +35,6 @@
     @endforeach
 @endisset
 
-@isset($whitelabel)
-    @if(!$whitelabel)
-        <p>
-            <a href="https://invoiceninja.com" target="_blank">
-                {{ __('texts.ninja_email_footer', ['site' => 'Invoice Ninja']) }}
-            </a>
-        </p>
-    @endif
-@endisset
-
 @if(isset($email_preferences) && $email_preferences)
 <p><a href="{!! $email_preferences !!}">{{ ctrans('texts.email_preferences') }}</a></p>
 @endif

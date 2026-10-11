@@ -121,7 +121,7 @@ trait MakesDates
         try {
             return Carbon::parse($date)->translatedFormat($format);
         } catch (\Exception $e) {
-            return 'Invalid date!';
+            return ctrans('texts.bis_invalid_date');
         }
     }
 

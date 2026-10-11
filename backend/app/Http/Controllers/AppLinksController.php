@@ -12,9 +12,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Account;
 use App\Utils\AppLinkPath;
-use App\Utils\Ninja;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -85,36 +83,10 @@ class AppLinksController extends Controller
     {
         $path = trim(preg_replace('#/+#', '/', $path), '/');
 
-        $query = $request->query();
-        // Lets the app tell a link from another install apart: a custom scheme
-        // URL carries no origin, and company hashids are per-instance, so a link
-        // from one server can resolve to a different company's record on
-        // another. Compared only, never navigated to.
-        $query['server'] = $request->getSchemeAndHttpHost();
-
-        // `native_scheme` is a URL prefix (`invoiceninja://app`), not a bare
-        // scheme, and an intent URL needs the halves apart.
-        $native = parse_url((string) config('ninja.app_links.native_scheme'));
-        $scheme = $native['scheme'] ?? 'invoiceninja';
-        $host = $native['host'] ?? 'app';
-
-        $target = $host.'/'.$path.'?'.http_build_query($query);
-        $webUrl = $this->webUrl($path, $request->query());
-
-        // Android gets intent:// rather than the scheme: Chrome answers an
-        // unregistered scheme with ERR_UNKNOWN_URL_SCHEME, an error page that
-        // replaces the document and takes the fallback with it. An intent URL
-        // carries its own browser_fallback_url.
-        return response()
-            ->view('app_links.bridge', [
-                'appUrl' => $scheme.'://'.$target,
-                'intentUrl' => 'intent://'.$target
-                    .'#Intent;scheme='.$scheme
-                    .';package='.config('ninja.app_links.android_package')
-                    .';S.browser_fallback_url='.rawurlencode($webUrl)
-                    .';end',
-                'webUrl' => $webUrl,
-            ])
+        // This installation has no mobile app, so a shared link never offers to
+        // open one: it goes straight to the web client.
+        return redirect()
+            ->away($this->webUrl($path, $request->query()))
             ->header('X-Robots-Tag', 'noindex');
     }
 
@@ -145,15 +117,8 @@ class AppLinksController extends Controller
      */
     private function usesFlutterWebClient(): bool
     {
-        if (! Ninja::isSelfHost()) {
-            return false;
-        }
-
-        try {
-            return Account::first()?->set_react_as_default_ap === false;
-        } catch (\Throwable) {
-            return false;
-        }
+        // `/` always serves the React UI, see BaseController::flutterRoute().
+        return false;
     }
 
     private function configList(string $key): array

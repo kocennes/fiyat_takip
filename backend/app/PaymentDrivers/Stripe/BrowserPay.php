@@ -193,7 +193,7 @@ class BrowserPay implements MethodInterface, LivewireMethodInterface
             $this->stripe->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
 
     /**
@@ -207,7 +207,7 @@ class BrowserPay implements MethodInterface, LivewireMethodInterface
         $domain = $this->getAppleDomain();
 
         if (! $domain) {
-            throw new PaymentFailed('Unable to register Domain with Apple Pay', 500);
+            throw new PaymentFailed(ctrans('texts.bis_pd_apple_pay_domain_failed'), 500);
         }
 
         $config = $this->stripe->company_gateway->getConfig();

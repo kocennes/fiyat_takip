@@ -168,7 +168,7 @@ class AdminEmail implements ShouldQueue
             $message = $e->getMessage();
 
             if (stripos($e->getMessage(), 'code 406') || stripos($e->getMessage(), 'code 300') || stripos($e->getMessage(), 'code 413')) {
-                $message = "Either Attachment too large, or recipient has been suppressed.";
+                $message = ctrans('texts.bis_mail_attachment_or_suppressed');
 
                 $this->logMailError($e->getMessage(), $this->company->clients()->first());
                 $this->cleanUpMailers();

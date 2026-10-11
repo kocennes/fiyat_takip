@@ -127,7 +127,7 @@ class UpdateSchedulerRequest extends Request
         
         $validator->after(function ($validator) {
             if (!empty($this->parameters['template_id']) && Design::where('id', $this->decodePrimaryKey($this->parameters['template_id']))->where('is_template', true)->company()->doesntExist()) {
-                $validator->errors()->add('template_id', 'Invalid Template ID Selected');
+                $validator->errors()->add('template_id', ctrans('texts.bis_invalid_template_id'));
             }
 
         });
@@ -191,9 +191,9 @@ class UpdateSchedulerRequest extends Request
     public function messages()
     {
         return [
-            'parameters.schedule.min' => 'The schedule must have at least one item.',
-            'parameters.schedule' => 'You must have at least one schedule entry.',
-            'parameters.invoice_id' => 'You must select an invoice.',
+            'parameters.schedule.min' => ctrans('texts.bis_schedule_min_one_item'),
+            'parameters.schedule' => ctrans('texts.bis_schedule_entry_required'),
+            'parameters.invoice_id' => ctrans('texts.bis_select_an_invoice'),
         ];
     }
 

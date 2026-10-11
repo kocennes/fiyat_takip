@@ -1,6 +1,6 @@
-Hello, here is the output of your recent import job.
+{!! ctrans('texts.bis_import_output_intro') !!}
 
-If your logo imported correctly it will available display below. If it didn't import, you'll need to reupload your logo
+{!! ctrans('texts.bis_import_logo_notice') !!}
 
 {!! $company->present()->logo() !!}
 
@@ -68,6 +68,6 @@ If your logo imported correctly it will available display below. If it didn't im
 
 {!! ctrans('texts.email_signature') !!}
 
-{!! ctrans('texts.email_from') !!}
+{!! ctrans('texts.bis_email_from') !!}
 
 

@@ -40,6 +40,6 @@ class ValidClientIds implements Rule
      */
     public function message()
     {
-        return 'Invalid client ids';
+        return ctrans('texts.bis_invalid_client_ids');
     }
 }

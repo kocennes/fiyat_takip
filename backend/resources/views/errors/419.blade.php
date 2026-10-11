@@ -1,5 +1,5 @@
 @extends('portal.ninja2020.layout.error')
 
-@section('title', __('Page Expired'))
+@section('title', ctrans('texts.bis_error_page_expired'))
 @section('code', '419')
-@section('message', __('Page Expired'))
+@section('message', ctrans('texts.bis_error_page_expired'))

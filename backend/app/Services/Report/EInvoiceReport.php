@@ -96,7 +96,7 @@ class EInvoiceReport extends BaseExport
         // Process invoices
         foreach ($invoices as $invoice) {
             /** @var Invoice $invoice */
-            $einvoiceStatus = $invoice->backup?->guid ? 'Sent via e-invoicing' : 'Not sent via e-invoicing';
+            $einvoiceStatus = $invoice->backup?->guid ? ctrans('texts.bis_einvoice_sent') : ctrans('texts.bis_einvoice_not_sent');
 
             $this->csv->insertOne([
                 $invoice->number,

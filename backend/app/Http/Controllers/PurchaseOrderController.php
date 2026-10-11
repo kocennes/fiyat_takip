@@ -491,7 +491,7 @@ class PurchaseOrderController extends BaseController
         $ids = $request->input('ids');
 
         if (Ninja::isHosted() && (stripos($action, 'email') !== false) && !$user->company()->account->account_sms_verified) {
-            return response(['message' => 'Please verify your account to send emails.'], 400);
+            return response(['message' => ctrans('texts.authorization_sms_failure')], 400);
         }
 
         if (Ninja::isHosted() && (stripos($action, 'email') !== false) && $user->account->emailQuotaExceeded()) {
@@ -505,7 +505,7 @@ class PurchaseOrderController extends BaseController
         $purchase_orders = PurchaseOrder::withTrashed()->whereIn('id', $this->transformKeys($ids))->company()->get();
 
         if ($purchase_orders->count() == 0) {
-            return response()->json(['message' => 'No Purchase Orders Found']);
+            return response()->json(['message' => ctrans('texts.bis_no_purchase_orders_found')]);
         }
 
         /*
@@ -713,7 +713,7 @@ class PurchaseOrderController extends BaseController
                 $purchase_order->service()->sendEmail();
 
                 if (! $bulk) {
-                    return response()->json(['message' => 'email sent'], 200);
+                    return response()->json(['message' => ctrans('texts.emailed_purchase_order')], 200);
                 }
                 break;
 
@@ -863,7 +863,7 @@ class PurchaseOrderController extends BaseController
         $invitation = $this->purchase_order_repository->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $purchase_order = $invitation->purchase_order;
@@ -928,7 +928,7 @@ class PurchaseOrderController extends BaseController
         $invitation = $this->purchase_order_repository->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $contact = $invitation->contact;

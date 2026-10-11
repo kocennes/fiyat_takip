@@ -99,7 +99,7 @@ class UpdateWebhookRequest extends Request
         // gethostbyname returns the hostname if resolution fails
         if ($ip === $host && !filter_var($host, FILTER_VALIDATE_IP)) {
             // DNS resolution failed - allow it (external DNS might resolve differently)
-            $validator->errors()->add($field, 'Unable to resolve hostname.');
+            $validator->errors()->add($field, ctrans('texts.bis_unable_to_resolve_hostname'));
             return;
         }
 

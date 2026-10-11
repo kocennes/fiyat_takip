@@ -65,7 +65,11 @@ class CreateAccount extends Command
 
         $settings->name = "BISAVUNMA Fiyat Takip";
         $settings->currency_id = '1';
-        $settings->language_id = '25';
+        $settings->language_id = '25'; // Turkish - Turkey (tr_TR)
+        $settings->timezone_id = '65'; // Europe/Istanbul
+        $settings->date_format_id = '11'; // d.m.Y (DD.MM.YYYY)
+        $settings->country_id = '792'; // Turkey
+        $settings->military_time = true; // 24-hour clock
 
         $account = Account::factory()->create();
         $company = Company::factory()->create([
@@ -85,14 +89,16 @@ class CreateAccount extends Command
         $email = $this->option('email') ?? 'admin@example.com';
         $password = $this->option('password') ?? 'changeme!';
 
+        $locale = $company->locale();
+
         $user = User::factory()->create([
             'account_id' => $account->id,
             'email' => $email,
             'password' => Hash::make($password),
             'confirmation_code' => $this->createDbHash(config('database.default')),
             'email_verified_at' => now(),
-            'first_name'        => 'New',
-            'last_name'         => 'User',
+            'first_name'        => ctrans('texts.new', [], $locale),
+            'last_name'         => ctrans('texts.user', [], $locale),
             'phone'             => '',
         ]);
 

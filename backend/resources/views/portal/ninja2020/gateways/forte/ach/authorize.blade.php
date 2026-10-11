@@ -1,4 +1,4 @@
-@extends('portal.ninja2020.layout.payments', ['gateway_title' => 'Bank Details', 'card_title' => 'Bank Details'])
+@extends('portal.ninja2020.layout.payments', ['gateway_title' => ctrans('texts.bis_bank_details'), 'card_title' => ctrans('texts.bis_bank_details')])
 
 @section('gateway_head')
     @if($gateway->company_gateway->getConfigField('testMode'))

@@ -77,7 +77,7 @@ class SetupController extends Controller
         }
 
         if ($check['system_health'] === false) {
-            return response('Oops, something went wrong. Check your logs.'); /* We should never reach this block, but just in case. */
+            return response(ctrans('texts.bis_setup_something_went_wrong')); /* We should never reach this block, but just in case. */
         }
 
         $mail_driver = $request->input('mail_driver', 'smtp');

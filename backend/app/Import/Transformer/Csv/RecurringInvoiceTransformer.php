@@ -39,7 +39,7 @@ class RecurringInvoiceTransformer extends BaseTransformer
         }
 
         if (isset($invoice_data['invoice.number']) && $this->hasRecurringInvoice($invoice_data['invoice.number'])) {
-            throw new ImportException('Invoice number already exists');
+            throw new ImportException(ctrans('texts.bis_import_invoice_number_exists'));
         }
 
         $invoiceStatusMap = [

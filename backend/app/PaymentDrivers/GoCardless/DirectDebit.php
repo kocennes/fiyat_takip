@@ -113,9 +113,9 @@ class DirectDebit implements MethodInterface, LivewireMethodInterface
                           ->first();
 
         if ($invoice) {
-            $description = "Invoice {$invoice->number} for {$request->amount} for client {$this->go_cardless->client->present()->name()}";
+            $description = ctrans('texts.bis_pd_desc_invoice_for_client', ['invoice' => $invoice->number, 'amount' => $request->amount, 'client' => $this->go_cardless->client->present()->name()]);
         } else {
-            $description = "Amount {$request->amount} from client {$this->go_cardless->client->present()->name()}";
+            $description = ctrans('texts.gateway_payment_text_no_invoice', ['amount' => $request->amount, 'client' => $this->go_cardless->client->present()->name()]);
         }
 
         $amount = $this->go_cardless->convertToGoCardlessAmount($this->go_cardless->payment_hash?->amount_with_fee(), $this->go_cardless->client->currency()->precision);
@@ -204,7 +204,7 @@ class DirectDebit implements MethodInterface, LivewireMethodInterface
      */
     public function processUnsuccessfulPayment(\GoCardlessPro\Resources\Payment $payment)
     {
-        $this->go_cardless->sendFailureMail("Direct Debit payment failed with status: {$payment->status}");
+        $this->go_cardless->sendFailureMail(ctrans('texts.bis_pd_payment_failed_with_status', ['gateway' => 'GoCardless', 'status' => $payment->status]));
 
         $message = [
             'server_response' => $payment,
@@ -220,7 +220,7 @@ class DirectDebit implements MethodInterface, LivewireMethodInterface
             $this->go_cardless->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
 
     /**

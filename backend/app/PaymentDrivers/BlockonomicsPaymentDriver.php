@@ -151,7 +151,7 @@ class BlockonomicsPaymentDriver extends BaseDriver
     public function checkStores($stores): string
     {
         if (empty($stores['data'])) {
-            return "Please add a store to your Blockonomics' account";
+            return ctrans('texts.bis_pd_blockonomics_add_store');
         }
 
         $invoice_ninja_callback_url = $this->company_gateway->webhookUrl();
@@ -180,11 +180,11 @@ class BlockonomicsPaymentDriver extends BaseDriver
         if ($matching_store) {
             $matching_store_wallet = $matching_store['wallets'];
             if (empty($matching_store_wallet)) {
-                return 'Please add a wallet to your Blockonomics store';
+                return ctrans('texts.bis_pd_blockonomics_add_wallet');
             }
             return 'ok';
         }
-        return "Copy your Invoice Ninja Webhook URL and set it as your callback URL in Blockonomics";
+        return ctrans('texts.bis_pd_blockonomics_set_callback');
     }
 
     public function auth(): string
@@ -193,19 +193,19 @@ class BlockonomicsPaymentDriver extends BaseDriver
             $api_key = $this->company_gateway->getConfigField('apiKey');
 
             if (!$api_key) {
-                return 'No API Key';
+                return ctrans('texts.bis_pd_api_key_missing', ['gateway' => 'Blockonomics']);
             }
             $get_stores_response = Http::withToken($api_key)
                 ->get($this->STORES_URL, ['wallets' => 'true']);
             $get_stores_response_status = $get_stores_response->status();
 
             if ($get_stores_response_status == 401) {
-                return 'API Key is incorrect';
+                return ctrans('texts.bis_pd_api_key_incorrect', ['gateway' => 'Blockonomics']);
             }
 
 
             if (!$get_stores_response || $get_stores_response_status !== 200) {
-                return 'Could not connect to Blockonomics API';
+                return ctrans('texts.bis_pd_gateway_communication_error', ['gateway' => 'Blockonomics']);
             }
 
             $stores = $get_stores_response->json();

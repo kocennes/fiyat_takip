@@ -69,7 +69,7 @@ class AuthorizeCreateCustomer
         } else {
             $errorMessages = $response->getMessages()->getMessage();
 
-            $message = 'Unable to add customer to Authorize.net gateway';
+            $message = ctrans('texts.bis_pd_unable_to_create_customer', ['gateway' => 'Authorize.net']);
 
             if (is_array($errorMessages)) {
                 $message = $errorMessages[0]->getCode() . '  ' . $errorMessages[0]->getText();

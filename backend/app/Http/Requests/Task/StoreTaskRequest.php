@@ -69,7 +69,7 @@ class StoreTaskRequest extends Request
             }
 
             if (!is_array($values)) {
-                $fail('The ' . $attribute . ' must be a valid array.');
+                $fail(ctrans('texts.bis_attribute_must_be_array', ['attribute' => $attribute]));
                 return;
             }
 
@@ -77,42 +77,42 @@ class StoreTaskRequest extends Request
 
                 // Check if this is an array
                 if (!is_array($k)) {
-                    return $fail('Time log entry at position ' . $key . ' must be an array.');
+                    return $fail(ctrans('texts.bis_time_log_entry_not_array', ['position' => (string) $key]));
                 }
 
                 // Check for associative array (has string keys)
                 if (array_keys($k) !== range(0, count($k) - 1)) {
-                    return $fail('Time log entry at position ' . $key . ' uses invalid format. Expected: [unix_start, unix_end, description, billable]. Received associative array with keys: ' . implode(', ', array_keys($k)));
+                    return $fail(ctrans('texts.bis_time_log_entry_invalid_format', ['position' => (string) $key, 'keys' => implode(', ', array_keys($k))]));
                 }
 
                 // Ensure minimum required elements exist
                 if (!isset($k[0]) || !isset($k[1])) {
-                    return $fail('Time log entry at position ' . $key . ' must have at least 2 elements: [start_timestamp, end_timestamp].');
+                    return $fail(ctrans('texts.bis_time_log_entry_min_elements', ['position' => (string) $key]));
                 }
 
                 // Validate types for required elements
                 if (!is_int($k[0]) || !is_int($k[1])) {
-                    return $fail('Time log entry at position ' . $key . ' is invalid. Elements [0] and [1] must be Unix timestamps (integers). Received: ' . print_r($k, true));
+                    return $fail(ctrans('texts.bis_time_log_entry_invalid_timestamps', ['position' => (string) $key, 'received' => print_r($k, true)]));
                 }
 
                 // Validate max elements
                 if (count($k) > 4) {
-                    return $fail('Time log entry at position ' . $key . ' can only have up to 4 elements. Received ' . count($k) . ' elements.');
+                    return $fail(ctrans('texts.bis_time_log_entry_max_elements', ['position' => (string) $key, 'count' => (string) count($k)]));
                 }
 
                 // Validate optional element [2] (description)
                 if (isset($k[2]) && !is_string($k[2])) {
-                    return $fail('Time log entry at position ' . $key . ': element [2] (description) must be a string. Received: ' . gettype($k[2]));
+                    return $fail(ctrans('texts.bis_time_log_entry_description_type', ['position' => (string) $key, 'type' => gettype($k[2])]));
                 }
 
                 // Validate optional element [3] (billable)
                 if (isset($k[3]) && !is_bool($k[3])) {
-                    return $fail('Time log entry at position ' . $key . ': element [3] (billable) must be a boolean. Received: ' . gettype($k[3]));
+                    return $fail(ctrans('texts.bis_time_log_entry_billable_type', ['position' => (string) $key, 'type' => gettype($k[3])]));
                 }
             }
 
             if (!$this->checkTimeLog($values)) {
-                return $fail($this->timeLogValidationError ?? 'Please correct overlapping values');
+                return $fail($this->timeLogValidationError ?? ctrans('texts.task_errors'));
             }
         }];
 

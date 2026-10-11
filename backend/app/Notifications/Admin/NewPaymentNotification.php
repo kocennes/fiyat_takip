@@ -89,7 +89,7 @@ class NewPaymentNotification extends Notification
         return (new SlackMessage())
                 ->success()
                 //->to("#devv2")
-                ->from('System')
+                ->from(ctrans('texts.notification_bot'))
                 ->image($logo)
                 ->content(ctrans(
                     'texts.notification_payment_paid',

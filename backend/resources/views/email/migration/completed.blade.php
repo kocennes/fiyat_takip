@@ -1,4 +1,4 @@
-@component('email.template.admin', ['logo' => 'https://invoicing.co/images/invoiceninja-black-logo-2.png', 'settings' => $settings])
+@component('email.template.admin', ['logo' => asset('brand/bisavunma-logo.png'), 'settings' => $settings])
     <div class="center">
         <h1>{{ ctrans('texts.migration_completed')}}</h1>
         <p>{{ ctrans('texts.migration_completed_description')}}</p>
@@ -27,6 +27,6 @@
             <![endif]-->
         </div>
 
-        <p>{{ ctrans('texts.email_signature')}}<br/> {{ ctrans('texts.email_from') }}</p>
+        <p>{{ ctrans('texts.email_signature')}}<br/> {{ ctrans('texts.bis_email_from') }}</p>
     </div>
 @endcomponent

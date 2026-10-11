@@ -53,7 +53,6 @@ class GmailTokenInvalid extends Mailable
         $this->title = ctrans('texts.gmail_credentials_invalid_subject');
         $this->body = ctrans('texts.gmail_credentials_invalid_body');
         $this->whitelabel = $this->company->account->isPaid();
-        $this->replyTo('contact@invoiceninja.com', 'Contact');
 
         return $this->from(config('mail.from.address'), config('mail.from.name'))
                     ->subject(ctrans('texts.gmail_credentials_invalid_subject'))

@@ -78,7 +78,7 @@ trait MakesTemplateData
         $data['$invoice.total_taxes'] = &$data['$total_taxes'];
         $data['$entity_label'] = ['value' => '', 'label' => ctrans('texts.invoice')];
         $data['$number'] = ['value' => '#ENT-292', 'label' => ctrans('texts.invoice_number')];
-        $data['$entity.terms'] = ['value' => 'The terms and conditions are listed below and are non negotiable', 'label' => ctrans('texts.invoice_terms')];
+        $data['$entity.terms'] = ['value' => ctrans('texts.bis_sample_terms'), 'label' => ctrans('texts.invoice_terms')];
         $data['$terms'] = &$data['$entity.terms'];
         $data['$entity_number'] = &$data['$number'];
         $data['$discount'] = ['value' => '$10.00', 'label' => ctrans('texts.discount')];
@@ -133,7 +133,7 @@ trait MakesTemplateData
         $data['$address2'] = ['value' => 'Kalamazoo', 'label' => ctrans('texts.address2')];
         $data['$id_number'] = ['value' => 'ID Number', 'label' => ctrans('texts.id_number')];
         $data['$vat_number'] = ['value' => '555-434-324', 'label' => ctrans('texts.vat_number')];
-        $data['$website'] = ['value' => 'https://www.invoiceninja.com', 'label' => ctrans('texts.website')];
+        $data['$website'] = ['value' => 'https://bisavunma.com', 'label' => ctrans('texts.website')];
         $data['$phone'] = ['value' => '555-12321', 'label' => ctrans('texts.phone')];
         $data['$country'] = ['value' => 'USA', 'label' => ctrans('texts.country')];
         $data['$email'] = ['value' => 'user@example.com', 'label' => ctrans('texts.email')];
@@ -177,9 +177,9 @@ trait MakesTemplateData
         $data['$company.email'] = ['value' => 'user@example.com', 'label' => ctrans('texts.email')];
         $data['$company.vat_number'] = ['value' => 'VAT-3344-223', 'label' => ctrans('texts.vat_number')];
         $data['$company.id_number'] = ['value' => 'ID-NO-#434', 'label' => ctrans('texts.id_number')];
-        $data['$company.website'] = ['value' => 'https://invoiceninja.com', 'label' => ctrans('texts.website')];
+        $data['$company.website'] = ['value' => 'https://bisavunma.com', 'label' => ctrans('texts.website')];
         $data['$company.address'] = ['value' => '5 Kalamazoo Way\n Jimbuckeroo\n USA 90210', 'label' => ctrans('texts.address')];
-        $data['$company.logo'] = ['value' => "<img src='https://raw.githubusercontent.com/hillelcoren/invoice-ninja/master/public/images/round_logo.png' class='w-48' alt='logo'>", 'label' => ctrans('texts.logo')];
+        $data['$company.logo'] = ['value' => "<img src='" . asset('brand/bisavunma-logo.png') . "' class='w-48' alt='BISAVUNMA'>", 'label' => ctrans('texts.logo')];
         $data['$company_logo'] = &$data['$company.logo'];
         $data['$company1'] = ['value' => 'Company Custom Value 1', 'label' => 'company label1'];
         $data['$company2'] = ['value' => 'Company Custom Value 2', 'label' => 'company label2'];

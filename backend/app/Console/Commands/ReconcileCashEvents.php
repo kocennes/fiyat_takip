@@ -33,7 +33,7 @@ class ReconcileCashEvents extends Command
     public function handle(ReconcilePaymentApplicationTransactionEventsRunner $runner): int
     {
         if (Ninja::isHosted()) {
-            $this->emitError('ninja:reconcile-cash-events is not available on Invoice Ninja hosted.');
+            $this->emitError('ninja:reconcile-cash-events is not available on the hosted platform.');
 
             return self::FAILURE;
         }

@@ -45,7 +45,7 @@ class InvoiceEmailFailedActivity implements ShouldQueue
         MultiDB::setDb($event->company->db);
 
         if (strpos($event->message, 'shared/public') !== false) {
-            $event->message = 'Unable to open attachment file for reading';
+            $event->message = ctrans('texts.bis_mail_attachment_unreadable');
         }
 
         $fields = new stdClass();

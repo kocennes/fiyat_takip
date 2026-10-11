@@ -267,7 +267,7 @@ class QuoteController extends Controller
 
             return redirect()
                 ->route('client.quotes.index')
-                ->withSuccess('Quote(s) rejected successfully.');
+                ->withSuccess(ctrans('texts.bis_quotes_rejected'));
         }
 
 
@@ -325,7 +325,7 @@ class QuoteController extends Controller
 
             return redirect()
                 ->route('client.quotes.index')
-                ->withSuccess('Quote(s) approved successfully.');
+                ->withSuccess(ctrans('texts.bis_quotes_approved'));
         }
 
 

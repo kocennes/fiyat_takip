@@ -399,7 +399,7 @@ class FortePaymentDriver extends BaseDriver
 
             nlog($response->body());
 
-            throw new PaymentFailed("Unable to create customer in Forte", 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_unable_to_create_customer', ['gateway' => 'Forte']), 400);
 
             //@todo add syslog here
         }

@@ -6,6 +6,7 @@
             window.gtag = window.gtag || function () {};
             window.trackEvent = window.trackEvent || function () {};
         </script>
+        @include('portal.ninja2020.components.js-translations')
 
         <!-- Title -->
         @if(auth()->guard('contact')->check())

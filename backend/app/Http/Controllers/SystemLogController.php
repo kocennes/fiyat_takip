@@ -77,7 +77,7 @@ class SystemLogController extends BaseController
             return $this->listResponse($system_logs);
         }
 
-        return $this->errorResponse('Insufficient permissions', 403);
+        return $this->errorResponse(ctrans('texts.authorization_failure'), 403);
     }
 
     /**
@@ -88,7 +88,7 @@ class SystemLogController extends BaseController
     public function create()
     {
         $error = [
-            'message' => 'Cannot create system log',
+            'message' => ctrans('texts.bis_system_logs_read_only'),
             'errors' => new stdClass(),
         ];
 
@@ -104,7 +104,7 @@ class SystemLogController extends BaseController
     public function store(Request $request)
     {
         $error = [
-            'message' => 'Cannot store system log',
+            'message' => ctrans('texts.bis_system_logs_read_only'),
             'errors' => new stdClass(),
         ];
 
@@ -174,7 +174,7 @@ class SystemLogController extends BaseController
     public function edit($id)
     {
         $error = [
-            'message' => 'Cannot edit system log',
+            'message' => ctrans('texts.bis_system_logs_read_only'),
             'errors' => new stdClass(),
         ];
 
@@ -191,7 +191,7 @@ class SystemLogController extends BaseController
     public function update(Request $request, $id)
     {
         $error = [
-            'message' => 'Cannot update system log',
+            'message' => ctrans('texts.bis_system_logs_read_only'),
             'errors' => new stdClass(),
         ];
 
@@ -207,7 +207,7 @@ class SystemLogController extends BaseController
     public function destroy($id)
     {
         $error = [
-            'message' => 'Cannot destroy system log',
+            'message' => ctrans('texts.bis_system_logs_read_only'),
             'errors' => new stdClass(),
         ];
 

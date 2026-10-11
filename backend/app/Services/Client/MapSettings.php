@@ -245,15 +245,15 @@ class MapSettings extends AbstractService
     private function handleCompanyGateways(?string $company_gateway_ids): string
     {
         if (!$company_gateway_ids) {
-            return "No Special Configuration.";
+            return ctrans('texts.bis_no_special_configuration');
         }
 
         if ($company_gateway_ids == "0") {
-            return "Payment Gateways Disabled!";
+            return ctrans('texts.bis_payment_gateways_disabled');
         }
 
         if ($company_gateway_ids == "") {
-            return "No Special Configuration.";
+            return ctrans('texts.bis_no_special_configuration');
         }
 
         $company_gateway_ids = explode(',', $company_gateway_ids);

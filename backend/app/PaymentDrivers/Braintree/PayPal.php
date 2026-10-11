@@ -90,7 +90,7 @@ class PayPal implements LivewireMethodInterface
             'options' => [
                 'submitForSettlement' => true,
                 'paypal' => [
-                    'description' => 'Meaningful description.',
+                    'description' => mb_substr((string) $this->braintree->getDescription(), 0, 127),
                 ],
             ],
             'taxAmount' => $total_taxes,
@@ -133,7 +133,7 @@ class PayPal implements LivewireMethodInterface
         if ($payment_method->success) {
             return $payment_method->paymentMethod->token;
         } else {
-            throw new PaymentFailed(property_exists($payment_method, 'message') ? $payment_method->message : 'Undefined error storing payment token.', 0);
+            throw new PaymentFailed(property_exists($payment_method, 'message') ? $payment_method->message : ctrans('texts.bis_pd_error_storing_payment_token'), 0);
         }
     }
 

@@ -105,7 +105,7 @@ class InstantPayment
         if ($payable_invoices->count() == 0) {
             return redirect()
                 ->route('client.invoices.index')
-                ->with(['message' => 'No payable invoices selected.']);
+                ->with(['message' => ctrans('texts.no_payable_invoices_selected')]);
         }
 
         $client = $invoices->first()->client;

@@ -51,6 +51,6 @@ class ValidSettingsRule implements Rule
             ? (string) $this->return_data[2]
             : json_encode($this->return_data[2]);
 
-        return $this->return_data[0] . ' is not a valid ' . $this->return_data[1] . ' ( ' . $value . ' )';
+        return ctrans('texts.bis_setting_invalid_type_value', ['key' => (string) $this->return_data[0], 'type' => (string) $this->return_data[1], 'value' => (string) $value]);
     }
 }

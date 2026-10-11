@@ -130,7 +130,8 @@ class Handler extends ExceptionHandler
             if ($this->validException($exception) && $this->sentryShouldReport($exception)) {
                 Integration::captureUnhandledException($exception);
             }
-        } elseif (app()->bound('sentry')) {
+        } elseif (app()->bound('sentry') && config('sentry.dsn')) {
+            // Only when an error-reporting DSN has been configured explicitly (off by default).
             Integration::configureScope(function (Scope $scope): void {
                 if (auth()->guard('contact') && auth()->guard('contact')->user() && auth()->guard('contact')->user()->company->account->report_errors) {// @phpstan-ignore-line
 
@@ -217,7 +218,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof ModelNotFoundException && $request->expectsJson()) {
-            return response()->json(['message' => $exception->getMessage()], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         } elseif ($exception instanceof InternalPDFFailure && $request->expectsJson()) {
             return response()->json(['message' => $exception->getMessage()], 500);
         } elseif ($exception instanceof PhantomPDFFailure && $request->expectsJson()) {
@@ -225,11 +226,18 @@ class Handler extends ExceptionHandler
         } elseif ($exception instanceof FilePermissionsFailure) {
             return response()->json(['message' => $exception->getMessage()], 500);
         } elseif ($exception instanceof ThrottleRequestsException && $request->expectsJson()) {
-            return response()->json(['message' => 'Too many requests'], 429);
+            return response()->json(['message' => ctrans('texts.too_many_requests')], 429);
             // } elseif ($exception instanceof FatalThrowableError && $request->expectsJson()) {
             //     return response()->json(['message'=>'Fatal error'], 500); //@deprecated
         } elseif ($exception instanceof AuthorizationException && $request->expectsJson()) {
-            return response()->json(['message' => $exception->getMessage()], 401);
+            $message = $exception->getMessage();
+
+            // The framework's default text is English; custom messages are already translated.
+            if ($message === '' || strcasecmp($message, 'This action is unauthorized.') === 0) {
+                $message = ctrans('texts.authorization_failure');
+            }
+
+            return response()->json(['message' => $message], 401);
         } elseif ($exception instanceof TokenMismatchException) {
             return redirect()
                     ->back()
@@ -238,13 +246,13 @@ class Handler extends ExceptionHandler
                         'message' => ctrans('texts.token_expired'),
                         'message-type' => 'danger', ]);
         } elseif ($exception instanceof NotFoundHttpException && $request->expectsJson()) {
-            return response()->json(['message' => 'Route does not exist'], 404);
+            return response()->json(['message' => ctrans('texts.bis_route_not_found')], 404);
         } elseif ($exception instanceof MethodNotAllowedHttpException && $request->expectsJson()) {
-            return response()->json(['message' => 'Method not supported for this route'], 404);
+            return response()->json(['message' => ctrans('texts.bis_method_not_allowed')], 404);
         } elseif ($exception instanceof ValidationException && $request->expectsJson()) {
-            return response()->json(['message' => 'The given data was invalid.', 'errors' => $exception->validator->getMessageBag()], 422);
+            return response()->json(['message' => ctrans('texts.bis_given_data_invalid'), 'errors' => $exception->validator->getMessageBag()], 422);
         } elseif ($exception instanceof RelationNotFoundException && $request->expectsJson()) {
-            return response()->json(['message' => "Relation `{$exception->relation}` is not a valid include."], 400);
+            return response()->json(['message' => ctrans('texts.bis_invalid_include', ['relation' => $exception->relation])], 400);
         } elseif ($exception instanceof GenericPaymentDriverFailure && $request->expectsJson()) {
             return response()->json(['message' => $exception->getMessage()], 400);
         } elseif ($exception instanceof GenericPaymentDriverFailure) {
@@ -256,10 +264,24 @@ class Handler extends ExceptionHandler
         return parent::render($request, $exception);
     }
 
+    /**
+     * JSON body for unhandled exceptions: the framework's generic text is English.
+     */
+    protected function convertExceptionToArray(Throwable $e): array
+    {
+        $data = parent::convertExceptionToArray($e);
+
+        if (($data['message'] ?? null) === 'Server Error') {
+            $data['message'] = ctrans('texts.bis_error_server');
+        }
+
+        return $data;
+    }
+
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return response()->json(['error' => ctrans('texts.bis_unauthenticated')], 401);
         }
 
         $guard = Arr::get($exception->guards(), 0);

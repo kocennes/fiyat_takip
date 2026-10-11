@@ -375,7 +375,7 @@ class BankIntegrationController extends BaseController
     private function removeAccountYodlee(Account $account, BankIntegration $bank_integration)
     {
         if (!$account->bank_integration_account_id) {
-            return response()->json(['message' => 'Not yet authenticated with Bank Integration service'], 400);
+            return response()->json(['message' => ctrans('texts.bis_bank_integration_not_authenticated')], 400);
         }
 
         $yodlee = new Yodlee($account->bank_integration_account_id);
@@ -406,6 +406,6 @@ class BankIntegrationController extends BaseController
             });
         }
 
-        return response()->json(['message' => 'Fetching transactions....'], 200);
+        return response()->json(['message' => ctrans('texts.bis_fetching_transactions')], 200);
     }
 }

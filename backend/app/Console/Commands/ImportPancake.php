@@ -30,7 +30,7 @@ class ImportPancake extends Command
      * @var string
      */
     protected $signature = 'ninja:import-pancake
-                            {api_token : Invoice Ninja API token used to create records}
+                            {api_token : BISAVUNMA Fiyat Takip API token used to create records}
                             {directory : Directory containing Pancake client and invoice CSV exports}
                             {--entities= : Comma-separated list: clients, invoices, recurring_invoices, payments. Omit to import all}
                             {--abort-on-failure : Stop importing after the first failed record}
@@ -41,7 +41,7 @@ class ImportPancake extends Command
      *
      * @var string
      */
-    protected $description = 'Import Pancake CSV exports into Invoice Ninja through the API';
+    protected $description = 'Import Pancake CSV exports into BISAVUNMA Fiyat Takip through the API';
 
     public function __construct(private readonly CsvImporter $importer)
     {
@@ -53,7 +53,7 @@ class ImportPancake extends Command
         $api_token = trim((string) $this->argument('api_token'));
 
         if ($api_token === '') {
-            $this->error('An Invoice Ninja API token is required.');
+            $this->error('A BISAVUNMA Fiyat Takip API token is required.');
 
             return self::FAILURE;
         }

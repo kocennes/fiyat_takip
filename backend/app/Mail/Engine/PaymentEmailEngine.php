@@ -235,7 +235,7 @@ class PaymentEmailEngine extends BaseEmailEngine
         $data['$website'] = ['value' => $this->client->present()->website() ?: '&nbsp;', 'label' => ctrans('texts.website')];
         $data['$phone'] = ['value' => $this->client->present()->phone() ?: '&nbsp;', 'label' => ctrans('texts.phone')];
         $data['$country'] = ['value' => $this->client->country->name ?? '', 'label' => ctrans('texts.country')];
-        $data['$email'] = ['value' => isset($this->contact) ? $this->contact->email : 'no contact email on record', 'label' => ctrans('texts.email')];
+        $data['$email'] = ['value' => isset($this->contact) ? $this->contact->email : ctrans('texts.bis_no_contact_email'), 'label' => ctrans('texts.email')];
         $data['$client_name'] = ['value' => $this->client->present()->name() ?: '&nbsp;', 'label' => ctrans('texts.client_name')];
         $data['$client.name'] = &$data['$client_name'];
         $data['$client'] = &$data['$client_name'];
@@ -272,7 +272,7 @@ class PaymentEmailEngine extends BaseEmailEngine
         $data['$contact.email'] = ['value' => isset($this->contact) ? $this->contact->email : '', 'label' => ctrans('texts.email')];
         $data['$contact.phone'] = ['value' => isset($this->contact) ? $this->contact->phone : '', 'label' => ctrans('texts.phone')];
 
-        $data['$contact.name'] = ['value' => isset($this->contact) ? $this->contact->present()->name() : 'no contact name on record', 'label' => ctrans('texts.contact_name')];
+        $data['$contact.name'] = ['value' => isset($this->contact) ? $this->contact->present()->name() : ctrans('texts.bis_no_contact_name'), 'label' => ctrans('texts.contact_name')];
         $data['$contact.first_name'] = ['value' => isset($this->contact) ? $this->contact->first_name : '', 'label' => ctrans('texts.first_name')];
         $data['$contact.last_name'] = ['value' => isset($this->contact) ? $this->contact->last_name : '', 'label' => ctrans('texts.last_name')];
         $data['$contact.custom1'] = ['value' => isset($this->contact) ? $this->contact->custom_value1 : '&nbsp;', 'label' => $this->helpers->makeCustomField($this->company->custom_fields, 'contact1')];

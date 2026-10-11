@@ -110,7 +110,7 @@ class ImportQuickbooksController extends BaseController
         if ($is_reconnect && $expected_realm_id && $realm !== $expected_realm_id) {
             nlog("QB Reconnect: realmID mismatch. Expected: {$expected_realm_id}, Got: {$realm}");
             return redirect(config('ninja.react_url') . '?error=realm_mismatch&message=' . urlencode(
-                'You must reconnect to the same QuickBooks company. Expected company ID: ' . $expected_realm_id
+                ctrans('texts.bis_quickbooks_reconnect_same_company', ['id' => (string) $expected_realm_id])
             ));
         }
 

@@ -336,7 +336,7 @@ class YodleeController extends BaseController
             ->exists();
 
         if (!$bank_integration) {
-            return response()->json(['message' => 'Account does not exist.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_account_does_not_exist')], 400);
         }
 
         $yodlee = new Yodlee($user->account->bank_integration_account_id);

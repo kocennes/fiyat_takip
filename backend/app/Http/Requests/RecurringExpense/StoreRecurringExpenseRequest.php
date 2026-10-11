@@ -108,7 +108,7 @@ class StoreRecurringExpenseRequest extends Request
     public function messages()
     {
         return [
-            'unique' => ctrans('validation.unique', ['attribute' => 'email']),
+            'unique' => ctrans('validation.unique', ['attribute' => ctrans('texts.email')]),
         ];
     }
 }

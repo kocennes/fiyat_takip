@@ -121,7 +121,7 @@ class WebhookSingle implements ShouldQueue
         $base_headers = [
             'Content-Length' => strlen(json_encode($data)),
             'Accept'         => 'application/json',
-            'User-Agent'     => 'InvoiceNinja/' . config('ninja.app_version') . ' (+https://invoiceninja.com)',
+            'User-Agent'     => 'BISAVUNMA-Fiyat-Takip/' . config('ninja.app_version') . ' (+https://bisavunma.com)',
         ];
 
         $client = $this->makeHttpClient([

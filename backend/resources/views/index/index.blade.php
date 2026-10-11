@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html data-report-errors="{{ $report_errors }}" data-rc="{{ $rc }}" data-user-agent="{{ $user_agent }}" data-login="{{ $login }}" data-signup="{{ $signup }}" data-white-label="{{ $white_label }}" data-microsoft-client-id="{{ config('services.microsoft.client_id') }}">
+<html data-report-errors="{{ $report_errors }}" data-rc="{{ $rc }}" data-user-agent="{{ $user_agent }}" data-login="{{ $login }}" data-signup="{{ $signup }}" data-white-label="1" data-microsoft-client-id="{{ config('services.microsoft.client_id') }}">
 <head>
-    <!-- Source: https://github.com/invoiceninja/invoiceninja -->
     <!-- Version: {{ config('ninja.app_version') }} -->
   <meta charset="UTF-8">
-  <title>{{ $white_label ? "" : config('ninja.app_name')  }}</title>
+  <title>{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}</title>
+  <link href="{{ asset('favicon.ico') }}" rel="icon" type="image/x-icon">
   <meta name="google-signin-client_id" content="{{ config('services.google.client_id') }}">
   <link rel="manifest" href="manifest.json?v={{ config('ninja.app_version') }}">
   <script src="{{ asset('js/pdf.min.js') }}"></script>
@@ -142,7 +142,7 @@
     
     function invokeServiceWorkerUpdateFlow() {
       // you have a better UI here, reloading is not a great user experince here.
-      const confirmed = alert('New version of the app is available. Refresh now');
+      const confirmed = alert({!! json_encode(ctrans('texts.bis_new_version_refresh'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!});
       if (confirmed == true) {
         window.location.reload();
       }

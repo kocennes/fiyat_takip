@@ -48,12 +48,12 @@ class ValidProjectForClient implements Rule
         $project = Project::withTrashed()->find($this->input['project_id']);
 
         if (! $project) {
-            $this->message = 'Project not found';
+            $this->message = ctrans('texts.bis_project_not_found');
             return false;
         }
 
         if (!isset($this->input['client_id'])) {
-            $this->message = 'No Client ID provided.';
+            $this->message = ctrans('texts.bis_no_client_id');
             return false;
         }
 

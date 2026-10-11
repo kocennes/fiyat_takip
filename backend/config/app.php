@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Invoice Ninja'),
+    'name' => env('APP_NAME', 'BISAVUNMA Fiyat Takip'),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ return [
     |
     */
 
-    'locale' => env('DEFAULT_LOCALE', 'en'),
+    'locale' => env('DEFAULT_LOCALE', 'tr_TR'),
 
     /*
     |--------------------------------------------------------------------------

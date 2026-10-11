@@ -49,7 +49,7 @@ class Blockonomics implements LivewireMethodInterface
         $company_key = $this->blockonomics->company_gateway->company->company_key;
 
         if (!$api_key) {
-            return ['success' => false, 'message' => 'Please enter a valid API key'];
+            return ['success' => false, 'message' => ctrans('texts.bis_pd_api_key_missing', ['gateway' => 'Blockonomics'])];
         }
 
         $url = 'https://www.blockonomics.co/api/new_address?match_callback=' . $company_key;
@@ -60,17 +60,17 @@ class Blockonomics implements LivewireMethodInterface
         nlog($response->body());
 
         if ($response->status() == 401) {
-            return ['success' => false, 'message' => 'API Key is incorrect'];
+            return ['success' => false, 'message' => ctrans('texts.bis_pd_api_key_incorrect', ['gateway' => 'Blockonomics'])];
         };
 
         if ($response->successful()) {
             if (isset($response->object()->address)) {
                 return ['success' => true, 'address' => $response->object()->address];
             } else {
-                return ['success' => false, 'message' => 'Address not returned'];
+                return ['success' => false, 'message' => ctrans('texts.bis_pd_address_not_returned')];
             }
         } else {
-            return ['success' => false, 'message' => "Could not generate new address (This may be a temporary error. Please try again). \n\n<br><br> If this continues, please ask website administrator to check blockonomics registered email address for error messages"];
+            return ['success' => false, 'message' => ctrans('texts.bis_pd_address_generation_failed')];
         }
 
     }
@@ -80,7 +80,7 @@ class Blockonomics implements LivewireMethodInterface
 
         $r = Http::get('https://www.blockonomics.co/api/price', ['currency' => $this->blockonomics->client->getCurrencyCode()]);
 
-        return $r->successful() ? $r->object()->price : 'Something went wrong';
+        return $r->successful() ? $r->object()->price : ctrans('texts.something_went_wrong');
 
     }
 
@@ -188,8 +188,8 @@ class Blockonomics implements LivewireMethodInterface
             return redirect()->route('client.payments.show', ['payment' => $payment->hashed_id]);
 
         } catch (\Throwable $e) {
-            $this->blockonomics->sendFailureMail('Error during Blockonomics payment: ' . $e->getMessage());
-            throw new PaymentFailed('Error during Blockonomics payment: ' . $e->getMessage());
+            $this->blockonomics->sendFailureMail(ctrans('texts.bis_pd_gateway_payment_error', ['gateway' => 'Blockonomics', 'error' => $e->getMessage()]));
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_payment_error', ['gateway' => 'Blockonomics', 'error' => $e->getMessage()]));
         }
     }
 

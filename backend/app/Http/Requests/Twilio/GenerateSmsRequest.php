@@ -49,7 +49,7 @@ class GenerateSmsRequest extends Request
 
             \Illuminate\Support\Facades\Cache::put($key, $count + 1, 300);
             $validator->after(function ($validator) {
-                $validator->errors()->add('phone', 'You requested a verification code recently. Please retry again in a few minutes.');
+                $validator->errors()->add('phone', ctrans('texts.bis_sms_code_requested_recently'));
             });
 
         } else {

@@ -226,7 +226,7 @@ class SystemLog extends Model
     public function resolveRouteBinding($value, $field = null)
     {
         if (is_numeric($value)) {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Record with value {$value} not found");
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException(ctrans('texts.bis_record_with_value_not_found', ['value' => $value]));
         }
 
         return $this

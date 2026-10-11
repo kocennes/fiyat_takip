@@ -62,7 +62,7 @@ class FPX implements LivewireMethodInterface
             return $this->processSuccessfulPayment($request->payment_intent);
         }
 
-        $error = "FPX payment failed with status: {$request->redirect_status}";
+        $error = ctrans('texts.bis_pd_payment_failed_with_status', ['gateway' => 'FPX', 'status' => $request->redirect_status]);
 
         return $this->processUnsuccessfulPayment($error);
     }
@@ -100,7 +100,7 @@ class FPX implements LivewireMethodInterface
     {
         $server_response = $this->stripe->payment_hash->data;
 
-        $this->stripe->sendFailureMail($error ?: 'FPX payment was not successful');
+        $this->stripe->sendFailureMail($error ?: ctrans('texts.bis_pd_payment_not_successful', ['gateway' => 'FPX']));
 
         $message = [
             'server_response' => $server_response,
@@ -116,7 +116,7 @@ class FPX implements LivewireMethodInterface
             $this->stripe->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 400);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 400);
     }
 
     public function paymentData(array $data): array

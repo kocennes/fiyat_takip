@@ -1,5 +1,5 @@
 @extends('portal.ninja2020.layout.error')
 
-@section('title', __('Server Error'))
+@section('title', ctrans('texts.bis_error_server'))
 @section('code', '500')
-@section('message', __('Server Error'))
+@section('message', ctrans('texts.bis_error_server'))

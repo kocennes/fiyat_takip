@@ -267,7 +267,7 @@ class VendorHtmlEngine
         $data['$phone'] = ['value' => $this->vendor->present()->phone() ?: '&nbsp;', 'label' => ctrans('texts.phone')];
         $data['$country'] = ['value' => isset($this->vendor->country->name) ? ctrans('texts.country_' . $this->vendor->country->name) : '', 'label' => ctrans('texts.country')];
         $data['$country_2'] = ['value' => isset($this->vendor->country) ? $this->vendor->country->iso_3166_2 : '', 'label' => ctrans('texts.country')];
-        $data['$email'] = ['value' => isset($this->contact) ? $this->contact->email : 'no contact email on record', 'label' => ctrans('texts.email')];
+        $data['$email'] = ['value' => isset($this->contact) ? $this->contact->email : ctrans('texts.bis_no_contact_email'), 'label' => ctrans('texts.email')];
 
         if (str_contains($data['$email']['value'], 'example.com')) {
             $data['$email'] = ['value' => '', 'label' => ctrans('texts.email')];
@@ -422,7 +422,7 @@ class VendorHtmlEngine
         $data['$font_name'] = ['value' => Helpers::resolveFont($this->settings->primary_font)['name'], 'label' => ''];
         $data['$font_url'] = ['value' => Helpers::resolveFont($this->settings->primary_font)['url'], 'label' => ''];
 
-        $data['$invoiceninja.whitelabel'] = ['value' => 'https://invoicing.co/images/new_logo.png', 'label' => ''];
+        $data['$invoiceninja.whitelabel'] = ['value' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'label' => '']; // no third-party badge
 
         $data['$primary_color'] = ['value' => $this->settings->primary_color, 'label' => ''];
         $data['$secondary_color'] = ['value' => $this->settings->secondary_color, 'label' => ''];

@@ -88,7 +88,7 @@ trait HasTags
 
         if ($found->count() !== count($tag_ids)) {
             throw ValidationException::withMessages([
-                'tags' => ['One or more tags are invalid for this entity.'],
+                'tags' => [ctrans('texts.bis_tags_invalid_for_entity')],
             ]);
         }
 
@@ -119,7 +119,7 @@ trait HasTags
             }
 
             throw ValidationException::withMessages([
-                'tags' => ['One or more tags are invalid for this entity.'],
+                'tags' => [ctrans('texts.bis_tags_invalid_for_entity')],
             ]);
         }
 
@@ -127,7 +127,7 @@ trait HasTags
 
         if (count($out) !== count($tag_ids)) {
             throw ValidationException::withMessages([
-                'tags' => ['One or more tags are invalid for this entity.'],
+                'tags' => [ctrans('texts.bis_tags_invalid_for_entity')],
             ]);
         }
 

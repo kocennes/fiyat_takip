@@ -1,4 +1,4 @@
-@extends('portal.ninja2020.layout.payments', ['gateway_title' => 'payware', 'card_title' => 'payware'])
+@extends('portal.ninja2020.layout.payments', ['gateway_title' => ctrans('texts.mobile_payment'), 'card_title' => ctrans('texts.mobile_payment')])
 
 @section('gateway_head')
     <style>

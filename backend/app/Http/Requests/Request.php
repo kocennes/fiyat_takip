@@ -348,11 +348,10 @@ class Request extends FormRequest
                     ? $endTime
                     : min($endTime, $nextEntry[1]);
 
-                $this->timeLogValidationError = sprintf(
-                    'Overlap detected: %s - %s.',
-                    $this->formatTimeLogTimestamp($overlapStartTime),
-                    $this->formatTimeLogTimestamp($overlapEndTime)
-                );
+                $this->timeLogValidationError = ctrans('texts.bis_time_log_overlap', [
+                    'start' => $this->formatTimeLogTimestamp($overlapStartTime),
+                    'end' => $this->formatTimeLogTimestamp($overlapEndTime),
+                ]);
 
                 return false;
             }

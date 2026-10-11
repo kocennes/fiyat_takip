@@ -448,9 +448,24 @@ class TemplateService
     public function save(): self
     {
 
+        $this->setDocumentLanguage();
+
         $this->compiled_html = \App\Services\Pdf\Purify::clean($this->document->saveHTML());
 
         return $this;
+    }
+
+    /**
+     * Declares the document language (e.g. tr-TR) when the template does not,
+     * so the PDF renderer applies the correct casing rules (i -> İ for Turkish).
+     */
+    private function setDocumentLanguage(): void
+    {
+        $root = $this->document->documentElement ?? null;
+
+        if ($root && strtolower($root->nodeName) === 'html' && ! $root->hasAttribute('lang')) {
+            $root->setAttribute('lang', str_replace('_', '-', (string) app()->getLocale()));
+        }
     }
 
     /**

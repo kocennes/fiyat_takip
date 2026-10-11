@@ -1,9 +1,9 @@
 @component('email.template.admin', ['logo' => $logo, 'settings' => $settings, 'company' => $company ?? ''])
     <div class="center">
         <h1>{{ ctrans('texts.import_complete') }}</h1>
-        <p>Hello, here is the output of your recent import job.</p>
+        <p>{{ ctrans('texts.bis_import_output_intro') }}</p>
 
-        <p><b>If your logo imported correctly it will display below. If it didn't import, you'll need to reupload your logo</b></p>
+        <p><b>{{ ctrans('texts.bis_import_logo_notice') }}</b></p>
 
         <p><img src="{{ $logo }}"></p>
 
@@ -68,25 +68,25 @@
         @endif
 
         @if(isset($check_data))
-            <p><b>Data Quality:</b></p>
+            <p><b>{{ ctrans('texts.bis_data_quality') }}:</b></p>
             <p> {!! $check_data !!} </p>
         @endif
 
         @if(!empty($errors) )
-            <p>{{ ctrans('texts.errors') }}:</p>
+            <p>{{ ctrans('texts.error') }}:</p>
             <table>
                 <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Data</th>
-                    <th>Error</th>
+                    <th>{{ ctrans('texts.type') }}</th>
+                    <th>{{ ctrans('texts.data') }}</th>
+                    <th>{{ ctrans('texts.error') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($errors as $entityType=>$entityErrors)
                     @foreach($entityErrors as $error)
                         <tr>
-                            <td>{{$entityType}}</td>
+                            <td>{{ \Illuminate\Support\Facades\Lang::has("texts.{$entityType}") ? ctrans("texts.{$entityType}") : $entityType }}</td>
                             <td>{{json_encode($error[$entityType]??null)}}</td>
                             <td>{{json_encode($error['error'])}}</td>
                         </tr>
@@ -121,7 +121,7 @@
         </div>
 
         <p>{{ ctrans('texts.email_signature')}}</p>
-        <p>{{ ctrans('texts.email_from') }}</p>
+        <p>{{ ctrans('texts.bis_email_from') }}</p>
     </div>
 @endcomponent
 

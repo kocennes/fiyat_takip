@@ -45,7 +45,7 @@ class StoreTagRequest extends Request
     public function messages(): array
     {
         return [
-            'name.not_regex' => 'Tag names may not contain commas.',
+            'name.not_regex' => ctrans('texts.bis_tag_no_commas'),
         ];
     }
 

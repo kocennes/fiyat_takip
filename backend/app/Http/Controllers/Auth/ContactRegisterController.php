@@ -74,7 +74,7 @@ class ContactRegisterController extends Controller
         $company = $request->company();
 
         if (! $company->client_can_register || $company->account->isFreeHostedClient()) {
-            abort(403, 'This page is restricted');
+            abort(403, ctrans('texts.bis_page_restricted'));
         }
 
         $request->merge(['company' => $request->company()]);

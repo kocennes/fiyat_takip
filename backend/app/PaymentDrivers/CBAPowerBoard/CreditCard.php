@@ -55,7 +55,7 @@ class CreditCard implements LivewireMethodInterface
                 "capture" => false,
                 "amount" => 1,
                 "currency" => $this->powerboard->client->currency()->code,
-                "description" => "Card authorization",
+                "description" => ctrans('texts.bis_pd_card_authorization'),
                 "customer" => [
                     "payment_source" => [
                         "vault_token" => $payment_source->vault_token,
@@ -457,13 +457,13 @@ class CreditCard implements LivewireMethodInterface
 
             $this->powerboard->logUnsuccessfulGatewayResponse($error_object, SystemLog::TYPE_POWERBOARD);
 
-            $error_message = "Unknown error";
+            $error_message = ctrans('texts.bis_pd_unknown_error');
 
             match ($error_object->error->code) {
-                "UnfulfilledCondition" => $error_message = $error_object->error->details->messages[0] ?? $error_object->error->message ?? "Unknown error",
+                "UnfulfilledCondition" => $error_message = $error_object->error->details->messages[0] ?? $error_object->error->message ?? ctrans('texts.bis_pd_unknown_error'),
                 "GatewayError" => $error_message = $error_object->error->message,
                 "transaction_declined" => $error_message = $error_object->error->details[0]->status_code_description,
-                default => $error_message = $error_object->error->message ?? "Unknown error",
+                default => $error_message = $error_object->error->message ?? ctrans('texts.bis_pd_unknown_error'),
             };
 
             return [$error_message, $exception->getCode()];
@@ -495,7 +495,7 @@ class CreditCard implements LivewireMethodInterface
             return response()->json($error[0], 200);
         }
 
-        throw new PaymentFailed('Failed to process the payment.', $error[1]);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), $error[1]);
     }
 
 }

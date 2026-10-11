@@ -76,7 +76,7 @@ class BaseExport
 
     protected const EXPORT_CHUNK_SIZE = 500;
 
-    public string $client_description = 'All Clients';
+    public string $client_description = '';
 
     protected array $vendor_report_keys = [
         'address1' => 'vendor.address1',
@@ -543,7 +543,7 @@ class BaseExport
 
         } elseif (isset($this->input['clients']) && count($this->input['clients']) > 0) {
 
-            $this->client_description = 'Multiple Clients';
+            $this->client_description = ctrans('texts.bis_multiple_clients');
             return $query->whereIn('client_id', $this->input['clients']);
         }
         return $query;
@@ -1353,8 +1353,8 @@ class BaseExport
         }
 
         if (in_array($date_range, ['all', 'all_time'], true)) {
-            $this->start_date = 'All available data';
-            $this->end_date = 'All available data';
+            $this->start_date = ctrans('texts.bis_all_available_data');
+            $this->end_date = ctrans('texts.bis_all_available_data');
 
             return $query;
         }

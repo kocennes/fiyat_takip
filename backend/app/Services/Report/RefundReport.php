@@ -142,7 +142,7 @@ class RefundReport extends BaseExport
                     $payment ? $payment->number : '',
                     $invoice['number'],
                     Number::formatMoney($invoice['amount'], $this->company),
-                    $gatewayRefund ? 'Yes' : 'No',
+                    $gatewayRefund ? ctrans('texts.yes') : ctrans('texts.no'),
                 ]);
             }
         }

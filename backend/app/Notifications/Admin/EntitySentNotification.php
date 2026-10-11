@@ -90,7 +90,7 @@ class EntitySentNotification extends Notification
         return (new SlackMessage())
                     ->from(ctrans('texts.notification_bot'))
                     ->success()
-                    ->image('https://app.invoiceninja.com/favicon-v2.png')
+                    ->image(asset('brand/bisavunma-icon-192.png'))
                     ->content(trans(
                         "texts.notification_{$this->entity_name}_sent_subject",
                         [

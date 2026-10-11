@@ -46,7 +46,7 @@ class ReportPreviewRequest extends Request
         $user = auth()->user();
 
         if (Ninja::isHosted() && $user->account->isFreeHostedClient()) {
-            $this->error_message = ctrans('texts.upgrade_to_view_reports');
+            $this->error_message = ctrans('texts.bis_feature_not_available');
             return false;
         }
 

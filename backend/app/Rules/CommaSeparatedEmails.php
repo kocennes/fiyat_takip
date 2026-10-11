@@ -71,20 +71,20 @@ class CommaSeparatedEmails implements ValidationRule
 
         // If no valid emails after splitting, fail validation
         if (empty($emails)) {
-            $fail('The :attribute must contain at least one valid email address.');
+            $fail(ctrans('texts.bis_emails_at_least_one'));
             return;
         }
 
         // Check if we exceed the maximum number of emails
         if (count($emails) > $this->maxEmails) {
-            $fail("The :attribute cannot contain more than {$this->maxEmails} email addresses.");
+            $fail(ctrans('texts.bis_emails_max_count', ['count' => $this->maxEmails]));
             return;
         }
 
         // Validate each email address
         foreach ($emails as $email) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $fail("The email address '{$email}' in :attribute is not valid.");
+                $fail(ctrans('texts.bis_email_invalid_in_list', ['email' => $email]));
                 return;
             }
         }
@@ -95,7 +95,7 @@ class CommaSeparatedEmails implements ValidationRule
      */
     public function message(): string
     {
-        return 'The :attribute must contain valid email addresses separated by commas.';
+        return ctrans('texts.bis_emails_comma_separated');
     }
 
     /**

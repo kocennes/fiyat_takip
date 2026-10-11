@@ -93,10 +93,10 @@ class ACSS implements LivewireMethodInterface
 
         if (isset($setup_intent->type)) {
 
-            $error = "There was a problem setting up this payment method for future use";
+            $error = ctrans('texts.bis_pd_payment_method_setup_failed');
 
             if (in_array($setup_intent->type, ["validation_error", "invalid_request_error"])) {
-                $error = "Please provide complete payment details.";
+                $error = ctrans('texts.bis_pd_complete_payment_details');
             }
 
             SystemLogger::dispatch(
@@ -120,7 +120,7 @@ class ACSS implements LivewireMethodInterface
             $data = Cache::pull($request->post_auth_response);
 
             if (!$data) {
-                throw new PaymentFailed("There was a problem storing this payment method", 500);
+                throw new PaymentFailed(ctrans('texts.bis_pd_problem_storing_payment_method'), 500);
             }
 
             $hash = PaymentHash::with('fee_invoice')->where('hash', $data['payment_hash'])->first();
@@ -292,7 +292,7 @@ class ACSS implements LivewireMethodInterface
         }
 
         //@phpstan-ignore-next-line
-        $error = $intent->last_payment_error?->message ?? $intent->cancellation_reason ?? "ACSS payment failed with status: {$intent->status}";
+        $error = $intent->last_payment_error?->message ?? $intent->cancellation_reason ?? ctrans('texts.bis_pd_payment_failed_with_status', ['gateway' => 'ACSS', 'status' => $intent->status]);
 
         return $this->processUnsuccessfulPayment($error);
     }
@@ -318,7 +318,7 @@ class ACSS implements LivewireMethodInterface
         if ($intent->status && $intent->status == 'processing') {
             $this->processSuccessfulPayment($intent->id);
         } else {
-            $e = new \Exception("There was a problem processing this payment method", 500);
+            $e = new \Exception(ctrans('texts.bis_pd_problem_processing_payment_method'), 500);
             $this->stripe->processInternallyFailedPayment($this->stripe, $e);
         }
 
@@ -358,7 +358,7 @@ class ACSS implements LivewireMethodInterface
     {
         $server_response = $this->stripe->payment_hash->data;
 
-        $this->stripe->sendFailureMail($error ?: 'ACSS payment was not successful');
+        $this->stripe->sendFailureMail($error ?: ctrans('texts.bis_pd_payment_not_successful', ['gateway' => 'ACSS']));
 
         $message = [
             'server_response' => $server_response,
@@ -374,7 +374,7 @@ class ACSS implements LivewireMethodInterface
             $this->stripe->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
 
     /**
@@ -407,7 +407,7 @@ class ACSS implements LivewireMethodInterface
         } catch (\Exception $e) {
 
             nlog("ACSS::Error: " . $e->getMessage());
-            $e = new \Exception("There was a problem processing this payment method", 500);
+            $e = new \Exception(ctrans('texts.bis_pd_problem_processing_payment_method'), 500);
             return $this->stripe->processInternallyFailedPayment($this->stripe, $e);
         }
     }

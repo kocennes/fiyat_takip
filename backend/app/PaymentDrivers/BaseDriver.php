@@ -472,7 +472,7 @@ class BaseDriver extends AbstractPaymentDriver
     public function sendFailureMail($error)
     {
         if (is_object($error)) {
-            $error = 'Payment Aborted';
+            $error = ctrans('texts.bis_pd_payment_aborted');
         }
 
         if (! is_null($this->payment_hash)) { //@phpstan-ignore-line
@@ -508,7 +508,7 @@ class BaseDriver extends AbstractPaymentDriver
     /*Generic Global unsuccessful transaction method when the client is present*/
     public function processUnsuccessfulTransaction($response, $client_present = true)
     {
-        $error = array_key_exists('error', $response) ? $response['error'] : 'Undefined Error';
+        $error = array_key_exists('error', $response) ? $response['error'] : ctrans('texts.bis_pd_unknown_error');
 
         $this->sendFailureMail($error);
 
@@ -719,7 +719,7 @@ class BaseDriver extends AbstractPaymentDriver
         App::setLocale($this->client->company->locale());
 
         if (! $this->payment_hash || !$this->client) {
-            return 'No description';
+            return ctrans('texts.bis_pd_no_description');
         }
 
         $invoices_string = \implode(', ', collect($this->payment_hash->invoices())->pluck('invoice_number')->toArray()) ?: null;

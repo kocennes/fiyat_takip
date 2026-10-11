@@ -116,7 +116,7 @@ class AuthorizeACH implements LivewireMethodInterface
             $client_gateway_token = (new AuthorizePaymentMethod($this->authorize))->authorizeBankTransferResponse($data);
 
             if (!$client_gateway_token) {
-                throw new PaymentFailed('Could not find the payment profile', 400);
+                throw new PaymentFailed(ctrans('texts.bis_pd_payment_profile_not_found'), 400);
             }
         }
 

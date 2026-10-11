@@ -1,5 +1,5 @@
 @extends('portal.ninja2020.layout.error')
 
-@section('title', __('Unauthorized'))
+@section('title', ctrans('texts.bis_error_unauthorized'))
 @section('code', '401')
-@section('message', __('Unauthorized'))
+@section('message', ctrans('texts.bis_error_unauthorized'))

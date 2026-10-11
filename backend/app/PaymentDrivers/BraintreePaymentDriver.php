@@ -222,9 +222,9 @@ class BraintreePaymentDriver extends BaseDriver
         $total_taxes = Invoice::query()->whereIn('id', $this->transformKeys(array_column($payment_hash->invoices(), 'invoice_id')))->withTrashed()->sum('total_taxes');
 
         if ($invoice) {
-            $description = "Invoice {$invoice->number} for {$amount} for client {$this->client->present()->name()}";
+            $description = ctrans('texts.bis_pd_desc_invoice_for_client', ['invoice' => $invoice->number, 'amount' => $amount, 'client' => $this->client->present()->name()]);
         } else {
-            $description = "Payment with no invoice for amount {$amount} for client {$this->client->present()->name()}";
+            $description = ctrans('texts.gateway_payment_text_no_invoice', ['amount' => $amount, 'client' => $this->client->present()->name()]);
         }
 
         $this->init();

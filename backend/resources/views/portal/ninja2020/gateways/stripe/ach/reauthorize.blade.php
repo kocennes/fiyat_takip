@@ -1,4 +1,4 @@
-@extends('portal.ninja2020.layout.payments', ['gateway_title' => 'ACH (Authorization)', 'card_title' => 'ACH (Authorization)'])
+@extends('portal.ninja2020.layout.payments', ['gateway_title' => ctrans('texts.bis_ach_authorization_title'), 'card_title' => ctrans('texts.bis_ach_authorization_title')])
 
 @section('gateway_head')
     @if($gateway->company_gateway->getConfigField('account_id'))

@@ -35,6 +35,6 @@ class VerifyHash
             return $next($request);
         }
 
-        abort(404, 'Unable to verify payment hash');
+        abort(404, ctrans('texts.bis_payment_hash_unverified'));
     }
 }

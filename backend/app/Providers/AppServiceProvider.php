@@ -91,7 +91,8 @@ class AppServiceProvider extends ServiceProvider
 
         /** Catch any jobs that run past their timeout or max attempts */
         Queue::failing(function (JobFailed $event) {
-            if (! app()->bound('sentry')) {
+            // Error reporting stays off unless a DSN has been configured explicitly.
+            if (! app()->bound('sentry') || ! config('sentry.dsn')) {
                 return;
             }
     

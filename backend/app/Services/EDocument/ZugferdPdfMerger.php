@@ -99,9 +99,9 @@ class ZugferdPdfMerger
     private function creatorTool(): string
     {
         try {
-            return (string) config('ninja.app_name', 'Invoice Ninja');
+            return (string) config('ninja.app_name', 'BISAVUNMA Fiyat Takip');
         } catch (\Throwable) {
-            return 'Invoice Ninja';
+            return 'BISAVUNMA Fiyat Takip';
         }
     }
 }

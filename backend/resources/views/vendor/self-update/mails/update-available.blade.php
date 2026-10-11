@@ -1,5 +1,5 @@
-Hello!
+{{ ctrans('texts.bis_mail_hello') }}
 
-The new version {{ $newVersion }} is available.
+{{ ctrans('texts.bis_new_version_available', ['version' => $newVersion]) }}
 
-Kind regards
+{{ ctrans('texts.bis_mail_regards') }}

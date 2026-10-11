@@ -33,7 +33,7 @@ class SetInviteDb
         $request->session()->regenerateToken();
 
         $error = [
-            'message' => 'I could not find the database for this object.',
+            'message' => ctrans('texts.bis_database_not_found_for_object'),
             'errors' => new stdClass(),
         ];
 
@@ -53,7 +53,7 @@ class SetInviteDb
         }
 
         if (! in_array($entity, ['invoice', 'quote', 'credit', 'recurring_invoice', 'purchase_order'])) {
-            abort(404, 'I could not find this resource.');
+            abort(404, ctrans('texts.bis_resource_not_found'));
         }
 
         /* Try and determine the DB from the invitation key STRING*/
@@ -79,7 +79,7 @@ class SetInviteDb
             if (request()->json) {
                 return response()->json($error, 403);
             } else {
-                abort(404, 'I could not find this resource.');
+                abort(404, ctrans('texts.bis_resource_not_found'));
             }
         }
 

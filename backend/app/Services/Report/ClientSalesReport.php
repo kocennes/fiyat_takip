@@ -304,7 +304,7 @@ class ClientSalesReport extends BaseExport
     private function resolveMonthAxis(): void
     {
         $dateRange = $this->input['date_range'] ?? '';
-        $unresolved = in_array($dateRange, ['all', 'all_time'], true) || $this->start_date === 'All available data' || empty($this->start_date) || empty($this->end_date);
+        $unresolved = in_array($dateRange, ['all', 'all_time'], true) || in_array($this->start_date, ['All available data', ctrans('texts.bis_all_available_data')], true) || empty($this->start_date) || empty($this->end_date);
 
         if ($unresolved) {
             // No explicit range: derive an end date from the most recent

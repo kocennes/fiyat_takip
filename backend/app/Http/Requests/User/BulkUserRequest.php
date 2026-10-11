@@ -61,6 +61,6 @@ class BulkUserRequest extends Request
 
     protected function failedAuthorization()
     {
-        throw new AuthorizationException("This Action is unauthorized.");
+        throw new AuthorizationException(ctrans('texts.authorization_failure'));
     }
 }

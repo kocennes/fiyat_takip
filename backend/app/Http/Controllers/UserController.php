@@ -199,7 +199,7 @@ class UserController extends BaseController
     public function destroy(DestroyUserRequest $request, User $user)
     {
         if ($user->hasOwnerFlag()) {
-            return response()->json(['message', 'Cannot detach owner.'], 401);
+            return response()->json(['message' => ctrans('texts.bis_cannot_detach_owner')], 401);
         }
 
         /* If the user passes the company user we archive the company user */
@@ -272,7 +272,7 @@ class UserController extends BaseController
                                     ->first();
 
         if ($company_user->is_owner) {
-            return response()->json(['message', 'Cannot detach owner.'], 401);
+            return response()->json(['message' => ctrans('texts.bis_cannot_detach_owner')], 401);
         }
 
         $company_user->tokens()->where('company_id', $company_user->company_id)->where('user_id', $company_user->user_id)->forceDelete();

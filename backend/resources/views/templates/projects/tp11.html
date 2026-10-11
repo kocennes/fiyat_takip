@@ -56,14 +56,14 @@
         {% for project in projects %}
 
         <h1>{{ project.name }}</h1>
-        <h3>Due: {{ project.due_date }}</h3>
-        <h6>{{ project.current_hours }} / {{ project.budgeted_hours }}: (Hours / Budgeted Hours @ {{ project.task_rate }}) - Report generated on {{ "now"|date('Y-m-d') }}</h6>
+        <h3>{{ t('due_date') }}: {{ project.due_date }}</h3>
+        <h6>{{ project.current_hours }} / {{ project.budgeted_hours }}: ({{ t('hours') }} / {{ t('budgeted_hours') }} @ {{ project.task_rate }}) - {{ t('created_on') }}: {{ "now"|date('Y-m-d') }}</h6>
         <table>
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Duration</th>
+                    <th>{{ t('date') }}</th>
+                    <th>{{ t('description') }}</th>
+                    <th>{{ t('duration') }}</th>
                 </tr>
             </thead>
             <tbody>

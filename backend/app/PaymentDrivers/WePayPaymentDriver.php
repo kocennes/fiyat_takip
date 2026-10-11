@@ -51,7 +51,7 @@ class WePayPaymentDriver extends BaseDriver
 
     public function init()
     {
-        throw new \Exception("Gateway no longer supported", 500);
+        throw new \Exception(ctrans('texts.bis_pd_gateway_not_supported'), 500);
 
 
         // return $this;

@@ -38,10 +38,15 @@ class TestMailServer extends Mailable
         $settings->email_style = 'dark';
         $settings->email_alignment = 'left';
 
+        // Callers pass a fixed English sentence; show it in the user's language.
+        $support_message = $this->support_messages === 'Email Server Works!'
+            ? ctrans('texts.bis_email_server_works')
+            : $this->support_messages;
+
         return $this->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject(ctrans('texts.email'))
+            ->subject(ctrans('texts.bis_test_email_subject'))
             ->markdown('email.support.message', [
-                'support_message' => $this->support_messages,
+                'support_message' => $support_message,
                 'system_info' => '',
                 'laravel_log' => [],
                 'settings' => $settings,

@@ -245,7 +245,7 @@ class CheckoutComPaymentDriver extends BaseDriver
         $subdomain = substr($clientId, strlen('cli_'), 8);
 
         if (! str_starts_with($clientId, 'cli_') || ! preg_match('/^[a-z0-9]{8}$/', $subdomain)) {
-            throw new CheckoutArgumentException('Checkout.com client ID must start with cli_ and contain at least eight lowercase letters or numbers.');
+            throw new CheckoutArgumentException(ctrans('texts.bis_pd_checkout_client_id_invalid'));
         }
 
         return $subdomain;
@@ -449,7 +449,7 @@ class CheckoutComPaymentDriver extends BaseDriver
             } catch (CheckoutAuthorizationException $e) {
                 // Bad Invalid authorization
 
-                throw new PaymentFailed("Checkout Gateway credentials are invalid", 400);
+                throw new PaymentFailed(ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'Checkout.com']), 400);
             }
 
             return $response;
@@ -537,7 +537,7 @@ class CheckoutComPaymentDriver extends BaseDriver
         $paymentRequest->amount = $this->convertToCheckoutAmount($amount, $this->client->getCurrencyCode());
         $paymentRequest->reference = '#' . $invoice->number . ' - ' . now();
         $paymentRequest->customer = $this->getCustomer();
-        $paymentRequest->metadata = ['udf1' => 'Invoice Ninja', 'udf2' => $payment_hash->hash];
+        $paymentRequest->metadata = ['udf1' => 'BISAVUNMA Fiyat Takip', 'udf2' => $payment_hash->hash];
         $paymentRequest->currency = $this->client->getCurrencyCode();
 
         $processingChannelId = $this->company_gateway->getConfigField('processingChannelId');

@@ -31,7 +31,7 @@ class ImportPancakeDatabase extends Command
      * @var string
      */
     protected $signature = 'ninja:import-pancake-db
-                            {api_token : Invoice Ninja API token used to create records}
+                            {api_token : BISAVUNMA Fiyat Takip API token used to create records}
                             {--source-connection=pancake : Runtime or configured Pancake database connection name}
                             {--source-url= : Pancake MariaDB connection URL}
                             {--source-host= : Pancake database host}
@@ -41,7 +41,7 @@ class ImportPancakeDatabase extends Command
                             {--source-password= : Pancake database password}
                             {--source-socket= : Pancake database Unix socket}
                             {--table-prefix=pancake_ : Prefix used by Pancake tables}
-                            {--api-url= : Invoice Ninja base URL; defaults to APP_URL}
+                            {--api-url= : BISAVUNMA Fiyat Takip base URL; defaults to APP_URL}
                             {--business-identity= : Pancake business identity ID to import; use 0 for unassigned clients}
                             {--entities= : Comma-separated entity list; omit to import all supported data}
                             {--state= : JSON checkpoint path; defaults below storage/app/pancake-import}
@@ -57,7 +57,7 @@ class ImportPancakeDatabase extends Command
      *
      * @var string
      */
-    protected $description = 'Import a Pancake MariaDB database into Invoice Ninja through the API';
+    protected $description = 'Import a Pancake MariaDB database into BISAVUNMA Fiyat Takip through the API';
 
     public function __construct(
         private readonly DatabaseManager $database,
@@ -76,13 +76,13 @@ class ImportPancakeDatabase extends Command
             $api_token = trim((string) $this->argument('api_token'));
 
             if ($api_token === '') {
-                throw new InvalidArgumentException('An Invoice Ninja API token is required.');
+                throw new InvalidArgumentException('A BISAVUNMA Fiyat Takip API token is required.');
             }
 
             $api_url = rtrim($this->optionString('api-url') ?: (string) config('app.url'), '/');
 
             if (! filter_var($api_url, FILTER_VALIDATE_URL) || ! preg_match('/^https?:\/\//i', $api_url)) {
-                throw new InvalidArgumentException('The Invoice Ninja --api-url must be a valid HTTP or HTTPS URL.');
+                throw new InvalidArgumentException('The BISAVUNMA Fiyat Takip --api-url must be a valid HTTP or HTTPS URL.');
             }
 
             $prefix = (string) ($this->option('table-prefix') ?? 'pancake_');
@@ -150,7 +150,7 @@ class ImportPancakeDatabase extends Command
                 'Recurring templates are created as drafts. Pancake installment schedules are retained in invoice notes; they are not activated as billing jobs.',
             );
             $this->components->warn(
-                'Pancake staff users are imported first without their legacy passwords. Inactive users are locked; active users must set an Invoice Ninja password.',
+                'Pancake staff users are imported first without their legacy passwords. Inactive users are locked; active users must set a BISAVUNMA Fiyat Takip password.',
             );
 
             $result = $this->importer->import(
@@ -191,7 +191,7 @@ class ImportPancakeDatabase extends Command
             $unsupported = $this->source->unsupportedCounts();
 
             if ($unsupported !== []) {
-                $this->components->warn('Pancake rows without a safe Invoice Ninja API equivalent were not imported:');
+                $this->components->warn('Pancake rows without a safe BISAVUNMA Fiyat Takip API equivalent were not imported:');
                 $this->table(
                     ['Source table', 'Rows'],
                     array_map(

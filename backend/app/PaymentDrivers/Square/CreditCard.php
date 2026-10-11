@@ -147,9 +147,9 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
         $invoice = Invoice::query()->whereIn('id', $this->transformKeys(array_column($this->square_driver->payment_hash->invoices(), 'invoice_id')))->withTrashed()->first();
 
         if ($invoice) {
-            $description = "Invoice {$invoice->number} for {$amount} for client {$this->square_driver->client->present()->name()}";
+            $description = ctrans('texts.bis_pd_desc_invoice_for_client', ['invoice' => $invoice->number, 'amount' => $amount, 'client' => $this->square_driver->client->present()->name()]);
         } else {
-            $description = "Payment with no invoice for amount {$amount} for client {$this->square_driver->client->present()->name()}";
+            $description = ctrans('texts.gateway_payment_text_no_invoice', ['amount' => $amount, 'client' => $this->square_driver->client->present()->name()]);
         }
 
         $amount_money = new \Square\Models\Money();
@@ -242,7 +242,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
         $body = \json_decode($response->getBody());
 
         $error = $body->errors[0]->detail
-            ?? ($response->getBody() ?: 'Unknown error from Square.');
+            ?? ($response->getBody() ?: ctrans('texts.bis_pd_unknown_gateway_error', ['gateway' => 'Square']));
 
         $data = [
             'response' => $response,
@@ -292,7 +292,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
 
         } else {
             $message = $body->errors[0]->detail
-                ?? ($api_response->getBody() ?: 'Unknown error from Square card creation.');
+                ?? ($api_response->getBody() ?: ctrans('texts.bis_pd_unknown_gateway_error', ['gateway' => 'Square']));
 
             throw new PaymentFailed($message, 500);
         }

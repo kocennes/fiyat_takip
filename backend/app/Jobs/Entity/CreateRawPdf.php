@@ -171,7 +171,7 @@ class CreateRawPdf
             $pdf = $ps->boot()->getPdf();
         } catch (\Throwable $e) {
             nlog($e->getMessage());
-            throw new FilePermissionsFailure('Unable to generate the raw PDF => ' . $e->getMessage());
+            throw new FilePermissionsFailure(ctrans('texts.bis_pdf_generation_failed') . ' => ' . $e->getMessage());
         }
 
         // Prefer the resolved settings on PdfService over the raw

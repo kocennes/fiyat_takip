@@ -29,7 +29,7 @@ class ImportHarvest extends Command
      * @var string
      */
     protected $signature = 'ninja:import-harvest
-                            {api_token : Invoice Ninja API token used to create records}
+                            {api_token : BISAVUNMA Fiyat Takip API token used to create records}
                             {directory : Directory containing Harvest CSV exports}
                             {--entities= : Comma-separated list: clients (includes contacts), users, projects, tasks, time_entries, expense_categories, expenses, invoices, invoice_payments, estimates. Omit to import all}
                             {--resolve-currency : Resolve each client currency from its parsed country}
@@ -41,7 +41,7 @@ class ImportHarvest extends Command
      *
      * @var string
      */
-    protected $description = 'Import Harvest CSV exports into Invoice Ninja through the API';
+    protected $description = 'Import Harvest CSV exports into BISAVUNMA Fiyat Takip through the API';
 
     public function __construct(private readonly CsvImporter $importer)
     {
@@ -53,7 +53,7 @@ class ImportHarvest extends Command
         $api_token = trim((string) $this->argument('api_token'));
 
         if ($api_token === '') {
-            $this->error('An Invoice Ninja API token is required.');
+            $this->error('A BISAVUNMA Fiyat Takip API token is required.');
 
             return self::FAILURE;
         }
@@ -1043,7 +1043,7 @@ class ImportHarvest extends Command
         ksort($unmatched_invoices);
         $this->newLine();
         $this->components->warn(sprintf(
-            '%d Harvest invoice ID(s) could not be matched to an Invoice Ninja invoice:',
+            '%d Harvest invoice ID(s) could not be matched to a BISAVUNMA Fiyat Takip invoice:',
             count($unmatched_invoices),
         ));
 
@@ -1062,7 +1062,7 @@ class ImportHarvest extends Command
         ksort($unmatched_projects);
         $this->newLine();
         $this->components->warn(sprintf(
-            '%d Harvest project(s) could not be matched to an Invoice Ninja project:',
+            '%d Harvest project(s) could not be matched to a BISAVUNMA Fiyat Takip project:',
             count($unmatched_projects),
         ));
 
@@ -1122,7 +1122,7 @@ class ImportHarvest extends Command
         ksort($unmatched_clients);
         $this->newLine();
         $this->components->warn(sprintf(
-            '%d client name(s) could not be matched to an Invoice Ninja client ID:',
+            '%d client name(s) could not be matched to a BISAVUNMA Fiyat Takip client ID:',
             count($unmatched_clients),
         ));
 

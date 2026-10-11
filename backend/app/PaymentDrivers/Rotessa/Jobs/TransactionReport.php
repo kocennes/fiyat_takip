@@ -133,7 +133,7 @@ class TransactionReport implements ShouldQueue
                                                 ]);
 
                                             } else {
-                                                $error = 'Payment for ' . $payment->client->present()->name() . " for {$payment->amount} failed";
+                                                $error = ctrans('texts.bis_pd_payment_for_client_failed', ['client' => $payment->client->present()->name(), 'amount' => $payment->amount]);
                                             }
 
                                             PaymentFailedMailer::dispatch(

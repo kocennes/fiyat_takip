@@ -81,9 +81,9 @@ class UpdateVendorRequest extends Request
     public function messages()
     {
         return [
-            'email' => ctrans('validation.email', ['attribute' => 'email']),
-            'name.required' => ctrans('validation.required', ['attribute' => 'name']),
-            'required' => ctrans('validation.required', ['attribute' => 'email']),
+            'email' => ctrans('validation.email', ['attribute' => ctrans('texts.email')]),
+            'name.required' => ctrans('validation.required', ['attribute' => ctrans('texts.name')]),
+            'required' => ctrans('validation.required', ['attribute' => ctrans('texts.email')]),
         ];
     }
 

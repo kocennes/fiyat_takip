@@ -41,7 +41,7 @@ class ProductController extends BaseController
         $company = Company::where('company_key', $request->header('X-API-COMPANY-KEY'))->firstOrFail();
 
         if (! $company->enable_shop_api) {
-            return response()->json(['message' => 'Shop is disabled', 'errors' => new stdClass()], 403);
+            return response()->json(['message' => ctrans('texts.bis_shop_disabled'), 'errors' => new stdClass()], 403);
         }
 
         $products = Product::where('company_id', $company->id);
@@ -55,7 +55,7 @@ class ProductController extends BaseController
         $company = Company::where('company_key', $request->header('X-API-COMPANY-KEY'))->firstOrFail();
 
         if (! $company->enable_shop_api) {
-            return response()->json(['message' => 'Shop is disabled', 'errors' => new stdClass()], 403);
+            return response()->json(['message' => ctrans('texts.bis_shop_disabled'), 'errors' => new stdClass()], 403);
         }
 
         $product = Product::where('company_id', $company->id)

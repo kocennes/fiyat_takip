@@ -244,13 +244,16 @@ class JsonDesignService
             ? $content
             : "<div class=\"invoice-container\">\n{$content}\n</div>";
 
+        $documentLang = htmlspecialchars(str_replace('_', '-', (string) app()->getLocale()), ENT_QUOTES, 'UTF-8');
+        $documentTitle = htmlspecialchars(ctrans('texts.' . ($this->pdfService->config->entity_string ?? 'invoice')), ENT_QUOTES, 'UTF-8');
+
         return <<<HTML
             <!DOCTYPE html>
-            <html lang="en">
+            <html lang="{$documentLang}">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Invoice</title>
+                <title>{$documentTitle}</title>
                 <style>
                     {$pageCSS}
                 </style>

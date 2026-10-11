@@ -4,9 +4,9 @@
 # {{ $greeting }}
 @else
 @if ($level === 'error')
-# @lang('Whoops!')
+# {{ ctrans('texts.bis_mail_whoops') }}
 @else
-# @lang('Hello!')
+# {{ ctrans('texts.bis_mail_hello') }}
 @endif
 @endif
 
@@ -43,20 +43,13 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-@lang('Regards'),<br>{{ config('app.name') }}
+{{ ctrans('texts.bis_mail_regards') }},<br>{{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}
 @endif
 
 {{-- Subcopy --}}
 @isset($actionText)
 @slot('subcopy')
-@lang(
-    "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
-    'into your web browser: [:actionURL](:actionURL)',
-    [
-        'actionText' => $actionText,
-        'actionURL' => $actionUrl,
-    ]
-)
+{{ ctrans('texts.bis_mail_button_trouble', ['actiontext' => $actionText, 'actionurl' => $actionUrl]) }}
 @endslot
 @endisset
 @endcomponent

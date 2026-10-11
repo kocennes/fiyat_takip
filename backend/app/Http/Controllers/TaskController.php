@@ -705,6 +705,6 @@ class TaskController extends BaseController
             }
         }
 
-        return response()->json(['message' => 'Ok'], 200);
+        return response()->json(['message' => ctrans('texts.ok')], 200);
     }
 }

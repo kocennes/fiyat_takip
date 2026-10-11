@@ -86,7 +86,7 @@ class PaymentAppliedValidAmount implements Rule
             foreach ($this->input['invoices'] as $invoice) {
 
                 if(!is_array($invoice) || !array_key_exists('amount', $invoice) || !array_key_exists('invoice_id', $invoice)){
-                    $this->message = 'Invalid invoice data. amount and invoice_id are required.';
+                    $this->message = ctrans('texts.bis_invalid_invoice_data');
                     return false;
                 }
 
@@ -97,14 +97,14 @@ class PaymentAppliedValidAmount implements Rule
                 if ($inv->status_id == Invoice::STATUS_DRAFT && $inv->amount >= $invoice['amount']) {
 
                 } elseif ($inv->balance < $invoice['amount']) {
-                    $this->message = 'Amount cannot be greater than invoice balance';
+                    $this->message = ctrans('texts.bis_amount_exceeds_invoice_balance');
 
                     return false;
                 }
             }
 
             if (count($this->input['invoices']) >= 1 && $payment->status_id == Payment::STATUS_PENDING) {
-                $this->message = 'Cannot apply a payment until the status is completed.';
+                $this->message = ctrans('texts.bis_payment_not_completed');
                 return false;
             }
 

@@ -49,7 +49,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
             $data['client_token'] = $this->braintree->gateway->clientToken()->generate();
         } catch (\Exception $e) {
 
-            throw new PaymentFailed("Unable to generate client token, check your Braintree credentials. Error: " . $e->getMessage(), 500);
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_configuration_error_details', ['gateway' => 'Braintree', 'error' => $e->getMessage()]), 500);
 
         }
 
@@ -202,7 +202,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
 
     private function processUnsuccessfulPayment($response)
     {
-        $this->braintree->sendFailureMail($response->transaction->additionalProcessorResponse ?? 'Unknown error occurred');
+        $this->braintree->sendFailureMail($response->transaction->additionalProcessorResponse ?? ctrans('texts.bis_pd_unknown_error_occurred'));
 
         $message = [
             'server_response' => $response,

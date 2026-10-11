@@ -88,7 +88,7 @@ trait AppSetup
         $result = file_put_contents(base_path('.env'), $env);
 
         if ($result === false) {
-            throw new \RuntimeException("Failed to write to .env file at " . base_path('.env') . ". Check file permissions.");
+            throw new \RuntimeException(ctrans('texts.bis_env_write_failed', ['path' => base_path('.env')]));
         }
     }
 }

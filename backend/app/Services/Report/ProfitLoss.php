@@ -502,7 +502,7 @@ class ProfitLoss
             $map->tax = $tax = $this->getConvertedTotal($expense_tax_total, $expense->exchange_rate); //tax component
             $map->net_converted_total = $expense->uses_inclusive_taxes ? ($converted_total - $tax) : $converted_total; //excludes all taxes
             $map->category_id = $expense->category_id;
-            $map->category_name = $expense->category ? $expense->category->name : 'No Category Defined';
+            $map->category_name = $expense->category ? $expense->category->name : ctrans('texts.uncategorized');
             $map->currency_id = $expense->currency_id ?: $expense->company->settings->currency_id;
             $map->currency = $expense->currency ? $expense->currency->code : $company_currency_code;
             $map->foreign_tax_amount = $expense_tax_total;

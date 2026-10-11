@@ -50,17 +50,17 @@ class TwilioController extends BaseController
         $user = auth()->user();
 
         if (!$user->email_verified_at) {
-            return response()->json(['message' => 'Please verify your email address before verifying your phone number'], 400);
+            return response()->json(['message' => ctrans('texts.bis_verify_email_before_phone')], 400);
         }
 
         $account = $user->company()->account;
 
         if (!$this->checkPhoneValidity($request->phone)) {
-            return response()->json(['message' => 'This phone number is not supported'], 400);
+            return response()->json(['message' => ctrans('texts.bis_phone_not_supported')], 400);
         }
 
         if (MultiDB::hasPhoneNumber($request->phone)) {
-            return response()->json(['message' => 'This phone number has already been verified with another account'], 400);
+            return response()->json(['message' => ctrans('texts.bis_phone_verified_other_account')], 400);
         }
 
         $sid = config('ninja.twilio_account_sid');
@@ -76,14 +76,14 @@ class TwilioController extends BaseController
                                    ->verifications
                                    ->create($request->phone, "sms");
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Invalid phone number please use + country code + number ie. +15552343334'], 400);
+            return response()->json(['message' => ctrans('texts.bis_invalid_phone_format')], 400);
         }
 
         $account->account_sms_verification_code = $verification->sid;
         $account->account_sms_verification_number = $request->phone;
         $account->save();
 
-        return response()->json(['message' => 'Code sent.'], 200);
+        return response()->json(['message' => ctrans('texts.bis_code_sent')], 200);
     }
 
     private function checkPhoneValidity(string $phone): bool
@@ -162,11 +162,11 @@ class TwilioController extends BaseController
                 \Modules\Admin\Jobs\Account\UserQualityCheck::dispatch($user, $user->company()->db);
             }
 
-            return response()->json(['message' => 'SMS verified'], 200);
+            return response()->json(['message' => ctrans('texts.bis_sms_verified')], 200);
         }
 
 
-        return response()->json(['message' => 'SMS not verified'], 400);
+        return response()->json(['message' => ctrans('texts.bis_sms_not_verified')], 400);
     }
 
     /**
@@ -182,20 +182,20 @@ class TwilioController extends BaseController
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            return response()->json(['message' => 'Unable to retrieve user.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_unable_to_retrieve_user')], 400);
         }
 
         if (!$user->email_verified_at) {
-            return response()->json(['message' => 'Please verify your email address before verifying your phone number'], 400);
+            return response()->json(['message' => ctrans('texts.bis_verify_email_before_phone')], 400);
         }
 
 
         if (!$user->first_name || !$user->last_name) {
-            return response()->json(['message' => 'Please update your first and/or last name in the User Details before verifying your number.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_update_name_before_phone')], 400);
         }
 
         if (!$user->phone || empty($user->phone)) {
-            return response()->json(['message' => 'User found, but no valid phone number on file, please contact support.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_no_phone_contact_admin')], 400);
         }
 
         $sid = config('ninja.twilio_account_sid');
@@ -210,13 +210,13 @@ class TwilioController extends BaseController
                                    ->verifications
                                    ->create($user->phone, "sms");
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Invalid phone number on file, we are unable to reset. Please contact support.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_invalid_phone_on_file')], 400);
         }
 
         $user->sms_verification_code = $verification->sid;
         $user->save();
 
-        return response()->json(['message' => 'Code sent.'], 200);
+        return response()->json(['message' => ctrans('texts.bis_code_sent')], 200);
     }
 
     /**
@@ -230,7 +230,7 @@ class TwilioController extends BaseController
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            return response()->json(['message' => 'Unable to retrieve user.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_unable_to_retrieve_user')], 400);
         }
 
         $sid = config('ninja.twilio_account_sid');
@@ -251,17 +251,17 @@ class TwilioController extends BaseController
             if ($request->query('validate_only') == 'true') {
                 $user->verified_phone_number = true;
                 $user->save();
-                return response()->json(['message' => 'SMS verified'], 200);
+                return response()->json(['message' => ctrans('texts.bis_sms_verified')], 200);
             }
 
             $user->google_2fa_secret = null;
             $user->sms_verification_code = '';
             $user->save();
 
-            return response()->json(['message' => 'SMS verified, 2FA disabled.'], 200);
+            return response()->json(['message' => ctrans('texts.bis_sms_verified_2fa_disabled')], 200);
         }
 
-        return response()->json(['message' => 'SMS not verified.'], 400);
+        return response()->json(['message' => ctrans('texts.bis_sms_not_verified')], 400);
     }
 
     // public function validatePhoneNumber()

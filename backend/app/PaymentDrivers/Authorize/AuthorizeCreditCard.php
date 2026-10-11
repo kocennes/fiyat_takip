@@ -187,7 +187,7 @@ class AuthorizeCreditCard implements LivewireMethodInterface
             ];
 
             $code = 'Error';
-            $description = 'There was an error processing the payment';
+            $description = ctrans('texts.bis_pd_error_processing_payment');
 
             if ($response->getErrors() != null) {
                 $code = $response->getErrors()[0]->getErrorCode();
@@ -264,7 +264,7 @@ class AuthorizeCreditCard implements LivewireMethodInterface
         $amount = array_key_exists('amount_with_fee', $data) ? $data['amount_with_fee'] : 0;
 
         $code = 1;
-        $description = 'There was an error processing the payment';
+        $description = ctrans('texts.bis_pd_error_processing_payment');
 
         if ($response && $response->getErrors() != null) {
             $code = (int) $response->getErrors()[0]->getErrorCode();

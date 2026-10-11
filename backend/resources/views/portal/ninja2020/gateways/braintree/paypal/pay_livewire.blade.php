@@ -37,7 +37,7 @@
                             data-token="{{ $token->token }}"
                             name="payment-type"
                             class="form-radio cursor-pointer toggle-payment-with-token"/>
-                        <span class="ml-1">{{ property_exists($token->meta, 'email') ? $token->meta?->email : 'no email provided'}}</span>
+                        <span class="ml-1">{{ property_exists($token->meta, 'email') ? $token->meta?->email : ctrans('texts.bis_no_email_provided') }}</span>
                     </label>
                 </li>
                 @endforeach

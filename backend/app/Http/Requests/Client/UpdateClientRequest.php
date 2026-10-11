@@ -85,22 +85,22 @@ class UpdateClientRequest extends Request
 
         $rules['custom_value1'] = ['bail','nullable','sometimes',function ($attribute, $value, $fail) {
             if (is_array($value)) {
-                $fail("The $attribute must not be an array.");
+                $fail(ctrans('texts.bis_attribute_not_array', ['attribute' => $attribute]));
             }
         }];
         $rules['custom_value2'] = ['bail','nullable','sometimes',function ($attribute, $value, $fail) {
             if (is_array($value)) {
-                $fail("The $attribute must not be an array.");
+                $fail(ctrans('texts.bis_attribute_not_array', ['attribute' => $attribute]));
             }
         }];
         $rules['custom_value3'] = ['bail','nullable','sometimes',function ($attribute, $value, $fail) {
             if (is_array($value)) {
-                $fail("The $attribute must not be an array.");
+                $fail(ctrans('texts.bis_attribute_not_array', ['attribute' => $attribute]));
             }
         }];
         $rules['custom_value4'] = ['bail','nullable','sometimes',function ($attribute, $value, $fail) {
             if (is_array($value)) {
-                $fail("The $attribute must not be an array.");
+                $fail(ctrans('texts.bis_attribute_not_array', ['attribute' => $attribute]));
             }
         }];
 
@@ -121,7 +121,7 @@ class UpdateClientRequest extends Request
             $company = $user->company();
 
             if (isset($this->settings['lock_invoices']) && $company->verifactuEnabled() && $this->settings['lock_invoices'] != 'when_sent') {
-                $validator->errors()->add('settings.lock_invoices', 'Locked Invoices Cannot Be Disabled');
+                $validator->errors()->add('settings.lock_invoices', ctrans('texts.bis_locked_invoices_cannot_be_disabled'));
             }
 
         });
@@ -130,9 +130,9 @@ class UpdateClientRequest extends Request
     public function messages()
     {
         return [
-            'email' => ctrans('validation.email', ['attribute' => 'email']),
-            'name.required' => ctrans('validation.required', ['attribute' => 'name']),
-            'required' => ctrans('validation.required', ['attribute' => 'email']),
+            'email' => ctrans('validation.email', ['attribute' => ctrans('texts.email')]),
+            'name.required' => ctrans('validation.required', ['attribute' => ctrans('texts.name')]),
+            'required' => ctrans('validation.required', ['attribute' => ctrans('texts.email')]),
             'contacts.*.password.min' => ctrans('texts.password_strength'),
             'contacts.*.password.regex' => ctrans('texts.password_strength'),
             'contacts.*.password.string' => ctrans('texts.password_strength'),

@@ -682,6 +682,6 @@ class ExpenseController extends BaseController
             ImportEDocument::dispatch($file->get(), $parsed_filename, $file->getMimeType(), $user->company());
         }
 
-        return response()->json(['message' => 'Processing....'], 200);
+        return response()->json(['message' => ctrans('texts.processing')], 200);
     }
 }

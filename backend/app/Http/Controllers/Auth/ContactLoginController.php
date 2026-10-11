@@ -91,7 +91,7 @@ class ContactLoginController extends Controller
         if ($company) {
             $account = $company->account;
         } else {
-            abort(404, "We could not find this site, if you think this is an error, please contact the administrator.");
+            abort(404, ctrans('texts.bis_site_not_found_contact_admin'));
         }
 
         return $this->render('auth.login', ['account' => $account, 'company' => $company]);

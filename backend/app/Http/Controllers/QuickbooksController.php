@@ -183,7 +183,7 @@ class QuickbooksController extends BaseController
         $company = $user->company();
 
         if (!$company->quickbooks || !$company->quickbooks->isConfigured()) {
-            return response()->json(['error' => 'No QuickBooks connection exists'], 400);
+            return response()->json(['error' => ctrans('texts.bis_quickbooks_no_connection')], 400);
         }
 
         // Generate a one-time token for the reconnect flow

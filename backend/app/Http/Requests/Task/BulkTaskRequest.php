@@ -70,7 +70,7 @@ class BulkTaskRequest extends Request
                     ->contains(fn (Task $task) => $user->cannot('edit', $task));
 
                 if ($unauthorized) {
-                    $validator->errors()->add('ids', 'You are not authorized to update these tasks.');
+                    $validator->errors()->add('ids', ctrans('texts.bis_not_authorized_update_tasks'));
                 }
             
             }

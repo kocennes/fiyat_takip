@@ -84,7 +84,7 @@ class ConnectedAccountController extends BaseController
         }
 
         return response()
-        ->json(['message' => 'Provider not supported'], 400)
+        ->json(['message' => ctrans('texts.bis_provider_not_supported')], 400)
         ->header('X-App-Version', config('ninja.app_version'))
         ->header('X-Api-Version', config('ninja.minimum_client_version'));
     }
@@ -95,7 +95,7 @@ class ConnectedAccountController extends BaseController
         $access_token = $request->has('access_token') ? $request->input('access_token') : $request->input('accessToken');
 
         if (!$access_token) {
-            return response()->json(['message' => 'No access_token parameter found!'], 400);
+            return response()->json(['message' => ctrans('texts.bis_access_token_missing')], 400);
         }
 
         $graph = new \Microsoft\Graph\Graph();
@@ -226,7 +226,7 @@ class ConnectedAccountController extends BaseController
             $logged_in_user = auth()->user();
 
             if ($logged_in_user->email != $google->harvestEmail($user)) {
-                return response()->json(['message' => 'Primary Email differs to OAuth email. Emails must match.'], 400);
+                return response()->json(['message' => ctrans('texts.bis_oauth_email_mismatch')], 400);
             }
 
             $logged_in_user->update($connected_account);

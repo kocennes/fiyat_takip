@@ -552,7 +552,7 @@ class CompanyController extends BaseController
     public function destroy(DestroyCompanyRequest $request, Company $company)
     {
         if (Ninja::isHosted() && config('ninja.ninja_default_company_id') == $company->id) {
-            return response()->json(['message' => 'Cannot purge this company'], 400);
+            return response()->json(['message' => ctrans('texts.bis_cannot_purge_company')], 400);
         }
 
         $company_count = $company->account->companies->count();
@@ -764,10 +764,10 @@ class CompanyController extends BaseController
             try {
                 (new CompanyTaxRate($company))->handle();
             } catch (\Exception $e) {
-                return response()->json(['message' => 'There was a problem updating the tax rates. Please try again.'], 400);
+                return response()->json(['message' => ctrans('texts.bis_tax_rates_update_failed')], 400);
             }
         } else {
-            return response()->json(['message' => 'Tax configuration not available due to settings / plan restriction.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_tax_configuration_not_available')], 400);
         }
 
         return $this->itemResponse($company->fresh());
@@ -784,7 +784,8 @@ class CompanyController extends BaseController
         /** @var \App\Models\User $user */
         $user = auth()->user();
         $company = $user->company();
-        $logo = strlen($company->settings->company_logo) > 5 ? $company->settings->company_logo : 'https://pdf.invoicing.co/favicon-v2.png';
+        $has_company_logo = strlen($company->settings->company_logo) > 5;
+        $logo = $has_company_logo ? $company->settings->company_logo : '';
         $headers = ['Content-Disposition' => 'inline'];
 
         try {
@@ -792,7 +793,11 @@ class CompanyController extends BaseController
             // enforces https, no userinfo, and non-IP-literal host. Paired
             // with allow_redirects=false below, this blocks the practical
             // SSRF surface on hosted.
-            if (! \App\Rules\SafeExternalUrl::check($logo)['ok']) {
+            if (! $has_company_logo) {
+                // No company logo: serve the bundled BISAVUNMA icon instead of fetching an external default.
+                $default_logo = public_path('brand/bisavunma-icon-512.png');
+                $logo = is_readable($default_logo) ? (string) file_get_contents($default_logo) : base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+            } elseif (! \App\Rules\SafeExternalUrl::check($logo)['ok']) {
                 $logo = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
             } else {
 

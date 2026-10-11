@@ -174,7 +174,7 @@ class PaymentCompletedWebhook implements ShouldQueue
     private function processFailure($driver, ?string $status): void
     {
         $reason = $this->data['cancellation_reason']
-            ?? ('PayFast payment status: ' . ($status ?? 'unknown'));
+            ?? ctrans('texts.bis_pd_payment_failed_with_status', ['gateway' => 'PayFast', 'status' => $status ?? ctrans('texts.unknown')]);
 
         $driver->sendFailureMail($reason);
 

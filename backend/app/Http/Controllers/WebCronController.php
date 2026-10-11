@@ -55,15 +55,15 @@ class WebCronController extends Controller
         set_time_limit(0);
 
         if (! config('ninja.webcron_secret')) {
-            return response()->json(['message' => 'Web cron has not been configured'], 403);
+            return response()->json(['message' => ctrans('texts.bis_webcron_not_configured')], 403);
         }
 
         if ($request->has('secret') && (config('ninja.webcron_secret') == $request->query('secret'))) {
             Artisan::call('schedule:run');
 
-            return response()->json(['message' => 'Executing web cron'], 200);
+            return response()->json(['message' => ctrans('texts.bis_webcron_executing')], 200);
         }
 
-        return response()->json(['message' => 'Invalid secret'], 403);
+        return response()->json(['message' => ctrans('texts.bis_invalid_secret')], 403);
     }
 }

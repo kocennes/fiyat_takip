@@ -67,7 +67,7 @@ class CreditCard implements LivewireMethodInterface
         $response = $this->paytrace->gatewayRequest('/v1/customer/pt_protect_create', $post_data);
 
         if (! $response->success) {
-            $error = 'Error creating customer in gateway';
+            $error = ctrans('texts.bis_pd_unable_to_create_customer', ['gateway' => 'PayTrace']);
             $error_code = $response->response_code ?? 'PT_ERR';
 
             if (isset($response->errors)) {

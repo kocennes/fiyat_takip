@@ -70,7 +70,7 @@
 
         <div class="row mt-4">
             <div class="col-md-4">
-                <b>Client:</b><br>
+                <b>{{ ctrans('texts.client') }}:</b><br>
                 $client_name<br>
                 $address1<br>
                 $address2<br>

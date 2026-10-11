@@ -16,13 +16,11 @@ import { useColorScheme } from '$app/common/colors';
 import { enterprisePlan } from '$app/common/guards/guards/enterprise-plan';
 import { endpoint, isSelfHosted } from '$app/common/helpers';
 import { request } from '$app/common/helpers/request';
-import { route } from '$app/common/helpers/route';
 import { useAccentColor } from '$app/common/hooks/useAccentColor';
 import { Button, Link } from '$app/components/forms';
 import { Icon } from '$app/components/icons/Icon';
 import { Modal } from '$app/components/Modal';
 import goCardlessLogo from '/dap-logos/goCardless.png';
-import yodleeLogo from '/dap-logos/yodlee.svg';
 
 export function ConnectAccounts() {
   const [t] = useTranslation();
@@ -44,21 +42,8 @@ export function ConnectAccounts() {
     setAccount(undefined);
   };
 
-  const handleConnectYodlee = () => {
-    request('POST', endpoint('/api/v1/one_time_token'), {
-      context: 'yodlee',
-      platform: 'react',
-    }).then((tokenResponse) => {
-      handleClose();
-
-      window.open(
-        route('https://invoicing.co/yodlee/onboard/:hash', {
-          hash: tokenResponse?.data?.hash,
-        })
-      );
-    });
-  };
-
+  // Yodlee onboarding only works through the upstream vendor's hosted
+  // service, so only the Nordigen (GoCardless) connection is offered.
   const handleConnectNordigen = () => {
     request('POST', endpoint('/api/v1/one_time_token'), {
       context: 'nordigen',
@@ -75,10 +60,6 @@ export function ConnectAccounts() {
   };
 
   const handleConnectAccount = () => {
-    if (account === 'yodlee') {
-      handleConnectYodlee();
-    }
-
     if (account === 'nordigen') {
       handleConnectNordigen();
     }
@@ -102,34 +83,6 @@ export function ConnectAccounts() {
         onClose={handleClose}
       >
         <div ref={divRef} className="flex flex-col space-y-6">
-          {enterprisePlan() && (
-            <div
-              className="flex flex-col cursor-pointer border-4"
-              style={{
-                borderColor: account === 'yodlee' ? accentColor : colors.$24,
-                height: '10.25rem',
-              }}
-              onClick={() => setAccount('yodlee')}
-            >
-              <img className="h-32" src={yodleeLogo} />
-
-              <div
-                className="flex items-center justify-center space-x-2 text-xs pb-3"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <p className="text-gray-500">{t('yodlee_regions')}.</p>
-
-                <Link
-                  className="text-xs"
-                  to="https://www.yodlee.com/open-banking/data-connections"
-                  external
-                >
-                  {t('learn_more')}.
-                </Link>
-              </div>
-            </div>
-          )}
-
           {enterprisePlan() && (
             <div
               data-cy="nordigenBox"

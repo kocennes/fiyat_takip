@@ -36,7 +36,7 @@ class InvoiceWithNoExistingSchedule implements ValidationRule
                             ->exists();
 
         if ($exists) {
-            $fail('Invoice already has a payment schedule');
+            $fail(ctrans('texts.bis_invoice_has_payment_schedule'));
         }
 
         $invoice_exists = Invoice::withTrashed()
@@ -45,7 +45,7 @@ class InvoiceWithNoExistingSchedule implements ValidationRule
                             ->exists();
 
         if (!$invoice_exists) {
-            $fail('Invoice not found');
+            $fail(ctrans('texts.invoice_not_found'));
         }
     }
 }

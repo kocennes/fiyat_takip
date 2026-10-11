@@ -71,7 +71,7 @@ class LoginController extends BaseController
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
-            return response()->json(['message' => 'Too many login attempts, you are being throttled']);
+            return response()->json(['message' => ctrans('texts.bis_too_many_login_attempts')]);
         }
 
         if ($this->attemptLogin($request)) {
@@ -139,7 +139,7 @@ class LoginController extends BaseController
         if ($user) {
             return $this->itemResponse($user);
         } else {
-            return $this->errorResponse(['message' => 'Invalid credentials'], 401);
+            return $this->errorResponse(['message' => ctrans('texts.invalid_credentials')], 401);
         }
     }
 }

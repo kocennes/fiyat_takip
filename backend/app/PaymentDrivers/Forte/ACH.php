@@ -118,7 +118,7 @@ class ACH implements LivewireMethodInterface
             $this->forte->client->company,
         );
 
-        throw new \App\Exceptions\PaymentFailed("Unable to store payment method: {$error->response->response_desc}", 400);
+        throw new \App\Exceptions\PaymentFailed(ctrans('texts.bis_pd_unable_to_store_payment_method', ['error' => $error->response->response_desc]), 400);
 
     }
 
@@ -133,7 +133,7 @@ class ACH implements LivewireMethodInterface
 
         $cgt = $this->storePaymentMethod($data);
 
-        return redirect()->route('client.payment_methods.index')->withSuccess('Payment Method added.');
+        return redirect()->route('client.payment_methods.index')->withSuccess(ctrans('texts.payment_method_added'));
 
     }
 
@@ -331,7 +331,7 @@ class ACH implements LivewireMethodInterface
             $this->forte->client->company,
         );
 
-        throw new PaymentFailed($forte_response->response->response_desc ?? 'Unable to process payment', 500);
+        throw new PaymentFailed($forte_response->response->response_desc ?? ctrans('texts.bis_pd_payment_failed_to_process'), 500);
 
     }
 

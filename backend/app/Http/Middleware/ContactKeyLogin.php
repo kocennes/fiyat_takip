@@ -47,7 +47,7 @@ class ContactKeyLogin
             $payload = Cache::get($request->segment(3));
 
             if (! $payload) {
-                abort(403, 'Link expired.');
+                abort(403, ctrans('texts.bis_link_expired'));
             }
 
             $contact_email = $payload['email'];
@@ -155,7 +155,7 @@ class ContactKeyLogin
             }
         }
         //28-02-2022 middleware should not allow this to progress as we should have redirected by this stage.
-        abort(404, 'Unable to authenticate.');
+        abort(404, ctrans('texts.bis_unable_to_authenticate'));
 
         return $next($request);
     }

@@ -118,7 +118,7 @@ class PasskeyController extends BaseController
                 'id' => $credential->hashed_id,
                 'name' => $credential->name,
             ],
-            'message' => 'Passkey added',
+            'message' => ctrans('texts.bis_passkey_added'),
         ]);
     }
 
@@ -138,12 +138,12 @@ class PasskeyController extends BaseController
         $user = auth()->user();
 
         if ((int) $passkey->user_id !== (int) $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => ctrans('texts.not_authorized')], 403);
         }
 
         $passkey->delete();
 
-        return response()->json(['message' => 'Passkey removed']);
+        return response()->json(['message' => ctrans('texts.bis_passkey_removed')]);
     }
 
     /**

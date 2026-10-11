@@ -166,7 +166,7 @@ class CreditCard implements LivewireMethodInterface
             return $this->processSuccessfulPayment($result);
         }
 
-        $error = $result ?: 'Undefined gateway error';
+        $error = $result ?: ctrans('texts.bis_pd_unknown_error');
 
         return $this->processUnsuccessfulPayment($error);
     }
@@ -256,7 +256,7 @@ class CreditCard implements LivewireMethodInterface
             $this->braintree->client->company,
         );
 
-        throw new PaymentFailed($response?->transaction?->additionalProcessorResponse ?: 'Unhandled error, please contact merchant', $response?->transaction?->processorResponseCode ?: 500);
+        throw new PaymentFailed($response?->transaction?->additionalProcessorResponse ?: ctrans('texts.bis_pd_unhandled_error_contact_merchant'), $response?->transaction?->processorResponseCode ?: 500);
     }
 
     private function storePaymentMethod($method, $customer_reference)

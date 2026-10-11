@@ -146,11 +146,11 @@ class InvoiceCollisionPolicy
 
         $message = match (true) {
             $number_differs && $amount_differs
-                => "The linked QuickBooks invoice differs: its number is #{$qb_number} instead of #{$ninja_number}, and its total is {$qb_total} instead of {$ninja_total}.",
+                => ctrans('texts.bis_qb_invoice_differs_both', ['qb_number' => $qb_number, 'number' => $ninja_number, 'qb_total' => $qb_total, 'total' => $ninja_total]),
             $number_differs
-                => "The linked QuickBooks invoice number is #{$qb_number}, while Invoice Ninja uses #{$ninja_number}.",
+                => ctrans('texts.bis_qb_invoice_number_differs', ['qb_number' => $qb_number, 'number' => $ninja_number]),
             default
-                => "The linked QuickBooks invoice total is {$qb_total}, while Invoice Ninja uses {$ninja_total}.",
+                => ctrans('texts.bis_qb_invoice_total_differs', ['qb_total' => $qb_total, 'total' => $ninja_total]),
         };
 
         return mb_substr($message, 0, 255);
@@ -171,15 +171,15 @@ class InvoiceCollisionPolicy
 
         if (!$this->amountsMatch($qb_record, $invoice)) {
             $sync->markDataMismatch(
-                "Invoice number #{$doc_number} is already used by a QuickBooks invoice with a different total. QuickBooks has {$qb_total}; Invoice Ninja has {$ninja_total}. Verify the records or change the Invoice Ninja invoice number and retry."
+                ctrans('texts.bis_qb_number_used_different_total', ['number' => $doc_number, 'qb_total' => $qb_total, 'total' => $ninja_total])
             );
         } elseif (!$this->customerMatches($invoice, $qb_record)) {
             $sync->markDataMismatch(
-                "QuickBooks invoice #{$doc_number} (Id {$qb_id}) has the same number and total ({$qb_total}), but its customer does not match this Invoice Ninja client. Push the client or fix the QuickBooks customer before linking."
+                ctrans('texts.bis_qb_customer_mismatch', ['number' => $doc_number, 'qb_id' => $qb_id, 'qb_total' => $qb_total])
             );
         } else {
             $sync->markLinkable(
-                "QuickBooks invoice #{$doc_number} (Id {$qb_id}) has the same number and total ({$qb_total}). Verify it is the same invoice before linking."
+                ctrans('texts.bis_qb_linkable', ['number' => $doc_number, 'qb_id' => $qb_id, 'qb_total' => $qb_total])
             );
         }
 

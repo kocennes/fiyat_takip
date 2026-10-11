@@ -36,7 +36,7 @@ class ApiSecretCheck
             return $next($request);
         } else {
             $error = [
-                'message' => 'Invalid secret',
+                'message' => ctrans('texts.bis_invalid_secret'),
                 'errors' => new stdClass(),
             ];
 

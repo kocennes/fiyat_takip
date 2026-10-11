@@ -49,7 +49,7 @@ class Setup {
 
     handleSuccess(element, nextStep = null) {
         element.classList.remove('alert-failure');
-        element.innerText = 'Success!';
+        element.innerText = (window.BIS_I18N?.success ?? 'Success!');
         element.classList.add('alert-success');
 
         if (nextStep) {
@@ -64,7 +64,7 @@ class Setup {
         element.classList.remove('alert-success');
         element.innerText = message
             ? message
-            : "Oops, looks like something isn't correct!";
+            : (window.BIS_I18N?.bis_setup_check_failed ?? "Oops, looks like something isn't correct!");
         element.classList.add('alert-failure');
     }
 

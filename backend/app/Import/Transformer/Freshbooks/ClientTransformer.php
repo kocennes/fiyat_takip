@@ -31,7 +31,7 @@ class ClientTransformer extends BaseTransformer
         $data = reset($client_data);
 
         if (isset($data['Organization']) && $this->hasClient($data['Organization'])) {
-            throw new ImportException('Client already exists');
+            throw new ImportException(ctrans('texts.bis_import_client_exists'));
         }
 
         $address1 = data_get($data, 'Street', data_get($data, 'Address Line 1', ''));

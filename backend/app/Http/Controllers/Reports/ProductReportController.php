@@ -72,7 +72,7 @@ class ProductReportController extends BaseController
         if ($request->has('send_email') && filter_var($request->input('send_email'), FILTER_VALIDATE_BOOLEAN) && $request->missing('output')) {
             SendToAdmin::dispatch($user->company(), $request->all(), ProductExport::class, $this->filename);
 
-            return response()->json(['message' => 'working...'], 200);
+            return response()->json(['message' => ctrans('texts.bis_working')], 200);
         }
 
         $hash = \Illuminate\Support\Str::uuid();

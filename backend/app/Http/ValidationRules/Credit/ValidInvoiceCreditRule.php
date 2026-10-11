@@ -51,26 +51,26 @@ class ValidInvoiceCreditRule implements Rule
 
         if (!$invoice) {
 
-            $this->error_message = 'Invoice not found.';
+            $this->error_message = ctrans('texts.invoice_not_found');
 
             return false;
 
         } elseif ($invoice->balance >= $invoice->amount) {
-            $this->error_message = 'Cannot reverse an invoice with no payment applied.';
+            $this->error_message = ctrans('texts.bis_reverse_invoice_no_payment');
 
             return false;
         } elseif ($invoice->status_id == Invoice::STATUS_REVERSED) {
-            $this->error_message = 'Cannot reverse an invoice that has already been reversed.';
+            $this->error_message = ctrans('texts.bis_reverse_invoice_already_reversed');
             return false;
         } elseif ($invoice->is_deleted) {
-            $this->error_message = 'Cannot reverse an invoice that has already been deleted.';
+            $this->error_message = ctrans('texts.bis_reverse_invoice_deleted');
             return false;
         }
 
         $existing_credit_amounts = $invoice->credits()->sum('amount');
 
         if ($this->sumCredit() > ($invoice->amount - $invoice->balance - $existing_credit_amounts)) {
-            $this->error_message = 'Credit cannot exceed the payment / credits already applied to invoice.';
+            $this->error_message = ctrans('texts.bis_credit_exceeds_applied');
 
             return false;
         }

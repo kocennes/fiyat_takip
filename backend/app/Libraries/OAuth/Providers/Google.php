@@ -35,7 +35,7 @@ class Google implements ProviderInterface
 
     public function harvestName($payload)
     {
-        return $payload['name'] ?? 'unknown name';
+        return $payload['name'] ?? ctrans('texts.bis_unknown_name');
     }
 
     public function harvestUser($access_token)

@@ -43,13 +43,13 @@ class TokenAuth
             'cu',
         ])->where('token', $request->header('X-API-TOKEN'))->first())) {
         } else {
-            return response()->json(['message' => 'Invalid token'], 403);
+            return response()->json(['message' => ctrans('texts.bis_invalid_token')], 403);
         }
 
         $user = $company_token->user;
 
         $error = [
-            'message' => 'User inactive',
+            'message' => ctrans('texts.bis_user_inactive'),
             'errors' => new stdClass(),
         ];
         //user who once existed, but has been soft deleted
@@ -59,7 +59,7 @@ class TokenAuth
 
         if (Ninja::isHosted() && $company_token->is_system == 0 && ! $user->account->isPaid()) {
             $error = [
-                'message' => 'Feature not available with free / unpaid account.',
+                'message' => ctrans('texts.bis_feature_not_available'),
                 'errors' => new stdClass(),
             ];
 
@@ -91,7 +91,7 @@ class TokenAuth
         //user who once existed, but has been soft deleted
         if ($company_token->cu->is_locked) {
             $error = [
-                'message' => 'User access locked',
+                'message' => ctrans('texts.bis_user_access_locked'),
                 'errors' => new stdClass(),
             ];
 

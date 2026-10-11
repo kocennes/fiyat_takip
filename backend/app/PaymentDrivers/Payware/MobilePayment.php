@@ -51,7 +51,7 @@ class MobilePayment implements MethodInterface, LivewireMethodInterface
         $paymentHash = PaymentHash::where('hash', $request->payment_hash)->first();
 
         if (!$paymentHash) {
-            throw new PaymentFailed('payware: Payment hash not found.');
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_session_not_found'));
         }
 
         $data = (array) $paymentHash->data;
@@ -63,7 +63,7 @@ class MobilePayment implements MethodInterface, LivewireMethodInterface
             ]);
         }
 
-        throw new PaymentFailed('payware: Payment was not confirmed.');
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_not_confirmed'));
     }
 
     /**

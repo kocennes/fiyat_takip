@@ -203,7 +203,7 @@ class BaseImport
             if (empty($item[$key])) {
                 $this->error_array['task'][] = [
                     'task' => $item,
-                    'error' => 'No task number',
+                    'error' => ctrans('texts.bis_import_no_task_number'),
                 ];
             } else {
                 $grouped[$item[$key]][$source_row] = $item;
@@ -280,8 +280,11 @@ class BaseImport
         $errors = $this->error_array;
 
         foreach ($this->system_errors as $entity_type => $system_error) {
-            $entity_label = str_replace('_', ' ', $entity_type);
-            $record_label = $system_error['count'] === 1 ? 'record' : 'records';
+            $entity_label = ctrans("texts.{$entity_type}");
+
+            if ($entity_label === "texts.{$entity_type}") {
+                $entity_label = str_replace('_', ' ', $entity_type);
+            }
 
             $errors[$entity_type][] = [
                 $entity_type => [
@@ -291,13 +294,11 @@ class BaseImport
                 ],
                 'code' => 'system_error',
                 'reference' => $this->system_error_reference,
-                'error' => sprintf(
-                    '%d %s %s could not be imported because of a system error. Contact support with reference %s.',
-                    $system_error['count'],
-                    $entity_label,
-                    $record_label,
-                    $this->system_error_reference
-                ),
+                'error' => ctrans('texts.bis_import_system_error', [
+                    'count' => $system_error['count'],
+                    'entity' => $entity_label,
+                    'reference' => $this->system_error_reference,
+                ]),
             ];
         }
 
@@ -1216,11 +1217,10 @@ class BaseImport
                 $this->error_array[$entity_type][] = [
                     $entity_type => ['source_column' => $source_column],
                     'code' => 'invalid_column_mapping',
-                    'error' => sprintf(
-                        'The selected source column %s is outside the CSV width of %d columns.',
-                        (string) $source_column,
-                        $expected_column_count
-                    ),
+                    'error' => ctrans('texts.bis_import_column_out_of_range', [
+                        'column' => (string) $source_column,
+                        'count' => $expected_column_count,
+                    ]),
                 ];
 
                 return [];
@@ -1246,12 +1246,11 @@ class BaseImport
                         'actual_columns' => $actual_column_count,
                     ],
                     'code' => 'invalid_column_count',
-                    'error' => sprintf(
-                        'CSV row %s has %d columns; expected %d. Check for an unescaped delimiter.',
-                        $row_number ?? 'unknown',
-                        $actual_column_count,
-                        $expected_column_count
-                    ),
+                    'error' => ctrans('texts.bis_import_row_column_mismatch', [
+                        'row' => $row_number ?? ctrans('texts.unknown'),
+                        'actual' => $actual_column_count,
+                        'expected' => $expected_column_count,
+                    ]),
                 ];
 
                 continue;

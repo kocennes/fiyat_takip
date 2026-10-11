@@ -42,7 +42,7 @@ class UserVerified
         }
 
         $error = [
-            'message' => 'Email confirmation required.',
+            'message' => ctrans('texts.confirm_your_email_address'),
             'errors' => new \stdClass(),
         ];
 

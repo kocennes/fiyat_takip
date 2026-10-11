@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Accounts Receivable Summary Report</title>
+    <title>Özet Alacak Yaşlandırma Raporu</title>
     <style> 
 		@page {
             size: landscape;
@@ -177,8 +177,8 @@
 		<div class="header-left">
 			<h1 class="report-title">{{ t('aged_receivable_summary_report') }}</h1>
 			<div class="report-meta">
-				<div>Created On: {{ created_on }}</div>
-                <div>Created By: {{ created_by }}</div>
+				<div>{{ t('created_on') }}: {{ created_on }}</div>
+                <div>{{ t('creator') }}: {{ created_by }}</div>
 			</div>
 		</div>
 		<div class="header-right">

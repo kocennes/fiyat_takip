@@ -159,7 +159,7 @@ class CalendarConnectionService
             || ($handoffContext['provider'] ?? null) !== $provider
             || empty($handoffContext['state'])
             || empty($handoffContext['code'])) {
-            throw ValidationException::withMessages(['handoff' => 'Invalid calendar connection handoff.']);
+            throw ValidationException::withMessages(['handoff' => ctrans('texts.bis_calendar_invalid_handoff')]);
         }
 
         return [
@@ -192,7 +192,7 @@ class CalendarConnectionService
         if (!is_array($stateContext)
             || ($stateContext['provider'] ?? null) !== $provider
             || empty($stateContext['user_id'])) {
-            throw ValidationException::withMessages(['state' => 'Invalid calendar connection state.']);
+            throw ValidationException::withMessages(['state' => ctrans('texts.bis_calendar_invalid_state')]);
         }
 
         if ((int) $stateContext['user_id'] !== (int) $user->id) {
@@ -203,11 +203,11 @@ class CalendarConnectionService
                 $provider,
             )));
 
-            throw ValidationException::withMessages(['state' => 'Invalid calendar connection state.']);
+            throw ValidationException::withMessages(['state' => ctrans('texts.bis_calendar_invalid_state')]);
         }
 
         if (($stateContext['database'] ?? null) !== config('database.default')) {
-            throw ValidationException::withMessages(['state' => 'Invalid calendar connection state.']);
+            throw ValidationException::withMessages(['state' => ctrans('texts.bis_calendar_invalid_state')]);
         }
 
         // Socialite's ->user() reads the `code` from the current request input.
@@ -223,7 +223,7 @@ class CalendarConnectionService
         $providerUserId = $socialiteUser->getId();
 
         if (!$providerUserId) {
-            throw ValidationException::withMessages(['provider_user_id' => 'The calendar provider did not return a user id.']);
+            throw ValidationException::withMessages(['provider_user_id' => ctrans('texts.bis_calendar_no_user_id')]);
         }
 
         $this->persistConnection($user, $provider, $socialiteUser, $providerUserId);
@@ -257,7 +257,7 @@ class CalendarConnectionService
         }
 
         if (!$refreshToken) {
-            throw ValidationException::withMessages(['refresh_token' => 'The calendar provider did not return a refresh token.']);
+            throw ValidationException::withMessages(['refresh_token' => ctrans('texts.bis_calendar_no_refresh_token')]);
         }
 
         $settings->setCalendarConnection(new CalendarConnection([
@@ -322,7 +322,7 @@ class CalendarConnectionService
                 ->get($url, $query);
 
             if ($response->failed()) {
-                throw ValidationException::withMessages(['calendar_connection' => 'Unable to load calendars from the provider.']);
+                throw ValidationException::withMessages(['calendar_connection' => ctrans('texts.bis_calendar_load_failed')]);
             }
 
             $body = $response->json();
@@ -464,7 +464,7 @@ class CalendarConnectionService
 
         if ($missingCalendarIds) {
             throw ValidationException::withMessages([
-                'calendar_ids' => 'One or more selected calendars are no longer available.',
+                'calendar_ids' => ctrans('texts.bis_calendar_unavailable'),
             ]);
         }
 
@@ -595,7 +595,7 @@ class CalendarConnectionService
             CalendarConnection::PROVIDER_GOOGLE,
             CalendarConnection::PROVIDER_MICROSOFT,
         ], true)) {
-            throw ValidationException::withMessages(['provider' => 'Calendar provider is not supported.']);
+            throw ValidationException::withMessages(['provider' => ctrans('texts.bis_calendar_provider_not_supported')]);
         }
 
         return $provider;
@@ -652,7 +652,7 @@ class CalendarConnectionService
         $connection = $this->userSettings($user)->calendar_connection;
 
         if (!$connection || !$connection->isConnected()) {
-            throw ValidationException::withMessages(['calendar_connection' => 'No calendar connection is configured.']);
+            throw ValidationException::withMessages(['calendar_connection' => ctrans('texts.bis_calendar_not_configured')]);
         }
 
         return $connection;
@@ -675,7 +675,7 @@ class CalendarConnectionService
         }
 
         if (!$connection->refresh_token) {
-            throw ValidationException::withMessages(['calendar_connection' => 'No calendar refresh token is configured.']);
+            throw ValidationException::withMessages(['calendar_connection' => ctrans('texts.bis_calendar_no_refresh_token_configured')]);
         }
 
         $data = $this->refreshTokenResponse($connection);
@@ -714,7 +714,7 @@ class CalendarConnectionService
             ->post($this->tokenEndpoint($provider), $this->refreshTokenPayload($connection));
 
         if ($response->failed() || !$response->json('access_token')) {
-            throw ValidationException::withMessages(['calendar_connection' => 'Unable to refresh the calendar token.']);
+            throw ValidationException::withMessages(['calendar_connection' => ctrans('texts.bis_calendar_token_refresh_failed')]);
         }
 
         return $response->json();
@@ -806,7 +806,7 @@ class CalendarConnectionService
                 ->get(sprintf(self::GOOGLE_EVENTS_ENDPOINT_FORMAT, rawurlencode($calendarId)), $query);
 
             if ($response->failed()) {
-                throw ValidationException::withMessages(['calendar_connection' => 'Unable to load calendar events from Google.']);
+                throw ValidationException::withMessages(['calendar_connection' => ctrans('texts.bis_calendar_events_load_failed', ['provider' => 'Google'])]);
             }
 
             foreach ($response->json('items') ?? [] as $event) {
@@ -852,7 +852,7 @@ class CalendarConnectionService
                 ->get($url, $query);
 
             if ($response->failed()) {
-                throw ValidationException::withMessages(['calendar_connection' => 'Unable to load calendar events from Microsoft.']);
+                throw ValidationException::withMessages(['calendar_connection' => ctrans('texts.bis_calendar_events_load_failed', ['provider' => 'Microsoft'])]);
             }
 
             $body = $response->json();
@@ -1027,7 +1027,7 @@ class CalendarConnectionService
         return match ($provider) {
             CalendarConnection::PROVIDER_GOOGLE => self::GOOGLE_CALENDARS_ENDPOINT,
             CalendarConnection::PROVIDER_MICROSOFT => self::MICROSOFT_CALENDARS_ENDPOINT,
-            default => throw ValidationException::withMessages(['provider' => 'Calendar provider is not supported.']),
+            default => throw ValidationException::withMessages(['provider' => ctrans('texts.bis_calendar_provider_not_supported')]),
         };
     }
 
@@ -1042,7 +1042,7 @@ class CalendarConnectionService
         return match ($provider) {
             CalendarConnection::PROVIDER_GOOGLE => self::GOOGLE_TOKEN_ENDPOINT,
             CalendarConnection::PROVIDER_MICROSOFT => self::MICROSOFT_TOKEN_ENDPOINT,
-            default => throw ValidationException::withMessages(['provider' => 'Calendar provider is not supported.']),
+            default => throw ValidationException::withMessages(['provider' => ctrans('texts.bis_calendar_provider_not_supported')]),
         };
     }
 

@@ -290,7 +290,7 @@ class JsonToSectionsAdapter
                             'element' => 'img',
                             'properties' => [
                                 'src' => $src,
-                                'alt' => $block['type'] === 'logo' ? 'Company Logo' : 'Image',
+                                'alt' => $block['type'] === 'logo' ? ctrans('texts.company_logo') : ctrans('texts.image'),
                                 'data-ref' => $blockId,
                                 'style' => $this->buildImageStyle($props),
                             ],

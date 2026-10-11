@@ -22,7 +22,7 @@ async function initFlow() {
     if (!sessionId || !sessionToken || !publicKey) {
         const errEl = document.getElementById('flow-error-message');
         if (errEl) {
-            errEl.textContent = 'Session is missing. Please refresh the page.';
+            errEl.textContent = (window.BIS_I18N?.bis_session_missing ?? 'Session is missing. Please refresh the page.');
             errEl.classList.remove('hidden');
         }
         return;
@@ -50,7 +50,7 @@ async function initFlow() {
             onError: (event) => {
                 const errEl = document.getElementById('flow-error-message');
                 if (errEl) {
-                    errEl.textContent = event.detail?.message || 'Failed to add payment method. Please try again.';
+                    errEl.textContent = event.detail?.message || (window.BIS_I18N?.bis_add_payment_method_failed ?? 'Failed to add payment method. Please try again.');
                     errEl.classList.remove('hidden');
                 }
             },
@@ -61,7 +61,7 @@ async function initFlow() {
     } catch (err) {
         const errEl = document.getElementById('flow-error-message');
         if (errEl) {
-            errEl.textContent = err?.message || 'Unable to load form. Please refresh the page.';
+            errEl.textContent = err?.message || (window.BIS_I18N?.bis_form_load_failed ?? 'Unable to load form. Please refresh the page.');
             errEl.classList.remove('hidden');
         }
     }

@@ -29,7 +29,7 @@ class SetEmailDb
     public function handle($request, Closure $next)
     {
         $error = [
-            'message' => 'Email not set or not found',
+            'message' => ctrans('texts.bis_email_not_found'),
             'errors' => new stdClass(),
         ];
 

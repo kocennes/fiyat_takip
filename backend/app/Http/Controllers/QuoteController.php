@@ -527,7 +527,7 @@ class QuoteController extends BaseController
         $ids = $request->input('ids');
 
         if (Ninja::isHosted() && (stripos($action, 'email') !== false) && !$user->account->account_sms_verified) {
-            return response(['message' => 'Please verify your account to send emails.'], 400);
+            return response(['message' => ctrans('texts.authorization_sms_failure')], 400);
         }
 
         if (Ninja::isHosted() && $user->account->emailQuotaExceeded()) {
@@ -899,7 +899,7 @@ class QuoteController extends BaseController
         $invitation = $this->quote_repo->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $contact = $invitation->contact;
@@ -967,7 +967,7 @@ class QuoteController extends BaseController
         $invitation = $this->quote_repo->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $contact = $invitation->contact;

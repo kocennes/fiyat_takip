@@ -66,7 +66,7 @@ class SmtpController extends BaseController
             $sending_email = (isset($company->settings->custom_sending_email) && stripos($company->settings->custom_sending_email, "@")) ? $company->settings->custom_sending_email : $user->email;
             $sending_user = (isset($company->settings->email_from_name) && strlen($company->settings->email_from_name) > 2) ? $company->settings->email_from_name : $user->name();
 
-            $mailable = new TestMailServer('Email Server Works!', $sending_email);
+            $mailable = new TestMailServer(ctrans('texts.bis_email_server_works'), $sending_email);
             $mailable->from($sending_email, $sending_user);
 
             Mail::mailer('smtp')
@@ -88,10 +88,10 @@ class SmtpController extends BaseController
         $this->padResponse($startedAt);
 
         if ($failed) {
-            return response()->json(['message' => 'Could not connect to SMTP server'], 400);
+            return response()->json(['message' => ctrans('texts.bis_smtp_connection_failed')], 400);
         }
 
-        return response()->json(['message' => 'Ok'], 200);
+        return response()->json(['message' => ctrans('texts.bis_smtp_connection_ok')], 200);
     }
     
     /**

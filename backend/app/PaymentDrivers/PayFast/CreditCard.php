@@ -170,7 +170,7 @@ class CreditCard implements LivewireMethodInterface
         $received = (float) $request->input('amount_gross');
 
         if (abs($received - $expected) > 0.02) {
-            throw new PaymentFailed('Amount mismatch', 500);
+            throw new PaymentFailed(ctrans('texts.bis_pd_amount_mismatch'), 500);
         }
 
         $response_array = $request->all();
@@ -244,7 +244,7 @@ class CreditCard implements LivewireMethodInterface
             $this->payfast->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
     /**
      * @inheritDoc

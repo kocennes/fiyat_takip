@@ -50,7 +50,7 @@ class ImportCustomers
         $this->update_payment_methods = new UpdatePaymentMethods($this->stripe);
 
         if (Ninja::isHosted() && strlen($this->stripe->company_gateway->getConfigField('account_id')) < 1) {
-            throw new StripeConnectFailure('Stripe Connect has not been configured');
+            throw new StripeConnectFailure(ctrans('texts.bis_pd_stripe_connect_not_configured'));
         }
 
         $starting_after = null;
@@ -174,7 +174,7 @@ class ImportCustomers
         $this->update_payment_methods = new UpdatePaymentMethods($this->stripe);
 
         if (strlen($this->stripe->company_gateway->getConfigField('account_id')) < 1) {
-            throw new StripeConnectFailure('Stripe Connect has not been configured');
+            throw new StripeConnectFailure(ctrans('texts.bis_pd_stripe_connect_not_configured'));
         }
 
         $customer = Customer::retrieve($customer_id, $this->stripe->stripe_connect_auth);
@@ -197,7 +197,7 @@ class ImportCustomers
         $this->update_payment_methods = new UpdatePaymentMethods($this->stripe);
 
         if (strlen($this->stripe->company_gateway->getConfigField('account_id')) < 1) {
-            throw new StripeConnectFailure('Stripe Connect has not been configured');
+            throw new StripeConnectFailure(ctrans('texts.bis_pd_stripe_connect_not_configured'));
         }
 
         foreach ($this->stripe->company_gateway->company->clients as $client) {

@@ -60,7 +60,7 @@ class ValidInvoicesRules implements Rule
             $unique_array[] = $invoice['invoice_id'];
 
             if (! array_key_exists('amount', $invoice)) {
-                $this->error_msg = ctrans('texts.amount') . ' required';
+                $this->error_msg = ctrans('validation.required', ['attribute' => ctrans('texts.amount')]);
 
                 return false;
             }
@@ -83,19 +83,19 @@ class ValidInvoicesRules implements Rule
             if ($inv->status_id == Invoice::STATUS_DRAFT && $invoice['amount'] <= $inv->amount) {
                 //catch here nothing to do - we need this to prevent the last elseif triggering
             } elseif ($invoice['amount'] <= 0 && $inv->amount > 0) {
-                $this->error_msg = 'Amount cannot be less than or equal to zero';
+                $this->error_msg = ctrans('texts.bis_amount_must_be_positive');
                 return false;
             } elseif ($inv->status_id == Invoice::STATUS_DRAFT && floatval($invoice['amount']) > floatval($inv->amount)) {
-                $this->error_msg = 'Amount cannot be greater than invoice balance';
+                $this->error_msg = ctrans('texts.bis_amount_exceeds_invoice_balance');
                 return false;
             } elseif ($invoice['amount'] < 0 && $inv->amount >= 0) {
-                $this->error_msg = 'Amount cannot be negative';
+                $this->error_msg = ctrans('texts.bis_amount_cannot_be_negative');
                 return false;
             } elseif (floatval($invoice['amount']) > floatval($inv->balance)) {
                 $this->error_msg = ctrans('texts.amount_greater_than_balance_v5');
                 return false;
             } elseif ($inv->is_deleted) {
-                $this->error_msg = 'One or more invoices in this request have since been deleted';
+                $this->error_msg = ctrans('texts.bis_invoices_deleted_since');
                 return false;
             }
         }

@@ -890,6 +890,48 @@ class CompanySettings extends BaseSettings
     // }
 
     /**
+     * BISAVUNMA: Turkish regional defaults for new companies.
+     *
+     * setting => [upstream fall-back of config('ninja.i18n.*'), Turkish default].
+     * A value configured explicitly through the DEFAULT_* environment variables
+     * is kept; only the upstream fall-back values are replaced.
+     */
+    public const TURKISH_REGIONAL_DEFAULTS = [
+        'timezone_id' => ['1', '65'],     // Europe/Istanbul
+        'language_id' => ['1', '25'],     // Turkish - Turkey (tr_TR)
+        'date_format_id' => ['1', '11'],  // d.m.Y (DD.MM.YYYY)
+        'country_id' => ['840', '792'],   // Turkey
+    ];
+
+    /**
+     * Returns the configured regional default for a setting, falling back to
+     * the Turkish default when only the upstream fall-back is configured.
+     *
+     * @param  string $key timezone_id|language_id|date_format_id|country_id
+     * @return string
+     */
+    public static function regionalDefault(string $key): string
+    {
+        [$upstream, $turkish] = self::TURKISH_REGIONAL_DEFAULTS[$key];
+
+        $configured = (string) config("ninja.i18n.{$key}");
+
+        return ($configured === '' || $configured === $upstream) ? $turkish : $configured;
+    }
+
+    /**
+     * 24-hour clock unless 12-hour time was configured explicitly (MILITARY_TIME=false).
+     *
+     * @return bool
+     */
+    public static function regionalMilitaryTime(): bool
+    {
+        $configured = config('ninja.i18n.military_time');
+
+        return in_array($configured, [0, '0', '', null], true) ? true : (bool) $configured;
+    }
+
+    /**
      * Provides class defaults on init.
      *
      * @return stdClass
@@ -903,13 +945,13 @@ class CompanySettings extends BaseSettings
         unset($data->free_plan_casts);
         unset($data->string_casts);
 
-        $data->timezone_id = (string) config('ninja.i18n.timezone_id');
+        $data->timezone_id = self::regionalDefault('timezone_id');
         $data->currency_id = (string) config('ninja.i18n.currency_id');
-        $data->language_id = (string) config('ninja.i18n.language_id');
+        $data->language_id = self::regionalDefault('language_id');
         $data->payment_terms = (string) config('ninja.i18n.payment_terms');
-        $data->military_time = (bool) config('ninja.i18n.military_time');
-        $data->date_format_id = (string) config('ninja.i18n.date_format_id');
-        $data->country_id = (string) config('ninja.i18n.country_id');
+        $data->military_time = self::regionalMilitaryTime();
+        $data->date_format_id = self::regionalDefault('date_format_id');
+        $data->country_id = self::regionalDefault('country_id');
         $data->translations = (object) [];
         $data->pdf_variables = (object) self::getEntityVariableDefaults();
 

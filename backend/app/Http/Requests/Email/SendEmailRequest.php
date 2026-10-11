@@ -197,8 +197,8 @@ class SendEmailRequest extends Request
     public function messages()
     {
         return [
-            'template.in' => 'Template :input is not a valid template.',
-            'entity.in' => 'Entity :input is not a valid entity.',
+            'template.in' => ctrans('texts.bis_invalid_email_template'),
+            'entity.in' => ctrans('texts.bis_invalid_email_entity'),
         ];
     }
 }

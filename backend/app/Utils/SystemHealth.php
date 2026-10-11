@@ -158,7 +158,7 @@ class SystemHealth
             //nlog($file->getPathname());
 
             if ($file->isFile() && ! $file->isWritable()) {
-                return "{$file->getFileName()} is not writable";
+                return ctrans('texts.bis_file_not_writable', ['file' => $file->getFileName()]);
             }
         }
 
@@ -200,11 +200,11 @@ class SystemHealth
     public static function getPdfEngine()
     {
         if (config('ninja.invoiceninja_hosted_pdf_generation') || config('ninja.pdf_generator') == 'hosted_ninja') {
-            return 'Invoice Ninja Hosted PDF Generator';
+            return ctrans('texts.bis_pdf_engine_hosted');
         } elseif (config('ninja.phantomjs_pdf_generation') || config('ninja.pdf_generator') == 'phantom') {
-            return 'Phantom JS Web Generator';
+            return ctrans('texts.bis_pdf_engine_phantom');
         } elseif (config('ninja.pdf_generator') == 'simulator') {
-            return 'Simulator (blank PDF)';
+            return ctrans('texts.bis_pdf_engine_simulator');
         } else {
             return 'SnapPDF PDF Generator';
         }
@@ -260,14 +260,14 @@ class SystemHealth
     private static function checkPhpCli()
     {
         if (!function_exists('exec')) {
-            return "Unable to check CLI version";
+            return ctrans('texts.bis_php_cli_check_unavailable');
         }
 
         try {
             exec('php -v', $foo, $exitCode);
 
             if ($exitCode === 0) {
-                return empty($foo[0]) ? 'Found php cli, but no version information' : $foo[0];
+                return empty($foo[0]) ? ctrans('texts.bis_php_cli_no_version') : $foo[0];
             }
         } catch (\Throwable $e) {
             return false;
@@ -352,7 +352,7 @@ class SystemHealth
         }
 
         try {
-            Mail::to(config('mail.from.address'))->send(new TestMailServer('Email Server Works!', config('mail.from.address')));
+            Mail::to(config('mail.from.address'))->send(new TestMailServer(ctrans('texts.bis_health_email_server_works'), config('mail.from.address')));
         } catch (Exception $e) {
             return ['success' => false, 'message' => $e->getMessage()];
         }

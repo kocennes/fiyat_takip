@@ -427,7 +427,7 @@ class RecurringInvoiceController extends BaseController
                 UpdateRecurring::dispatch($request->ids, $user->company(), $user, $request->action, $percentage_increase);
             }
 
-            return response()->json(['message' => 'Update in progress.'], 200);
+            return response()->json(['message' => ctrans('texts.bis_update_in_progress')], 200);
         }
 
         $recurring_invoices = RecurringInvoice::withTrashed()->company()->find($request->ids);
@@ -630,7 +630,7 @@ class RecurringInvoiceController extends BaseController
         $invitation = $this->recurring_invoice_repo->getInvitationByKey($invitation_key);
 
         if (! $invitation) {
-            return response()->json(['message' => 'no record found'], 400);
+            return response()->json(['message' => ctrans('texts.record_not_found')], 400);
         }
 
         $invoice = $invitation->recurring_invoice;

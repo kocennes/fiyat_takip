@@ -277,7 +277,7 @@ class Wave extends BaseImport implements ImportInterface
                     $message = $ex->getMessage();
                 } else {
                     report($ex);
-                    $message = 'Unknown error';
+                    $message = ctrans('texts.bis_pd_unknown_error');
                 }
 
                 $this->error_array['expense'][] = [

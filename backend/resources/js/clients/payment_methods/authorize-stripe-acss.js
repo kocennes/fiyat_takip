@@ -46,14 +46,14 @@ function authorize() {
             /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
         if (email.value.length < 3 || !email.value.match(validEmailRegex)) {
-            errors.textContent = 'Please enter a valid email address.';
+            errors.textContent = (window.BIS_I18N?.provide_email ?? 'Please enter a valid email address.');
             errors.hidden = false;
             submitButton.disabled = false;
             return;
         }
 
         if (accountholderName.value.length < 3) {
-            errors.textContent = 'Please enter a name for the account holder.';
+            errors.textContent = (window.BIS_I18N?.missing_account_holder_name ?? 'Please enter a name for the account holder.');
             errors.hidden = false;
             submitButton.disabled = false;
             return;

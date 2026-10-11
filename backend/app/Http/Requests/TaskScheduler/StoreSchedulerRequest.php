@@ -123,7 +123,7 @@ class StoreSchedulerRequest extends Request
         
         $validator->after(function ($validator) {
             if (!empty($this->parameters['template_id']) && Design::where('id', $this->decodePrimaryKey($this->parameters['template_id']))->where('is_template', true)->company()->doesntExist()) {
-                $validator->errors()->add('template_id', 'Invalid Template ID Selected');
+                $validator->errors()->add('template_id', ctrans('texts.bis_invalid_template_id'));
             }
 
             $this->validatePaymentScheduleTotal($validator);
@@ -150,9 +150,9 @@ class StoreSchedulerRequest extends Request
         $is_amount = (bool) ($schedule->first()['is_amount'] ?? false);
 
         if ($is_amount && !BcMath::equal($schedule->sum('amount'), $invoice->amount)) {
-            $validator->errors()->add('schedule', 'The total amount of the schedule does not match the invoice amount.');
+            $validator->errors()->add('schedule', ctrans('texts.bis_schedule_amount_mismatch'));
         } elseif (!$is_amount && !BcMath::equal($schedule->sum('amount'), 100)) {
-            $validator->errors()->add('schedule', 'The total percentage amount of the schedule does not match 100%.');
+            $validator->errors()->add('schedule', ctrans('texts.bis_schedule_percentage_mismatch'));
         }
     }
 
@@ -207,9 +207,9 @@ class StoreSchedulerRequest extends Request
     public function messages()
     {
         return [
-            'parameters.schedule.min' => 'The schedule must have at least one item.',
-            'parameters.schedule' => 'You must have at least one schedule entry.',
-            'parameters.invoice_id.required_if' => 'The invoice is required for the payment schedule template.',
+            'parameters.schedule.min' => ctrans('texts.bis_schedule_min_one_item'),
+            'parameters.schedule' => ctrans('texts.bis_schedule_entry_required'),
+            'parameters.invoice_id.required_if' => ctrans('texts.bis_schedule_invoice_required'),
         ];
     }
 }

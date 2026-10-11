@@ -106,7 +106,7 @@ class ChipInAsiaPaymentDriver extends BaseDriver
                 'transaction_reference' => null,
                 'transaction_response' => '',
                 'success' => false,
-                'description' => 'Missing CHIP purchase id on payment.',
+                'description' => ctrans('texts.bis_pd_missing_purchase_id', ['gateway' => 'CHIP']),
                 'code' => 422,
             ];
         }
@@ -148,7 +148,7 @@ class ChipInAsiaPaymentDriver extends BaseDriver
         }
 
         $errorBody = $response->json();
-        $description = $errorBody['__all__']['message'] ?? $errorBody['message'] ?? $response->body() ?: 'Refund failed';
+        $description = $errorBody['__all__']['message'] ?? $errorBody['message'] ?? $response->body() ?: ctrans('texts.bis_pd_refund_failed');
         SystemLogger::dispatch(
             ['server_response' => $errorBody, 'payment_id' => $payment->id],
             SystemLog::CATEGORY_GATEWAY_RESPONSE,
@@ -179,7 +179,7 @@ class ChipInAsiaPaymentDriver extends BaseDriver
 
         $recurringToken = $cgt->gateway_customer_reference ?? $cgt->token;
         if (empty($recurringToken)) {
-            $this->processInternallyFailedPayment($this, new PaymentFailed('CHIP token billing: no recurring token on file.'));
+            $this->processInternallyFailedPayment($this, new PaymentFailed(ctrans('texts.bis_pd_no_recurring_token', ['gateway' => 'CHIP'])));
         }
 
         $newPurchaseId = $this->payment_method->createPurchaseForTokenCharge();

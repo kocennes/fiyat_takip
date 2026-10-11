@@ -148,9 +148,9 @@ class StoreShopClientRequest extends Request
     public function messages()
     {
         return [
-            'unique' => ctrans('validation.unique', ['attribute' => 'email']),
-            //'required' => trans('validation.required', ['attribute' => 'email']),
-            'contacts.*.email.required' => ctrans('validation.email', ['attribute' => 'email']),
+            'unique' => ctrans('validation.unique', ['attribute' => ctrans('texts.email')]),
+            //'required' => trans('validation.required', ['attribute' => ctrans('texts.email')]),
+            'contacts.*.email.required' => ctrans('validation.email', ['attribute' => ctrans('texts.email')]),
         ];
     }
 

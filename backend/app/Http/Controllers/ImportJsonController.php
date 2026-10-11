@@ -71,7 +71,7 @@ class ImportJsonController extends BaseController
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Chunk uploaded successfully',
+                    'message' => ctrans('texts.bis_chunk_uploaded'),
                     'chunk' => $metadata['currentChunk'],
                     'totalChunks' => $metadata['totalChunks'],
                     'fileName' => $metadata['fileName'],
@@ -104,7 +104,7 @@ class ImportJsonController extends BaseController
 
         unset($metadata['uploaded_filepath']);
 
-        return response()->json(array_merge(['message' => 'Processing','success' => true], $metadata), 200);
+        return response()->json(array_merge(['message' => ctrans('texts.processing'), 'success' => true], $metadata), 200);
     }
 
     private function handleChunkedUpload(ImportJsonRequest $request)

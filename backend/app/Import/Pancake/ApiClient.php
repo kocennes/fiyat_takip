@@ -81,7 +81,7 @@ class ApiClient
         $company_id = $company['hashed_id'] ?? $company['id'] ?? null;
 
         if (! is_string($company_id) && ! is_int($company_id)) {
-            throw new RuntimeException('Invoice Ninja did not return an ID for the current company.');
+            throw new RuntimeException('BISAVUNMA Fiyat Takip did not return an ID for the current company.');
         }
 
         $current_settings = is_array($company['settings'] ?? null) ? $company['settings'] : [];
@@ -103,7 +103,7 @@ class ApiClient
         $company_id = $company['hashed_id'] ?? $company['id'] ?? null;
 
         if (! is_string($company_id) && ! is_int($company_id)) {
-            throw new RuntimeException('Invoice Ninja did not return an ID for the current company.');
+            throw new RuntimeException('BISAVUNMA Fiyat Takip did not return an ID for the current company.');
         }
 
         return (string) $company_id;
@@ -359,7 +359,7 @@ class ApiClient
         $id = $data['hashed_id'] ?? $data['id'] ?? null;
 
         if (! is_string($id) && ! is_int($id)) {
-            throw new RuntimeException("Invoice Ninja did not return an ID after creating {$label}.");
+            throw new RuntimeException("BISAVUNMA Fiyat Takip did not return an ID after creating {$label}.");
         }
 
         return (string) $id;
@@ -389,7 +389,7 @@ class ApiClient
         }
 
         return sprintf(
-            'Invoice Ninja API rejected %s with HTTP %d: %s',
+            'BISAVUNMA Fiyat Takip API rejected %s with HTTP %d: %s',
             $label,
             $response->status(),
             mb_substr(trim((string) $message), 0, 2000),

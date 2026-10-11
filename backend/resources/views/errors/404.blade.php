@@ -1,5 +1,5 @@
 @extends('portal.ninja2020.layout.error')
 
-@section('title', __('Not Found'))
+@section('title', ctrans('texts.bis_error_not_found'))
 @section('code', '404')
-@section('message', __('Not Found'))
+@section('message', ctrans('texts.bis_error_not_found'))

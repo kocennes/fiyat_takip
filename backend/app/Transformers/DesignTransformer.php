@@ -45,7 +45,7 @@ class DesignTransformer extends EntityTransformer
     {
         return [
             'id' => (string) $this->encodePrimaryKey($design->id),
-            'name' => (string) $design->name,
+            'name' => $this->displayName($design),
             'is_custom' => (bool) $design->is_custom,
             'is_active' => (bool) $design->is_active,
             'is_template' => (bool) $design->is_template,
@@ -58,5 +58,23 @@ class DesignTransformer extends EntityTransformer
             'is_template' => (bool) $design->is_template,
             'entities' => (string) $design->entities ?: '',
         ];
+    }
+
+    /**
+     * Built-in designs store English style names (Clean, Bold ...) in the
+     * database; show them in the user's language. Custom designs keep the
+     * name the user gave them.
+     */
+    private function displayName(Design $design): string
+    {
+        $name = (string) $design->name;
+
+        if ($design->is_custom) {
+            return $name;
+        }
+
+        $key = 'texts.bis_design_' . strtolower(str_replace(' ', '_', $name));
+
+        return \Illuminate\Support\Facades\Lang::has($key) ? ctrans($key) : $name;
     }
 }

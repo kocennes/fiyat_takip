@@ -30,7 +30,7 @@ class ClientPresenter extends EntityPresenter
 
         $contact = $this->entity->contacts->whereNotNull('email')->first();
 
-        $contact_name = 'No Contact Set';
+        $contact_name = ctrans('texts.bis_no_contact_set');
 
         if ($contact && ((is_string($contact->first_name) && strlen($contact->first_name) >= 1) || (is_string($contact->last_name) && strlen($contact->last_name) >= 1))) {
             $contact_name = $contact->first_name . ' ' . $contact->last_name;
@@ -53,7 +53,7 @@ class ClientPresenter extends EntityPresenter
 
     public function primary_contact_name()
     {
-        return $this->entity?->primary_contact()?->first() ? $this->entity->primary_contact()->first()->first_name . ' ' . $this->entity->primary_contact()->first()->last_name : 'No primary contact set';
+        return $this->entity?->primary_contact()?->first() ? $this->entity->primary_contact()->first()->first_name . ' ' . $this->entity->primary_contact()->first()->last_name : ctrans('texts.bis_no_primary_contact_set');
     }
 
     public function primary_contact_name_or_null()
@@ -73,7 +73,7 @@ class ClientPresenter extends EntityPresenter
 
         $contact = $this->entity->contacts->where('email', '!=', '')->first();
 
-        return $contact ? $contact->email : 'No Email Set';
+        return $contact ? $contact->email : ctrans('texts.bis_no_email_set');
     }
 
     public function address()

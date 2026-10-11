@@ -107,14 +107,14 @@ class PaymentMethodSyncService
                 }
 
                 $after = $this->describeToken($firstToken->fresh());
-                $prefix = $automaticallyUpdated
-                    ? 'Stripe automatically updated'
-                    : 'Stripe updated';
+                $notes = $automaticallyUpdated
+                    ? ctrans('texts.bis_pd_sync_updated_auto', ['before' => $before, 'after' => $after])
+                    : ctrans('texts.bis_pd_sync_updated', ['before' => $before, 'after' => $after]);
 
                 $this->createActivity(
                     $firstToken->client,
                     Activity::PAYMENT_METHOD_UPDATED,
-                    "{$prefix} saved payment method from {$before} to {$after}"
+                    $notes
                 );
             }
         });
@@ -230,23 +230,25 @@ class PaymentMethodSyncService
         bool $removedDefault
     ): string {
         // nlog("paymentMethodDetachedNotes: {$tokens->first()->id}");
-        $description = $descriptions->get($tokens->first()->id, 'a saved payment method');
+        $description = $descriptions->get($tokens->first()->id, ctrans('texts.bis_pd_sync_a_saved_payment_method'));
 
         if (!$removedDefault) {
-            return "Stripe removed saved payment method {$description}.";
+            return ctrans('texts.bis_pd_sync_removed', ['description' => $description]);
         }
+
+        $notes = ctrans('texts.bis_pd_sync_removed_default', ['description' => $description]);
 
         $replacements = array_values(array_unique($replacementDescriptions));
 
         if (count($replacements) === 1) {
-            return "Stripe removed default payment method {$description}. {$replacements[0]} is now the default.";
+            return $notes . ' ' . ctrans('texts.bis_pd_sync_new_default', ['replacement' => $replacements[0]]);
         }
 
         if (count($replacements) > 1) {
-            return "Stripe removed default payment method {$description}. Replacement default payment methods were assigned.";
+            return $notes . ' ' . ctrans('texts.bis_pd_sync_replacements_assigned');
         }
 
-        return "Stripe removed default payment method {$description}. No saved payment method remains.";
+        return $notes . ' ' . ctrans('texts.bis_pd_sync_none_remaining');
     }
 
     private function customerDeletedNotes(
@@ -256,8 +258,7 @@ class PaymentMethodSyncService
     ): string {
         // nlog("customerDeletedNotes: {$tokens->first()->id}");
         $count = $tokens->pluck('token')->unique()->count();
-        $label = $count === 1 ? 'payment method was' : 'payment methods were';
-        $notes = "The Stripe customer was deleted. {$count} saved {$label} removed from Invoice Ninja.";
+        $notes = ctrans('texts.bis_pd_sync_customer_deleted', ['count' => $count]);
 
         if (!$removedDefault) {
             return $notes;
@@ -266,14 +267,14 @@ class PaymentMethodSyncService
         $replacements = array_values(array_unique($replacementDescriptions));
 
         if (count($replacements) === 1) {
-            return "{$notes} {$replacements[0]} is now the default.";
+            return $notes . ' ' . ctrans('texts.bis_pd_sync_new_default', ['replacement' => $replacements[0]]);
         }
 
         if (count($replacements) > 1) {
-            return "{$notes} Replacement default payment methods were assigned.";
+            return $notes . ' ' . ctrans('texts.bis_pd_sync_replacements_assigned');
         }
 
-        return "{$notes} No saved payment method remains.";
+        return $notes . ' ' . ctrans('texts.bis_pd_sync_none_remaining');
     }
 
     private function describeToken(ClientGatewayToken $token): string
@@ -284,14 +285,14 @@ class PaymentMethodSyncService
         $description = trim("{$brand} •••• {$last4}");
 
         if ($description === '••••') {
-            $description = 'saved payment method';
+            $description = ctrans('texts.bis_pd_sync_saved_payment_method');
         }
 
         $expMonth = trim((string) ($meta->exp_month ?? ''));
         $expYear = trim((string) ($meta->exp_year ?? ''));
 
         if ($expMonth !== '' && $expYear !== '') {
-            $description .= " (expires {$expMonth}/{$expYear})";
+            $description .= ' ' . ctrans('texts.bis_pd_sync_expires', ['date' => "{$expMonth}/{$expYear}"]);
         }
 
         return $description;

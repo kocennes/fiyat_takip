@@ -61,7 +61,7 @@ class ACH implements LivewireMethodInterface
 
         $this->lawpay->storeGatewayToken($data, []);
 
-        return redirect()->route('client.payment_methods.index')->withSuccess('Payment Method added.');
+        return redirect()->route('client.payment_methods.index')->withSuccess(ctrans('texts.payment_method_added'));
     }
 
     public function paymentView(array $data)
@@ -152,7 +152,7 @@ class ACH implements LivewireMethodInterface
 
         // Handle failure
         $error = $response->json();
-        $error_message = $error['message'] ?? $error['error'] ?? 'Payment failed';
+        $error_message = $error['message'] ?? $error['error'] ?? ctrans('texts.failed_payment');
 
         SystemLogger::dispatch(
             ['server_response' => $error, 'data' => $payment_hash->data],
@@ -210,7 +210,7 @@ class ACH implements LivewireMethodInterface
             return $payment;
         }
 
-        $error_message = $lawpay_response['message'] ?? $lawpay_response['error'] ?? 'Payment failed';
+        $error_message = $lawpay_response['message'] ?? $lawpay_response['error'] ?? ctrans('texts.failed_payment');
 
         SystemLogger::dispatch(
             ['server_response' => $lawpay_response, 'data' => $payload],

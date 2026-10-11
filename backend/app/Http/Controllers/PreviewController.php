@@ -274,7 +274,7 @@ class PreviewController extends BaseController
 
         } catch (SyntaxError $e) {
         } catch (\Exception $e) {
-            return response()->json(['message' => 'invalid data access', 'errors' => ['design.design.body' => $e->getMessage()]], 422);
+            return response()->json(['message' => ctrans('texts.bis_template_data_access_invalid'), 'errors' => ['design.design.body' => $e->getMessage()]], 422);
         }
 
         if (request()->query('html') == 'true') {
@@ -319,13 +319,13 @@ class PreviewController extends BaseController
         $design_object = json_decode(json_encode(request()->input('design')), true);
 
         if (! is_array($design_object)) {
-            return response()->json(['message' => 'Invalid custom design object'], 400);
+            return response()->json(['message' => ctrans('texts.bis_invalid_custom_design')], 400);
         }
 
         $requestDesign = $design_object['design'] ?? null;
 
         if (! is_array($requestDesign)) {
-            return response()->json(['message' => 'Invalid custom design object'], 400);
+            return response()->json(['message' => ctrans('texts.bis_invalid_custom_design')], 400);
         }
 
         $ps = new PdfService($invitation, 'product', [

@@ -77,7 +77,7 @@ class ContactForgotPasswordController extends Controller
         }
 
         return $this->render('auth.passwords.request', [
-            'title' => 'Client Password Reset',
+            'title' => ctrans('texts.password_recovery'),
             'passwordEmailRoute' => 'client.password.email',
             'account' => $account,
             'company' => $company,
@@ -143,8 +143,8 @@ class ContactForgotPasswordController extends Controller
             }
 
             return $response == Password::RESET_LINK_SENT // @phpstan-ignore-line
-                ? response()->json(['message' => 'Reset link sent to your email.', 'status' => true], 201)
-                : response()->json(['message' => 'Email not found', 'status' => false], 401);
+                ? response()->json(['message' => ctrans('passwords.sent'), 'status' => true], 201)
+                : response()->json(['message' => ctrans('passwords.user'), 'status' => false], 401);
         }
 
         return $response == Password::RESET_LINK_SENT // @phpstan-ignore-line

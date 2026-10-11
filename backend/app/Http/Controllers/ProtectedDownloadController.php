@@ -35,7 +35,7 @@ class ProtectedDownloadController extends BaseController
         $download = Cache::get($hash);
 
         if (! $download) {
-            throw new SystemError('File no longer available', 404);
+            throw new SystemError(ctrans('texts.bis_file_no_longer_available'), 404);
         }
 
         if (
@@ -50,20 +50,20 @@ class ProtectedDownloadController extends BaseController
             $download_name = $download['download_name'];
 
             if ($download['expires_at'] <= now()->timestamp) {
-                throw new SystemError('File no longer available', 404);
+                throw new SystemError(ctrans('texts.bis_file_no_longer_available'), 404);
             }
         } else {
-            throw new SystemError('File no longer available', 404);
+            throw new SystemError(ctrans('texts.bis_file_no_longer_available'), 404);
         }
 
         if ($disk === '') {
-            throw new SystemError('File no longer available', 404);
+            throw new SystemError(ctrans('texts.bis_file_no_longer_available'), 404);
         }
 
         $storage = Storage::disk($disk);
 
         if (! $storage->exists($storage_path)) {
-            throw new SystemError('File not found', 404);
+            throw new SystemError(ctrans('texts.bis_file_not_found'), 404);
         }
 
         $file_size = $storage->size($storage_path);
@@ -73,7 +73,7 @@ class ProtectedDownloadController extends BaseController
             $stream = $storage->readStream($storage_path);
 
             if (! is_resource($stream)) {
-                throw new SystemError('Unable to read file', 500);
+                throw new SystemError(ctrans('texts.bis_unable_to_read_file'), 500);
             }
 
             try {
@@ -81,7 +81,7 @@ class ProtectedDownloadController extends BaseController
                     $chunk = fread($stream, 8192);
 
                     if ($chunk === false) {
-                        throw new SystemError('Unable to read file', 500);
+                        throw new SystemError(ctrans('texts.bis_unable_to_read_file'), 500);
                     }
 
                     echo $chunk;

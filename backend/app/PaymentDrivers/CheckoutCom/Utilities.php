@@ -168,7 +168,7 @@ trait Utilities
         if (is_array($_payment) && array_key_exists('status', $_payment)) {
             $error_message = $_payment['status'];
         } else {
-            $error_message = 'Error processing payment.';
+            $error_message = ctrans('texts.bis_pd_error_processing_payment');
         }
 
         if (isset($_payment['actions'][0]['response_summary'])) {
@@ -255,7 +255,7 @@ trait Utilities
         // No redirect link and no payment ID — something went wrong
         return $this->getParent()->processInternallyFailedPayment(
             $this->getParent(),
-            new Exception('Pending payment response contained no redirect link or payment ID.')
+            new Exception(ctrans('texts.bis_pd_pending_response_invalid'))
         );
     }
 

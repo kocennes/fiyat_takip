@@ -29,7 +29,7 @@ class ContactSetDb
     public function handle($request, Closure $next)
     {
         $error = [
-            'message' => 'Invalid Token',
+            'message' => ctrans('texts.bis_invalid_token'),
             'errors' => new stdClass(),
         ];
 

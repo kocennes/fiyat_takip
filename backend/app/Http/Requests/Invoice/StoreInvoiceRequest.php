@@ -185,7 +185,7 @@ class StoreInvoiceRequest extends Request
     public function messages(): array
     {
         return [
-            'client_id.integer' => 'The value for the client ID is invalid',
+            'client_id.integer' => ctrans('texts.bis_client_id_invalid'),
         ];
     }
 }

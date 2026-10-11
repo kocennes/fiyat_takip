@@ -10,6 +10,7 @@
 
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { trans } from '$app/common/helpers';
 import { Invoice } from '$app/common/interfaces/invoice';
 import { Schedule, ScheduleParams } from '$app/common/interfaces/schedule';
 import { ValidationBag } from '$app/common/interfaces/validation-bag';
@@ -271,8 +272,13 @@ export function AddScheduleModal(props: Props) {
 
           <div className="text-sm text-gray-600 mt-1">
             {currentSchedule.is_amount
-              ? `Remaining: $${calculateModalRemaining(currentSchedule.is_amount)} of ${selectedInvoice?.amount || 0}`
-              : `Remaining: ${calculateModalRemaining(currentSchedule.is_amount)}% of invoice`}
+              ? trans('bis_schedule_remaining_amount', {
+                  remaining: calculateModalRemaining(currentSchedule.is_amount),
+                  total: selectedInvoice?.amount || 0,
+                })
+              : trans('bis_schedule_remaining_percent', {
+                  remaining: calculateModalRemaining(currentSchedule.is_amount),
+                })}
           </div>
         </div>
 

@@ -20,19 +20,19 @@ class Checkout3dsController extends Controller
     public function index(Checkout3dsRequest $request, string $company_key, string $company_gateway_id, string $hash)
     {
         if (! $request->getCompany()) {
-            return response()->json(['message' => 'Company record not found.', 'company_key' => $company_key]);
+            return response()->json(['message' => ctrans('texts.bis_company_record_not_found'), 'company_key' => $company_key]);
         }
 
         if (! $request->getCompanyGateway()) {
-            return response()->json(['message' => 'Company gateway record not found.', 'company_gateway_id' => $company_gateway_id]);
+            return response()->json(['message' => ctrans('texts.bis_company_gateway_record_not_found'), 'company_gateway_id' => $company_gateway_id]);
         }
 
         if (! $request->getPaymentHash()) {
-            return response()->json(['message' => 'Hash record not found.', 'hash' => $hash]);
+            return response()->json(['message' => ctrans('texts.bis_payment_hash_record_not_found'), 'hash' => $hash]);
         }
 
         if (! $request->getClient()) {
-            return response()->json(['message' => 'Client record not found.']);
+            return response()->json(['message' => ctrans('texts.bis_client_record_not_found')]);
         }
 
         return $request->getCompanyGateway()

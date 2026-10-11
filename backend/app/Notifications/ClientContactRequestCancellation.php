@@ -88,10 +88,9 @@ class ClientContactRequestCancellation extends Notification
 
         return (new SlackMessage())
                 ->success()
-                ->to('#devv2')
-                ->from('System')
-                ->image('https://app.invoiceninja.com/favicon.png')
-                ->content("Contact {$name} from client {$client_name} requested to cancel Recurring Invoice #{$recurring_invoice_number}");
+                ->from(ctrans('texts.notification_bot'))
+                ->image(asset('brand/bisavunma-icon-192.png'))
+                ->content(ctrans('texts.recurring_cancellation_request_body', ['contact' => $name, 'client' => $client_name, 'invoice' => $recurring_invoice_number]));
     }
 
     /**

@@ -60,7 +60,7 @@ class StoreGroupSettingRequest extends Request
             $company = $user->company();
 
             if (isset($this->settings['lock_invoices']) && $company->verifactuEnabled() && $this->settings['lock_invoices'] != 'when_sent') {
-                $validator->errors()->add('settings.lock_invoices', 'Locked Invoices Cannot Be Disabled');
+                $validator->errors()->add('settings.lock_invoices', ctrans('texts.bis_locked_invoices_cannot_be_disabled'));
             }
 
         });
@@ -82,7 +82,7 @@ class StoreGroupSettingRequest extends Request
     public function messages()
     {
         return [
-            'settings' => 'settings must be a valid json structure',
+            'settings' => ctrans('texts.bis_settings_invalid_json'),
         ];
     }
 

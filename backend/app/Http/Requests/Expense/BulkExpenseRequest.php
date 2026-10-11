@@ -73,7 +73,7 @@ class BulkExpenseRequest extends Request
             $entity_id = $this->decodePrimaryKey($this->input('new_value'), true);
 
             if (! is_int($entity_id)) {
-                $validator->errors()->add('new_value', 'The selected new value is invalid.');
+                $validator->errors()->add('new_value', ctrans('texts.bis_selected_new_value_invalid'));
 
                 return;
             }
@@ -94,7 +94,7 @@ class BulkExpenseRequest extends Request
                     ->exists();
 
             if (! $entity_exists) {
-                $validator->errors()->add('new_value', 'The selected new value is invalid.');
+                $validator->errors()->add('new_value', ctrans('texts.bis_selected_new_value_invalid'));
             }
         });
     }

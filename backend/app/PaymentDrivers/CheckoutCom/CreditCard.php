@@ -143,7 +143,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
         } catch (CheckoutAuthorizationException $e) {
             // Bad Invalid authorization
 
-            throw new PaymentFailed("There is a problem with your Checkout Gateway API keys", 401);
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'Checkout.com']), 401);
         }
     }
 
@@ -228,7 +228,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
         $paymentRequest->amount = $this->checkout->payment_hash->data->value;
         $paymentRequest->reference = substr($this->checkout->getDescription(), 0, 49);
         $paymentRequest->customer = $this->checkout->getCustomer();
-        $paymentRequest->metadata = ['udf1' => 'Invoice Ninja', 'udf2' => $this->checkout->payment_hash->hash];
+        $paymentRequest->metadata = ['udf1' => 'BISAVUNMA Fiyat Takip', 'udf2' => $this->checkout->payment_hash->hash];
         $paymentRequest->currency = $this->checkout->client->getCurrencyCode();
 
         $processingChannelId = $this->checkout->company_gateway->getConfigField('processingChannelId');
@@ -362,7 +362,7 @@ class CreditCard implements MethodInterface, LivewireMethodInterface
                 $this->checkout->client->company,
             );
 
-            return new PaymentFailed("There was a problem communicating with the API credentials for Checkout", $e->getCode());
+            return new PaymentFailed(ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'Checkout.com']), $e->getCode());
 
         }
     }

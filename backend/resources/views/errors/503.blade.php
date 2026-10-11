@@ -1,5 +1,5 @@
 @extends('portal.ninja2020.layout.error')
 
-@section('title', __('Service Unavailable'))
+@section('title', ctrans('texts.bis_error_service_unavailable'))
 @section('code', '503')
-@section('message', __($exception->getMessage() ?: 'Service Unavailable'))
+@section('message', $exception->getMessage() ? __($exception->getMessage()) : ctrans('texts.bis_error_service_unavailable'))

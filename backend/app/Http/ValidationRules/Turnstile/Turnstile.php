@@ -29,7 +29,7 @@ class Turnstile implements ValidationRule
         if ($data['success']) {
 
         } else {
-            $fail("Captcha failed");
+            $fail(ctrans('texts.bis_captcha_failed'));
         }
 
 

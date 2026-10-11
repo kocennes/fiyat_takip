@@ -95,7 +95,7 @@ class LoginController extends BaseController
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
-            return $this->loginErrorResponse('Too many login attempts, you are being throttled', 401);
+            return $this->loginErrorResponse(ctrans('texts.bis_too_many_login_attempts'), 401);
         }
 
         $via_passkey = $request->isPasskeyLogin();
@@ -259,11 +259,11 @@ class LoginController extends BaseController
         $cu = $this->hydrateCompanyUser($user);
 
         if ($cu->count() == 0) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         if (Ninja::isHosted() && !$cu->first()->is_owner && !$user->account->isEnterprisePaidClient()) { //@phpstan-ignore-line
-            return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade.'], 401);
+            return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 401);
         }
 
         event(new UserLoggedIn($user, $user->account->default_company, Ninja::eventVars($user->id)));
@@ -363,7 +363,7 @@ class LoginController extends BaseController
             ->where('user_id', $company_token->user_id);
 
         if ($cu->count() == 0) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         $cu->each(function ($company_user) use ($request) {
@@ -377,7 +377,7 @@ class LoginController extends BaseController
         }
 
         if (Ninja::isHosted() && !$cu->first()->is_owner && !$cu->first()->user->account->isEnterprisePaidClient()) {
-            return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+            return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
         }
 
         return $this->refreshReactResponse($cu);
@@ -398,7 +398,7 @@ class LoginController extends BaseController
             ->where('user_id', $company_token->user_id);
 
         if ($cu->count() == 0) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         $cu->each(function ($company_user) use ($request) {
@@ -417,7 +417,7 @@ class LoginController extends BaseController
         }
 
         if (Ninja::isHosted() && !$cu->first()->is_owner && !$cu->first()->user->account->isEnterprisePaidClient()) {
-            return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+            return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
         }
 
         return $this->refreshResponse($cu);
@@ -437,7 +437,7 @@ class LoginController extends BaseController
      */
     public function oauthApiLogin()
     {
-        $message = 'Provider not supported';
+        $message = ctrans('texts.bis_provider_not_supported');
         if (request()->input('provider') == 'google') {
             return $this->handleGoogleOauth();
         } elseif (request()->input('provider') == 'microsoft') {
@@ -447,7 +447,7 @@ class LoginController extends BaseController
                 $token = request()->input('id_token');
                 return $this->handleSocialiteLogin('apple', $token);
             } else {
-                $message = 'Token is missing for the apple login';
+                $message = ctrans('texts.bis_apple_login_token_missing');
             }
         }
 
@@ -485,7 +485,7 @@ class LoginController extends BaseController
 
         if ($existing_user = MultiDB::hasUser($query)) {
             if (!$existing_user->account) { //@phpstan-ignore-line
-                return response()->json(['message' => 'User exists, but not attached to any companies! Orphaned user!'], 400);
+                return response()->json(['message' => ctrans('texts.bis_user_orphaned')], 400);
             }
 
             Auth::login($existing_user, false);
@@ -493,11 +493,11 @@ class LoginController extends BaseController
             $cu = $this->hydrateCompanyUser($existing_user);
 
             if ($cu->count() == 0) {
-                return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+                return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
             }
 
             if (Ninja::isHosted() && !$cu->first()->is_owner && !$existing_user->account->isEnterprisePaidClient()) { //@phpstan-ignore-line
-                return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+                return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
             }
 
             return $this->timeConstrainedResponse($cu);
@@ -505,12 +505,12 @@ class LoginController extends BaseController
         //If this is a result user/email combo - lets add their OAuth details details
         if ($existing_login_user = MultiDB::hasUser(['email' => $user->email])) {
             if (!$existing_login_user->account) { //@phpstan-ignore-line
-                return response()->json(['message' => 'User exists, but not attached to any companies! Orphaned user!'], 400);
+                return response()->json(['message' => ctrans('texts.bis_user_orphaned')], 400);
             }
 
             if ($existing_login_user->oauth_provider_id && $existing_login_user->oauth_provider_id !== $provider) {
                 return response()->json([
-                    'message' => 'This email is already linked to '.$existing_login_user->oauth_provider_id.' sign-in. Please sign in with '.$existing_login_user->oauth_provider_id.'.',
+                    'message' => ctrans('texts.bis_email_linked_to_provider', ['provider' => $existing_login_user->oauth_provider_id]),
                 ], 400);
             }
 
@@ -526,11 +526,11 @@ class LoginController extends BaseController
             $cu = $this->hydrateCompanyUser($existing_login_user);
 
             if ($cu->count() == 0) {
-                return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+                return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
             }
 
             if (Ninja::isHosted() && !$cu->first()->is_owner && !$existing_login_user->account->isEnterprisePaidClient()) { //@phpstan-ignore-line
-                return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+                return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
             }
 
             return $this->timeConstrainedResponse($cu);
@@ -547,7 +547,7 @@ class LoginController extends BaseController
         }
 
         if ($provider == 'apple' && !$user->email) {
-            return response()->json(['message' => 'This signup method is not supported as no email was provided'], 403);
+            return response()->json(['message' => ctrans('texts.bis_signup_no_email')], 403);
         }
 
         $new_account = [
@@ -573,11 +573,11 @@ class LoginController extends BaseController
         $cu = $this->hydrateCompanyUser($account_user);
 
         if ($cu->count() == 0) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         if (Ninja::isHosted() && !$cu->first()->is_owner && !$account_user->account->isEnterprisePaidClient()) { //@phpstan-ignore-line
-            return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+            return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
         }
 
         return $this->timeConstrainedResponse($cu);
@@ -633,7 +633,7 @@ class LoginController extends BaseController
         } elseif (request()->has('access_token')) {
             $access_token = request()->input('access_token');
         } else {
-            return response()->json(['message' => 'Invalid response from oauth server, no access token in response.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_oauth_no_access_token')], 400);
         }
 
         $expected_client_id = config('services.microsoft.client_id');
@@ -645,7 +645,7 @@ class LoginController extends BaseController
                 $token_client_id = $payload['appid'] ?? $payload['azp'] ?? null;
 
                 if ($token_client_id !== $expected_client_id) {
-                    return response()->json(['message' => 'Invalid Microsoft token: audience mismatch.'], 403);
+                    return response()->json(['message' => ctrans('texts.bis_microsoft_token_audience_mismatch')], 403);
                 }
             }
         }
@@ -669,18 +669,18 @@ class LoginController extends BaseController
 
             if ($existing_user = MultiDB::hasUser($query)) {
                 if (!$existing_user->account) {
-                    return response()->json(['message' => 'User exists, but not attached to any companies! Orphaned user!'], 400);
+                    return response()->json(['message' => ctrans('texts.bis_user_orphaned')], 400);
                 }
 
                 return $this->existingOauthUser($existing_user);
             }
 
             if (MultiDB::hasUser(['email' => $email, 'oauth_provider_id' => null])) {
-                return response()->json(['message' => 'User exists, but never authenticated with OAuth, please use your email and password to login.'], 400);
+                return response()->json(['message' => ctrans('texts.bis_user_not_oauth_use_password')], 400);
             }
 
             if (($linked_user = MultiDB::hasUser(['email' => $email])) && $linked_user->oauth_provider_id && $linked_user->oauth_provider_id !== 'microsoft') {
-                return response()->json(['message' => 'This email is already linked to '.$linked_user->oauth_provider_id.' sign-in. Please sign in with '.$linked_user->oauth_provider_id.'.'], 400);
+                return response()->json(['message' => ctrans('texts.bis_email_linked_to_provider', ['provider' => $linked_user->oauth_provider_id])], 400);
             }
 
             // Signup!
@@ -697,11 +697,11 @@ class LoginController extends BaseController
                 return $this->createNewAccount($new_account);
             }
 
-            return response()->json(['message' => 'User not found. If you believe this is an error, please send an email to contact@invoiceninja.com'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_not_found_contact_admin')], 400);
         }
 
 
-        return response()->json(['message' => 'Unable to authenticate this user'], 400);
+        return response()->json(['message' => ctrans('texts.bis_unable_to_authenticate_user')], 400);
     }
 
     /**
@@ -718,11 +718,11 @@ class LoginController extends BaseController
         $cu = $this->hydrateCompanyUser($existing_user);
 
         if ($cu->count() == 0) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         if (Ninja::isHosted() && !$cu->first()->is_owner && !$existing_user->account->isEnterprisePaidClient()) { //@phpstan-ignore-line
-            return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+            return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
         }
 
         event(new UserLoggedIn($existing_user, $existing_user->account->default_company, Ninja::eventVars($existing_user->id)));
@@ -735,11 +735,11 @@ class LoginController extends BaseController
         $cu = $this->hydrateCompanyUser($user);
 
         if ($cu->count() == 0) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         if (Ninja::isHosted() && !$cu->first()->is_owner && !auth()->user()->account->isEnterprisePaidClient()) { //@phpstan-ignore-line
-            return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+            return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
         }
 
         event(new UserLoggedIn($user, $user->account->default_company, Ninja::eventVars($user->id)));
@@ -758,7 +758,7 @@ class LoginController extends BaseController
         } elseif (request()->has('access_token')) {
             $user = $google->harvestUser(request()->input('access_token'));
         } else {
-            return response()->json(['message' => 'Illegal request'], 403);
+            return response()->json(['message' => ctrans('texts.bis_illegal_request')], 403);
         }
 
         if (is_array($user)) {
@@ -769,18 +769,18 @@ class LoginController extends BaseController
 
             if ($existing_user = MultiDB::hasUser($query)) {
                 if (!$existing_user->account) {
-                    return response()->json(['message' => 'User exists, but not attached to any companies! Orphaned user!'], 400);
+                    return response()->json(['message' => ctrans('texts.bis_user_orphaned')], 400);
                 }
 
                 return $this->existingOauthUser($existing_user);
             }
 
             if (MultiDB::hasUser(['email' => $google->harvestEmail($user), 'oauth_provider_id' => null])) {
-                return response()->json(['message' => 'Please use your email and password to login.'], 400);
+                return response()->json(['message' => ctrans('texts.bis_use_email_password_login')], 400);
             }
 
             if (($linked_user = MultiDB::hasUser(['email' => $google->harvestEmail($user)])) && $linked_user->oauth_provider_id && $linked_user->oauth_provider_id !== 'google') {
-                return response()->json(['message' => 'This email is already linked to '.$linked_user->oauth_provider_id.' sign-in. Please sign in with '.$linked_user->oauth_provider_id.'.'], 400);
+                return response()->json(['message' => ctrans('texts.bis_email_linked_to_provider', ['provider' => $linked_user->oauth_provider_id])], 400);
             }
 
         }
@@ -789,7 +789,7 @@ class LoginController extends BaseController
             //check the user doesn't already exist in some form
             if ($existing_login_user = MultiDB::hasUser(['email' => $google->harvestEmail($user), 'oauth_provider_id' => 'google'])) {
                 if (!$existing_login_user->account) {
-                    return response()->json(['message' => 'User exists, but not attached to any companies! Orphaned user!'], 400);
+                    return response()->json(['message' => ctrans('texts.bis_user_orphaned')], 400);
                 }
 
                 Auth::login($existing_login_user, false);
@@ -819,7 +819,7 @@ class LoginController extends BaseController
                 return $this->createNewAccount($new_account);
             }
 
-            return response()->json(['message' => 'User not found. If you believe this is an error, please send an email to contact@invoiceninja.com'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_not_found_contact_admin')], 400);
         }
 
         return response()
@@ -847,11 +847,11 @@ class LoginController extends BaseController
         $cu = $this->hydrateCompanyUser($user);
 
         if ($cu->count() == 0) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         if (Ninja::isHosted() && !$cu->first()->is_owner && !auth()->user()->account->isEnterprisePaidClient()) {
-            return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+            return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
         }
 
         return $this->timeConstrainedResponse($cu);
@@ -875,7 +875,7 @@ class LoginController extends BaseController
 
         if ($provider == 'oidc') {
             if (!config('services.oidc.issuer')) {
-                return abort(404, 'OIDC provider is not configured');
+                return abort(404, ctrans('texts.bis_oidc_not_configured'));
             }
 
             $scopes = array_values(array_filter(explode(' ', (string) config('services.oidc.scopes', 'openid profile email'))));
@@ -894,14 +894,14 @@ class LoginController extends BaseController
         // straight back to the IdP and loop.
         if (request()->has('error')) {
             nlog('OAuth provider returned error: ' . request()->query('error'));
-            return response()->json(['message' => 'OAuth sign-in was cancelled or failed.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_oauth_signin_failed')], 400);
         }
 
         if (request()->has('code')) {
             return $this->handleProviderCallback($provider);
         } else {
             if (!in_array($provider, ['google', 'microsoft', 'oidc'])) {
-                return abort(400, 'Invalid provider');
+                return abort(400, ctrans('texts.bis_invalid_provider'));
             }
 
             return Socialite::driver($provider)->with($parameters)->scopes($scopes)->redirect();
@@ -995,11 +995,11 @@ class LoginController extends BaseController
             $socialite_user = Socialite::driver('oidc')->user();
         } catch (\Throwable $e) {
             nlog('OIDC callback failed: ' . $e->getMessage());
-            return response()->json(['message' => 'OIDC sign-in failed.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_oidc_signin_failed')], 400);
         }
 
         if (!$socialite_user || !$socialite_user->getId()) { //@phpstan-ignore-line
-            return response()->json(['message' => 'OIDC sign-in failed: missing subject identifier.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_oidc_missing_subject')], 400);
         }
 
         $user = MultiDB::hasUser([
@@ -1030,11 +1030,11 @@ class LoginController extends BaseController
         }
 
         if (!$user) {
-            return response()->json(['message' => 'No Invoice Ninja account is linked to this OIDC identity. Ask an administrator to invite you first.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_oidc_no_linked_account')], 400);
         }
 
         if (!$user->account) {
-            return response()->json(['message' => 'User exists but is not attached to any company.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_orphaned')], 400);
         }
 
         Auth::login($user, false);
@@ -1042,11 +1042,11 @@ class LoginController extends BaseController
         $cu = $this->hydrateCompanyUser($user);
 
         if ($cu->count() == 0) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         if (Ninja::isHosted() && !$cu->first()->is_owner && !$user->account->isEnterprisePaidClient()) { //@phpstan-ignore-line
-            return response()->json(['message' => 'Pro / Free accounts only the owner can log in. Please upgrade'], 403);
+            return response()->json(['message' => ctrans('texts.bis_only_owner_can_login')], 403);
         }
 
         $name = OAuth::splitName($socialite_user->getName() ?? '');
@@ -1058,7 +1058,7 @@ class LoginController extends BaseController
         $company_token = app(TruthSource::class)->getCompanyToken();
 
         if (!$company_token) {
-            return response()->json(['message' => 'User found, but not attached to any companies, please see your administrator'], 400);
+            return response()->json(['message' => ctrans('texts.bis_user_no_company_contact_admin')], 400);
         }
 
         event(new UserLoggedIn($user, $company_token->company, Ninja::eventVars($user->id)));
@@ -1094,13 +1094,13 @@ class LoginController extends BaseController
         // Fixed-length guard rejects trivially short guesses without giving
         // any information about which specific codes are live.
         if (strlen($code) !== 64) {
-            return response()->json(['message' => 'Invalid OIDC exchange code.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_oidc_invalid_exchange_code')], 400);
         }
 
         $token = Cache::pull('oidc.exchange.' . $code);
 
         if (!$token) {
-            return response()->json(['message' => 'OIDC exchange code is expired or already used.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_oidc_exchange_code_expired')], 400);
         }
 
         return response()->json(['token' => $token]);

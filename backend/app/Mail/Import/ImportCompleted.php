@@ -77,6 +77,7 @@ class ImportCompleted extends Mailable
 
         return $this
             ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject(ctrans('texts.import_completed'))
             ->view('email.import.completed', $data);
     }
 }

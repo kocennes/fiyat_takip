@@ -49,10 +49,15 @@ class FDSReview implements ShouldQueue
 
         $invoices_string = \implode(', ', collect($this->payment_hash->invoices())->pluck('invoice_number')->toArray()) ?: '';
 
-        $body = "Transaction {$this->transaction_reference} has been held for your review in Auth.net based on your Fraud Detection Settings.\n\n\nWe have marked invoices {$invoices_string} as paid in Invoice Ninja.\n\n\nPlease review this transaction in your auth.net account, and authorize if correct to ensure the transaction is finalized as expected.\n\n\nIf these charges need to be cancelled, you will need to delete the payments that have been created in Invoice Ninja.";
+        $body = implode("\n\n\n", [
+            ctrans('texts.bis_pd_fds_review_held', ['reference' => $this->transaction_reference]),
+            ctrans('texts.bis_pd_fds_review_marked_paid', ['invoices' => $invoices_string]),
+            ctrans('texts.bis_pd_fds_review_action'),
+            ctrans('texts.bis_pd_fds_review_cancel'),
+        ]);
 
         $mo = new EmailObject();
-        $mo->subject = "Transaction {$this->transaction_reference} held for review by auth.net";
+        $mo->subject = ctrans('texts.bis_pd_fds_review_subject', ['reference' => $this->transaction_reference]);
         $mo->body = nl2br($body);
         $mo->text_body = $body;
         $mo->company_key = $company->company_key;

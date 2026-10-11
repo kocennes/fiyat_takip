@@ -2,26 +2,30 @@
 
 return [
 
-    'web_url' => 'https://www.invoiceninja.com',
+    // Links in e-mails ("log in") point at this installation, not at an external product site.
+    'web_url' => rtrim(env('APP_URL', ''), '/'),
     'admin_token' => env('NINJA_ADMIN_TOKEN', ''),
-    'license_url' => 'https://app.invoiceninja.com',
+    // No external licence / registration server: an empty URL keeps every phone-home call inert.
+    'license_url' => env('LICENSE_URL', ''),
     'react_url' => env('REACT_URL', env('APP_URL', '')),
     'calendar' => [
-        'native_redirect' => env('CALENDAR_NATIVE_REDIRECT', 'invoiceninja://calendar_connection/complete'),
+        'native_redirect' => env('CALENDAR_NATIVE_REDIRECT', ''),
     ],
+    // There is no BISAVUNMA mobile app; shared links open the web client unless configured.
     'app_links' => [
-        'native_scheme' => env('APP_LINKS_NATIVE_SCHEME', 'invoiceninja://app'),
-        'android_package' => env('APP_LINKS_ANDROID_PACKAGE', 'com.invoiceninja.admin'),
-        'android_fingerprints' => env('APP_LINKS_ANDROID_FINGERPRINTS', 'BB:BC:8B:FB:72:4E:F2:56:77:30:31:B1:C9:22:C0:51:D3:5D:EE:3F:CE:BD:59:3A:F7:11:2F:AB:46:7D:E8:88'),
-        'apple_app_ids' => env('APP_LINKS_APPLE_APP_IDS', 'NPC44Y2C98.com.invoiceninja.admin'),
+        'native_scheme' => env('APP_LINKS_NATIVE_SCHEME', ''),
+        'android_package' => env('APP_LINKS_ANDROID_PACKAGE', ''),
+        'android_fingerprints' => env('APP_LINKS_ANDROID_FINGERPRINTS', ''),
+        'apple_app_ids' => env('APP_LINKS_APPLE_APP_IDS', ''),
     ],
     'production' => env('NINJA_PROD', false),
     'license' => env('NINJA_LICENSE', ''),
-    'version_url' => 'https://pdf.invoicing.co/api/version',
-    'app_name' => env('APP_NAME', 'Invoice Ninja'),
+    // Version checks read the bundled VERSION.txt (latest = installed) instead of an external server.
+    'version_url' => env('VERSION_URL', base_path('VERSION.txt')),
+    'app_name' => env('APP_NAME', 'BISAVUNMA Fiyat Takip'),
     'app_env' => env('APP_ENV', 'selfhosted'),
-    'app_logo' => env('APP_LOGO', 'https://invoicing.co/images/new_logo.png'),
-    'ninja_client_portal' => env('NINJA_CLIENT_PORTAL', 'https://invoiceninja.invoicing.co'),
+    'app_logo' => env('APP_LOGO', rtrim(env('APP_URL', ''), '/') . '/brand/bisavunma-logo.png'),
+    'ninja_client_portal' => env('NINJA_CLIENT_PORTAL', ''),
     'debug_enabled' => env('APP_DEBUG', false),
     'require_https' => env('REQUIRE_HTTPS', true),
     'app_url' => rtrim(env('APP_URL', ''), '/'),
@@ -52,7 +56,8 @@ return [
     'trusted_proxies' => env('TRUSTED_PROXIES', false),
     'is_docker' => env('IS_DOCKER', false),
     'local_download' => env('LOCAL_DOWNLOAD', false),
-    'sentry_dsn' => env('SENTRY_LARAVEL_DSN', "https://39389664f3f14969b4c43dadda00a40b@sentry2.invoicing.co/5"),
+    // Error reporting is off unless a DSN is configured explicitly.
+    'sentry_dsn' => env('SENTRY_LARAVEL_DSN', null),
     'environment' => env('NINJA_ENVIRONMENT', 'selfhost'), // 'hosted', 'development', 'selfhost', 'reseller'
     'preconfigured_install' => env('PRECONFIGURED_INSTALL', false),
     'update_secret' => env('UPDATE_SECRET', ''),
@@ -64,12 +69,12 @@ return [
         'document' => env('DOCUMENT_DISK', 's3'),
     ],
     'terms_of_service_url' => [
-        'hosted' => env('TERMS_OF_SERVICE_URL', 'https://www.invoiceninja.com/terms/'),
-        'selfhost' => env('TERMS_OF_SERVICE_URL', 'https://www.invoiceninja.com/self-hosting-terms-service/'),
+        'hosted' => env('TERMS_OF_SERVICE_URL', ''),
+        'selfhost' => env('TERMS_OF_SERVICE_URL', ''),
     ],
     'privacy_policy_url' => [
-        'hosted' => env('PRIVACY_POLICY_URL', 'https://www.invoiceninja.com/privacy-policy/'),
-        'selfhost' => env('PRIVACY_POLICY_URL', 'https://www.invoiceninja.com/self-hosting-privacy-data-control/'),
+        'hosted' => env('PRIVACY_POLICY_URL', ''),
+        'selfhost' => env('PRIVACY_POLICY_URL', ''),
     ],
     'db' => [
         'multi_db_enabled' => env('MULTI_DB_ENABLED', false),
@@ -79,10 +84,10 @@ return [
         'timezone_id' => env('DEFAULT_TIMEZONE', 1),
         'country_id' => env('DEFAULT_COUNTRY', 840), // United Stated
         'currency_id' => env('DEFAULT_CURRENCY', 1),
-        'language_id' => env('DEFAULT_LANGUAGE', 1), //en
+        'language_id' => env('DEFAULT_LANGUAGE', 25), // Turkish - Turkey (tr_TR)
         'date_format_id' => env('DEFAULT_DATE_FORMAT_ID', '1'),
         'datetime_format_id' => env('DEFAULT_DATETIME_FORMAT_ID', '1'),
-        'locale' => env('DEFAULT_LOCALE', 'en'),
+        'locale' => env('DEFAULT_LOCALE', 'tr_TR'),
         'map_zoom' => env('DEFAULT_MAP_ZOOM', 10),
         'payment_terms' => env('DEFAULT_PAYMENT_TERMS', ''),
         'military_time' => env('MILITARY_TIME', 0),
@@ -113,7 +118,7 @@ return [
     'contact' => [
         'email' => env('MAIL_FROM_ADDRESS'),
         'from_name' => env('MAIL_FROM_NAME'),
-        'ninja_official_contact' => env('NINJA_OFFICIAL_CONTACT', 'contact@invoiceninja.com'),
+        'ninja_official_contact' => env('NINJA_OFFICIAL_CONTACT', ''),
     ],
     'cached_tables' => [
         'banks' => App\Models\Bank::class,

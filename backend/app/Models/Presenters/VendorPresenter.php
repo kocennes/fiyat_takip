@@ -30,7 +30,7 @@ class VendorPresenter extends EntityPresenter
 
         $contact = $this->entity->primary_contact->first();
 
-        $contact_name = 'No Contact Set';
+        $contact_name = ctrans('texts.bis_no_contact_set');
 
         if ($contact && (strlen($contact->first_name) >= 1 || strlen($contact->last_name) >= 1)) {
             $contact_name = $contact->first_name . ' ' . $contact->last_name;
@@ -43,12 +43,12 @@ class VendorPresenter extends EntityPresenter
 
     public function primary_contact_name()
     {
-        return $this->entity->primary_contact->first() !== null ? $this->entity->primary_contact->first()->first_name . ' ' . $this->entity->primary_contact->first()->last_name : 'No primary contact set';
+        return $this->entity->primary_contact->first() !== null ? $this->entity->primary_contact->first()->first_name . ' ' . $this->entity->primary_contact->first()->last_name : ctrans('texts.bis_no_primary_contact_set');
     }
 
     public function email()
     {
-        return $this->entity->primary_contact->first() !== null ? $this->entity->primary_contact->first()->email : 'No Email Set';
+        return $this->entity->primary_contact->first() !== null ? $this->entity->primary_contact->first()->email : ctrans('texts.bis_no_email_set');
     }
 
     public function address()

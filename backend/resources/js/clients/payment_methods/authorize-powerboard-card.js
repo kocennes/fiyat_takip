@@ -50,7 +50,7 @@ async function get3dsToken() {
 
         if (!response.ok) {
             return await response.json().then((errorData) => {
-                throw new Error(errorData.message ?? 'Unknown error.');
+                throw new Error(errorData.message ?? (window.BIS_I18N?.bis_unknown_error ?? 'Unknown error.'));
             });
 
             // const text = await response.text();
@@ -61,7 +61,7 @@ async function get3dsToken() {
     } catch (error) {
         document.getElementById(
             'errors'
-        ).textContent = `Sorry, your transaction could not be processed...\n\n${error.message}`;
+        ).textContent = (window.BIS_I18N?.bis_transaction_not_processed ?? 'Sorry, your transaction could not be processed...') + `\n\n${error.message}`;
         document.getElementById('errors').hidden = false;
 
 
@@ -84,7 +84,7 @@ async function process3ds() {
             authorize();
             
             throw new Error(
-                'There was an issue authenticating this payment method.'
+                (window.BIS_I18N?.bis_payment_method_auth_issue ?? 'There was an issue authenticating this payment method.')
             );
         }
 
@@ -121,7 +121,7 @@ async function process3ds() {
         canvas.on('chargeAuthReject', function (data) {
             document.getElementById(
                 'errors'
-            ).textContent = `Sorry, your transaction could not be processed...`;
+            ).textContent = (window.BIS_I18N?.bis_transaction_not_processed ?? 'Sorry, your transaction could not be processed...');
             document.getElementById('errors').hidden = false;
 
             authorize();
@@ -133,7 +133,7 @@ async function process3ds() {
 
         document.getElementById(
             'errors'
-        ).textContent = `Sorry, your transaction could not be processed...\n\n${error}`;
+        ).textContent = (window.BIS_I18N?.bis_transaction_not_processed ?? 'Sorry, your transaction could not be processed...') + `\n\n${error}`;
         document.getElementById('errors').hidden = false;
 
         let payNow = document.getElementById('authorize-card');

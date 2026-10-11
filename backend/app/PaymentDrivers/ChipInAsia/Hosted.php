@@ -80,8 +80,8 @@ class Hosted implements MethodInterface, LivewireMethodInterface
         $purchaseId = $this->driver->payment_hash->data->chip_purchase_id ?? null;
 
         if (empty($purchaseId)) {
-            $this->driver->sendFailureMail('Missing chip_purchase_id in payment hash (CHIP redirect does not pass id).');
-            throw new PaymentFailed('Invalid return from payment gateway. Please contact support.');
+            $this->driver->sendFailureMail(ctrans('texts.bis_pd_missing_purchase_id', ['gateway' => 'CHIP']));
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_gateway_return'));
         }
 
         // If webhook already created the payment, redirect to it instead of recreating.
@@ -96,8 +96,8 @@ class Hosted implements MethodInterface, LivewireMethodInterface
         $purchase = $this->getPurchase($purchaseId);
 
         if (! $purchase) {
-            $this->driver->sendFailureMail('Could not verify payment with CHIP.');
-            throw new PaymentFailed('Could not verify payment. Please contact support.');
+            $this->driver->sendFailureMail(ctrans('texts.bis_pd_could_not_verify_payment_with', ['gateway' => 'CHIP']));
+            throw new PaymentFailed(ctrans('texts.bis_pd_could_not_verify_payment'));
         }
 
         $status = $purchase['status'] ?? null;
@@ -106,7 +106,7 @@ class Hosted implements MethodInterface, LivewireMethodInterface
             return $this->processSuccessfulPayment($purchase);
         }
 
-        $message = 'Payment was not completed.';
+        $message = ctrans('texts.payment_was_not_completed');
         if (isset($purchase['transaction_data']['attempts'][0]['error']['message'])) {
             $message = $purchase['transaction_data']['attempts'][0]['error']['message'];
         }
@@ -214,7 +214,7 @@ class Hosted implements MethodInterface, LivewireMethodInterface
         }
 
         $errorBody = $response->json();
-        $error = $errorBody['message'] ?? $errorBody['errors'][0]['message'] ?? $response->body() ?: 'Failed to create payment.';
+        $error = $errorBody['message'] ?? $errorBody['errors'][0]['message'] ?? $response->body() ?: ctrans('texts.bis_pd_failed_to_create_payment');
         $this->driver->sendFailureMail($error);
         throw new PaymentFailed($error);
     }
@@ -288,14 +288,14 @@ class Hosted implements MethodInterface, LivewireMethodInterface
         $response = $this->chipRequest('POST', '/purchases/', $payload);
         if (! $response->successful()) {
             $errorBody = $response->json();
-            $error = $errorBody['__all__']['message'] ?? $errorBody['message'] ?? $response->body() ?: 'Failed to create purchase for charge.';
+            $error = $errorBody['__all__']['message'] ?? $errorBody['message'] ?? $response->body() ?: ctrans('texts.bis_pd_failed_to_create_payment');
             throw new PaymentFailed($error);
         }
 
         $body = $response->json();
         $purchaseId = $body['id'] ?? null;
         if (empty($purchaseId)) {
-            throw new PaymentFailed('CHIP did not return a purchase id.');
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_missing_purchase_id', ['gateway' => 'CHIP']));
         }
 
         return $purchaseId;
@@ -351,7 +351,7 @@ class Hosted implements MethodInterface, LivewireMethodInterface
         if (! $response->successful()) {
             $errorBody = $response->json();
             $code = $errorBody['__all__']['code'] ?? '';
-            $message = $errorBody['__all__']['message'] ?? $errorBody['message'] ?? $response->body() ?: 'Charge failed.';
+            $message = $errorBody['__all__']['message'] ?? $errorBody['message'] ?? $response->body() ?: ctrans('texts.bis_pd_charge_failed');
             throw new PaymentFailed($message, $response->status());
         }
 
@@ -491,7 +491,7 @@ class Hosted implements MethodInterface, LivewireMethodInterface
 
         $reportedTotalCents = $purchase['purchase']['total'] ?? null;
         if ($reportedTotalCents === null) {
-            throw new PaymentFailed('CHIP purchase payload is missing the total.');
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_missing_total', ['gateway' => 'CHIP']));
         }
         $reportedAmount = (float) $reportedTotalCents / 100;
         if (abs($reportedAmount - $expectedAmount) > 0.01) {
@@ -508,7 +508,7 @@ class Hosted implements MethodInterface, LivewireMethodInterface
                 $this->driver->client,
                 $this->driver->client->company,
             );
-            throw new PaymentFailed('CHIP returned a different amount than expected.');
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_amount_mismatch', ['gateway' => 'CHIP']));
         }
 
         // Map chip's status to our Payment status. /charge/ can return
@@ -519,7 +519,7 @@ class Hosted implements MethodInterface, LivewireMethodInterface
         $paymentStatus = match ($chipStatus) {
             'paid' => Payment::STATUS_COMPLETED,
             'pending_charge' => Payment::STATUS_PENDING,
-            default => throw new PaymentFailed("CHIP returned unexpected status '{$chipStatus}'; cannot create payment."),
+            default => throw new PaymentFailed(ctrans('texts.bis_pd_gateway_unexpected_status', ['gateway' => 'CHIP', 'status' => $chipStatus])),
         };
 
         return DB::transaction(function () use ($purchase, $expectedAmount, $purchaseId, $paymentStatus, $chipStatus) {

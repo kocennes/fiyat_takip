@@ -71,6 +71,6 @@ class LogoutController extends BaseController
                         $ct->save();
                     });
 
-        return response()->json(['message' => 'All tokens deleted'], 200);
+        return response()->json(['message' => ctrans('texts.bis_all_tokens_deleted')], 200);
     }
 }

@@ -91,7 +91,7 @@ class AddTaxIdentifierRequest extends FormRequest
                         }
                     }
                     if ($company->settings->classification == 'individual') {
-                        $fail("Individuals cannot register additional VAT numbers, only business entities");
+                        $fail(ctrans('texts.bis_individual_no_additional_vat'));
                     }
                 },
             ]

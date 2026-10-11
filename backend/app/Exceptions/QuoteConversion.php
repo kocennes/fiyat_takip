@@ -36,6 +36,6 @@ class QuoteConversion extends Exception
      */
     public function render($request)
     {
-        return response()->json(['message' => 'This quote has already been converted. Cannot convert again.'], 400);
+        return response()->json(['message' => ctrans('texts.bis_quote_already_converted')], 400);
     }
 }

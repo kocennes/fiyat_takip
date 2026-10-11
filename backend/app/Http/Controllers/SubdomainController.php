@@ -29,7 +29,7 @@ class SubdomainController extends BaseController
         $company = $user->company();
 
         if ($company->subdomain == trim(request()->input('subdomain'))) {
-            return response()->json(['message' => 'Current subdomain name.'], 200);
+            return response()->json(['message' => ctrans('texts.bis_current_subdomain')], 200);
         }
 
         if (!MultiDB::checkDomainAvailable(request()->input('subdomain'))) {
@@ -37,10 +37,10 @@ class SubdomainController extends BaseController
         }
 
         if (!preg_match('/^[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?$/', request()->input('subdomain'))) {
-            return response()->json(['message' => "Invalid subdomain format."], 400);
+            return response()->json(['message' => ctrans('texts.bis_invalid_subdomain_format')], 400);
         }
 
 
-        return response()->json(['message' => 'Domain available'], 200);
+        return response()->json(['message' => ctrans('texts.bis_subdomain_available')], 200);
     }
 }

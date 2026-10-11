@@ -81,6 +81,6 @@ class ExportController extends BaseController
 
         CompanyExport::dispatch($user->getCompany(), $user, $hash, $total_activities);
 
-        return response()->json(['message' => 'Processing', 'url' => $url], 200);
+        return response()->json(['message' => ctrans('texts.processing'), 'url' => $url], 200);
     }
 }

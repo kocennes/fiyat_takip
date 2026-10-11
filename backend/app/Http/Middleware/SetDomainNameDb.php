@@ -29,7 +29,7 @@ class SetDomainNameDb
     public function handle($request, Closure $next)
     {
         $error = [
-            'message' => 'Invalid token',
+            'message' => ctrans('texts.bis_invalid_token'),
             'errors' => new stdClass(),
         ];
         /*

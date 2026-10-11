@@ -198,7 +198,7 @@ export function Upload(props: Props) {
                 style={{ color: colors.$3 }}
               >
                 {isDragActive
-                  ? 'drop_file_here'
+                  ? t('drop_file_here')
                   : t('dropzone_default_message')}
               </span>
             </Box>

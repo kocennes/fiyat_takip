@@ -32,7 +32,7 @@ class ClientPortalEnabled
         }]);
 
         if (auth()->guard('contact')->user()->client->getSetting('enable_client_portal') === false) {
-            return redirect()->route('client.error')->with(['title' => ctrans('texts.client_portal'), 'notification' => 'This section of the app has been disabled by the administrator.']);
+            return redirect()->route('client.error')->with(['title' => ctrans('texts.client_portal'), 'notification' => ctrans('texts.bis_section_disabled_by_admin')]);
         }
 
         return $next($request);

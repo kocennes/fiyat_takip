@@ -6,6 +6,7 @@
             window.gtag = window.gtag || function () {};
             window.trackEvent = window.trackEvent || function () {};
         </script>
+        @include('portal.ninja2020.components.js-translations')
 
         <!-- Title -->
         @if(auth()->guard('contact')->check())
@@ -85,7 +86,7 @@
         @yield('footer')
         @stack('footer')
 
-        @if($company && $company->account->isPaid() && !empty($client->getSetting('portal_custom_footer')))
+        @if($company && ($company->account->isPaid() || \App\Utils\Ninja::isSelfHost()) && !empty($client->getSetting('portal_custom_footer')))
             <div class="py-1 text-sm text-center text-white bg-primary">
                 {!! app(\App\Services\ClientPortal\PortalHtmlSanitizer::class)->clean($client->getSetting('portal_custom_footer')) !!}
             </div>

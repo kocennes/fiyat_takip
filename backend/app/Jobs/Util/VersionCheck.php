@@ -44,7 +44,20 @@ class VersionCheck implements ShouldQueue
      */
     public function handle()
     {
-        $version_file = trim(@file_get_contents(config('ninja.version_url')));
+        // BISAVUNMA: never phone home to the upstream version server. By default the
+        // running version is recorded (VERSION.txt / APP_VERSION), so the scheduler
+        // health check keeps working and no "new version available" prompt is shown.
+        // A VERSION_URL that does not point at the upstream vendor is still honoured.
+        $version_url = trim((string) config('ninja.version_url'));
+        $version_file = '';
+
+        if ($version_url !== '' && preg_match('/invoicing\.co|invoiceninja\.(com|org|net)/i', $version_url) !== 1) {
+            $version_file = trim((string) @file_get_contents($version_url));
+        }
+
+        if ($version_file === '') {
+            $version_file = trim((string) config('ninja.app_version'));
+        }
 
         if (Ninja::isSelfHost() && $version_file) {
             Account::query()->whereNotNull('id')->update(['latest_version' => $version_file]);

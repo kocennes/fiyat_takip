@@ -1,4 +1,4 @@
-@extends('portal.ninja2020.layout.payments', ['gateway_title' => 'ACH (Verification)', 'card_title' => 'ACH (Verification)'])
+@extends('portal.ninja2020.layout.payments', ['gateway_title' => ctrans('texts.bis_ach_verification'), 'card_title' => ctrans('texts.bis_ach_verification')])
 
 @section('gateway_content')
     @if(session()->has('error'))

@@ -54,7 +54,7 @@ class MailerController extends BaseController
                 'error' => $exception->getMessage(),
             ]);
 
-            return response()->json(['message' => 'Could not send a test email using the selected mailer.'], 400);
+            return response()->json(['message' => ctrans('texts.bis_mailer_test_failed')], 400);
         } finally {
             app('mail.manager')->forgetMailers();
         }
@@ -154,10 +154,10 @@ class MailerController extends BaseController
             ->timeout(self::TIMEOUT_SECONDS)
             ->post('https://graph.microsoft.com/v1.0/me/sendMail', [
                 'message' => [
-                    'subject' => 'Invoice Ninja mailer test',
+                    'subject' => ctrans('texts.bis_mailer_test_subject'),
                     'body' => [
                         'contentType' => 'Text',
-                        'content' => 'Your Microsoft mailer connection is working.',
+                        'content' => ctrans('texts.bis_mailer_test_body_microsoft'),
                     ],
                     'toRecipients' => [[
                         'emailAddress' => ['address' => $recipient->email],
@@ -196,7 +196,7 @@ class MailerController extends BaseController
 
         $fromAddress = $request->string('from_address')->toString();
         $fromName = $request->string('from_name', $recipient->name())->toString();
-        $mailable = new TestMailServer('Email Server Works!', $fromAddress);
+        $mailable = new TestMailServer(ctrans('texts.bis_email_server_works'), $fromAddress);
         $mailable->from($fromAddress, $fromName);
 
         $configuredMailer
@@ -225,15 +225,17 @@ class MailerController extends BaseController
 
     private function gmailMessage(User $sendingUser, User $recipient): string
     {
+        // Subject and body are Turkish (UTF-8), so both are encoded for a 7-bit safe message.
         $message = implode("\r\n", [
             "From: {$sendingUser->email}",
             "To: {$recipient->email}",
-            'Subject: Invoice Ninja mailer test',
-            'Message-ID: <'.Str::uuid().'@invoiceninja.com>',
+            'Subject: =?UTF-8?B?'.base64_encode(ctrans('texts.bis_mailer_test_subject')).'?=',
+            'Message-ID: <'.Str::uuid().'@'.(parse_url((string) config('ninja.app_url'), PHP_URL_HOST) ?: 'localhost').'>',
             'MIME-Version: 1.0',
             'Content-Type: text/plain; charset=UTF-8',
+            'Content-Transfer-Encoding: base64',
             '',
-            'Your Gmail mailer connection is working.',
+            chunk_split(base64_encode(ctrans('texts.bis_mailer_test_body_gmail'))),
         ]);
 
         return rtrim(strtr(base64_encode($message), '+/', '-_'), '=');

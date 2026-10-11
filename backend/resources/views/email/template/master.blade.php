@@ -273,30 +273,6 @@
                                         </tbody>
                                     </table>
 
-                                    <!-- Whitelabel logo -->
-                                    @isset($whitelabel)
-                                        @if(!$whitelabel)
-                                            <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                                                <tbody>
-                                                <tr>
-                                                    <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-
-                                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                                            <tr>
-                                                                <td style="padding-right: 0px;padding-left: 0px;" align="center">
-
-                                                                    <img align="center" border="0" src="{{ asset('images/invoiceninja-black-logo-2.png') }}" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 34%;max-width: 163.2px; {{ $design == 'dark' ? 'filter: invert(100%);' : '' }}" width="163.2"/>
-
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        @endif
-                                    @endisset
                                     <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
                             </div>
                         </div>

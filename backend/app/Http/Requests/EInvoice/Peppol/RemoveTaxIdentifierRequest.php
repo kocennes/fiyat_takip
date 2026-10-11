@@ -42,7 +42,7 @@ class RemoveTaxIdentifierRequest extends FormRequest
             'country' => ['required', 'bail', Rule::in(array_keys(AddTaxIdentifierRequest::$vat_regex_patterns))],
             'vat_number' => ['required', function ($attribute, $value, $fail) use ($company, $tax_data) {
                 if ($company->settings->classification == 'individual') {
-                    $fail("Individuals cannot register additional VAT numbers, only business entities");
+                    $fail(ctrans('texts.bis_individual_no_additional_vat'));
                 }
 
                 $country = $this->country;
@@ -52,7 +52,7 @@ class RemoveTaxIdentifierRequest extends FormRequest
                     : data_get($tax_data->regions->EU->subregions, "{$country}.vat_number");
 
                 if ($vat === null) {
-                    $fail('VAT number not found.');
+                    $fail(ctrans('texts.bis_vat_number_not_found'));
                 }
             }],
         ];

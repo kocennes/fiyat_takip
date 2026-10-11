@@ -32,11 +32,11 @@ class ClientTransformer extends BaseTransformer
         $data = reset($client_data);
 
         if (isset($data['client.name']) && $this->hasClient($data['client.name'])) {
-            throw new ImportException('Client already exists');
+            throw new ImportException(ctrans('texts.bis_import_client_exists'));
         }
 
         if (!is_array($data)) {
-            throw new ImportException('Empty row, or invalid data encountered.');
+            throw new ImportException(ctrans('texts.bis_import_empty_row'));
         }
 
         $settings = ClientSettings::defaults();

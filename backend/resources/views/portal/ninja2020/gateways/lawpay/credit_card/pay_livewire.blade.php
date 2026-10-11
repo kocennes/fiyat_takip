@@ -25,7 +25,7 @@
 
     @include('portal.ninja2020.gateways.includes.payment_details')
 
-    @component('portal.ninja2020.components.general.card-element', ['title' => 'Pay with Credit Card'])
+    @component('portal.ninja2020.components.general.card-element', ['title' => ctrans('texts.bis_pay_with_credit_card')])
         @include('portal.ninja2020.gateways.lawpay.includes.credit_card')
     @endcomponent
 

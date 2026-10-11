@@ -123,7 +123,7 @@ class StripePaymentDriver extends BaseDriver implements SupportsHeadlessInterfac
             if (strlen($this->company_gateway->getConfigField('account_id')) > 1) {
                 $this->stripe_connect_auth = ['stripe_account' => $this->company_gateway->getConfigField('account_id')];
             } else {
-                throw new StripeConnectFailure('Stripe Connect has not been configured');
+                throw new StripeConnectFailure(ctrans('texts.bis_pd_stripe_connect_not_configured'));
             }
         } else {
 
@@ -612,7 +612,7 @@ class StripePaymentDriver extends BaseDriver implements SupportsHeadlessInterfac
         $customer = Customer::create($data, array_merge($this->stripe_connect_auth, ['idempotency_key' => uniqid("st", true)]));
 
         if (! $customer) {
-            throw new Exception('Unable to create gateway customer');
+            throw new Exception(ctrans('texts.bis_pd_unable_to_create_customer', ['gateway' => 'Stripe']));
         }
 
         return $customer;
@@ -668,7 +668,7 @@ class StripePaymentDriver extends BaseDriver implements SupportsHeadlessInterfac
         // }
 
         if (! $this->hasCompleteBillingAddress()) {
-            throw new PaymentFailed('A complete billing address is required to use this bank account.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_billing_address_required'), 400);
         }
 
         $this->init();
@@ -1146,7 +1146,7 @@ class StripePaymentDriver extends BaseDriver implements SupportsHeadlessInterfac
         }
 
         if (! strlen($this->company_gateway->getConfigField('account_id')) > 1) {
-            throw new StripeConnectFailure('Stripe Connect has not been configured');
+            throw new StripeConnectFailure(ctrans('texts.bis_pd_stripe_connect_not_configured'));
         }
 
         Stripe::setApiKey(config('ninja.ninja_stripe_key'));
@@ -1162,7 +1162,7 @@ class StripePaymentDriver extends BaseDriver implements SupportsHeadlessInterfac
             $this->company_gateway->setConfig($config);
             $this->company_gateway->save();
         } catch (\Exception $e) {
-            throw new StripeConnectFailure('Unable to disconnect Stripe Connect');
+            throw new StripeConnectFailure(ctrans('texts.bis_pd_stripe_connect_disconnect_failed'));
         }
 
         return response()->json(['message' => 'success'], 200);

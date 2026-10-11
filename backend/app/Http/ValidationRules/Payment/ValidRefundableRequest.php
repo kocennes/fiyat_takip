@@ -84,7 +84,7 @@ class ValidRefundableRequest implements Rule
         $invoice = Invoice::query()->where('id', $invoice['invoice_id'])->where('company_id', $payment->company_id)->withTrashed()->first();
 
         if (! $invoice) {
-            $this->error_msg = 'Invoice not found for refund';
+            $this->error_msg = ctrans('texts.bis_refund_invoice_not_found');
 
             return false;
         }
@@ -173,7 +173,7 @@ class ValidRefundableRequest implements Rule
         $max_total_refundable = BcMath::add($max_cash_refund, $max_credit_refund, 2);
 
         if (BcMath::greaterThan($total_refund_requested, $max_total_refundable, 2)) {
-            $this->error_msg = ctrans('texts.max_refundable_payment', [
+            $this->error_msg = ctrans('texts.bis_max_refundable_payment', [
                 'max_refundable' => $max_total_refundable,
             ]);
 

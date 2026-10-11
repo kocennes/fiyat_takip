@@ -46,7 +46,7 @@ class ReferralPayoutReport extends Command
                             {--user_id=* : Referrer user ID; repeat to override the default list}
                             {--commission-rate= : Optional payout percentage applied to net completed payments}
                             {--referral-database=db-ninja-01 : Database containing the referrer users}
-                            {--billing-database=db-ninja-01 : Database containing Invoice Ninja billing clients and payments}
+                            {--billing-database=db-ninja-01 : Database containing BISAVUNMA Fiyat Takip billing clients and payments}
                             {--account-database=* : Account database to scan; repeat to override the configured shards}';
 
     /**
@@ -54,7 +54,7 @@ class ReferralPayoutReport extends Command
      *
      * @var string
      */
-    protected $description = 'Report completed payments associated with referred Invoice Ninja accounts.';
+    protected $description = 'Report completed payments associated with referred BISAVUNMA Fiyat Takip accounts.';
 
     /**
      * Execute the console command.

@@ -100,7 +100,7 @@ class StoreVendorRequest extends Request
     public function messages()
     {
         return [
-            'contacts.*.email.required' => ctrans('validation.email', ['attribute' => 'email']),
+            'contacts.*.email.required' => ctrans('validation.email', ['attribute' => ctrans('texts.email')]),
         ];
     }
 }

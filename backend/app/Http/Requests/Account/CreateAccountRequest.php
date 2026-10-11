@@ -228,7 +228,7 @@ class CreateAccountRequest extends Request
                 $server = $dns[0]["target"] ?? null;
 
                 if ($server && in_array($server, $this->fake_domains)) {
-                    $validator->errors()->add('email', 'Account Already Exists.');
+                    $validator->errors()->add('email', ctrans('texts.bis_account_already_exists'));
                 }
             } catch (\Throwable $e) {
 

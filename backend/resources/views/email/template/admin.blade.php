@@ -2,20 +2,21 @@
     $primary_color = isset($settings) ? $settings->primary_color : '#4caf50';
     $email_alignment = isset($settings) && $settings?->email_alignment ? $settings->email_alignment : 'center';
     $email_preferences = isset($url) && str_contains($url ?? '', '/#/') ? config('ninja.react_url').'/#/settings/user_details/notifications' : config('ninja.app_url');
+    // System e-mails fall back to the BISAVUNMA logo when the company has not uploaded one.
+    $logo = (isset($logo) && $logo && strpos($logo, 'blank.png') === false)
+        ? $logo
+        : asset((isset($settings) && (($settings->email_style ?? '') === 'dark')) ? 'brand/bisavunma-logo-white.png' : 'brand/bisavunma-logo.png');
 @endphp
 
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="color-scheme" content="light dark">
     <meta name="supported-color-schemes" content="light dark">
-    <style>
-        @import url("https://use.typekit.net/zxn7pho.css");
-    </style>
 
     <style type="text/css">
         :root {
@@ -175,80 +176,14 @@
 
                 <tr class="dark-bg"
                     style="background-color: {{ $primary_color }};" width="100%">
-                    <td width="100%">
-                        <div style="text-align: center; margin-top: 25px;">
-                            <h2
-                                style="color: #ffffff; font-family: 'canada-type-gibson', 'roboto', Arial, Helvetica, sans-serif; font-weight: 500; font-size: 26px;">
-                                Questions? We're here to help!</h2>
-                        </div>
-
-                        <div style="text-align:center; margin-bottom: 35px; margin-top: 25px;">
-
-                        <!--[if mso]>
-                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="text-align: center;" valign="center">
-                        <tr>
-                        <td>
-                        <![endif]-->
-                            <a href="https://forum.invoiceninja.com" target="_blank" class="btn-white"
-                               style="vertical-align: middle;display: inline-block;background-color: #ffffff; color: {{ $primary_color }}; display: inline-block; text-decoration: none;  width: 100px; text-align: center; font-size: 12px; height: 35px; line-height: 35px; margin-left: 10px; margin-right: 10px;">
-                                <img style="width: 13px; margin-right: 4px; display: inline-block; vertical-align:middle;" src="{{ asset('images/emails/forum.png') }}" width="13">
-                                <span>Forums</span>
-                            </a>
-                        <!--[if mso]>
-                        </td>
-                        <![endif]-->
-
-
-                        <!--[if mso]>
-                        
-                        <td>
-                        <![endif]-->   
-                            <a href="https://slack.invoiceninja.com/" target="_blank" class="btn-white"
-                               style="vertical-align: middle;display: inline-block;background-color: #ffffff; color: {{ $primary_color }}; display: inline-block; text-decoration: none;  width: 100px; text-align: center; font-size: 12px; height: 35px; line-height: 35px; margin-left: 10px; margin-right: 10px;">
-                                <img style="width: 13px; margin-right: 4px; display: inline-block; vertical-align:middle;" src="{{ asset('images/emails/slack.png') }}" width="13">
-                                <span>Slack</span>
-                            </a>
-                        <!--[if mso]>
-                        </td>
-                        <![endif]-->
-
-                        <!--[if mso]>
-                        
-                        <td>
-                        <![endif]-->   
-                            <a href="https://www.invoiceninja.com/contact/" target="_blank" class="btn-white"
-                               style="vertical-align: middle;display: inline-block;background-color: #ffffff; color: {{ $primary_color }}; display: inline-block; text-decoration: none;  width: 100px; text-align: center; font-size: 12px; height: 35px; line-height: 35px; margin-left: 10px; margin-right: 10px;">
-                                <img style="width: 13px; margin-right: 4px; display: inline-block; vertical-align:middle;" src="{{ asset('images/emails/email.png') }}" width="13">
-                                <span>E-mail</span>
-                            </a>
-                        <!--[if mso]>
-                        </td>
-                        <![endif]-->
-
-                        <!--[if mso]>
-                        
-                        <td>
-                        <![endif]-->     
-                            <a href="https://invoiceninja.github.io/" target="_blank" class="btn-white"
-                               style="vertical-align: middle;display: inline-block;background-color: #ffffff; color: {{ $primary_color }}; display: inline-block; text-decoration: none;  width: 100px; text-align: center; font-size: 12px; height: 35px; line-height: 35px; margin-left: 10px; margin-right: 10px;">
-                                <span>Support Docs</span>
-                            </a>
-                        <!--[if mso]>
-                        </td>
-                        </tr>
-                        </table>
-                        <![endif]-->
-
-                        </div>
-
-                    </td>
+                    <td width="100%" height="6" style="height: 6px; line-height: 6px; font-size: 0;">&nbsp;</td>
                 </tr>
                 <tr>
                     <td class="dark-bg-base"
                         style="background-color: #242424;">
                         <div style="padding-top: 10px;padding-bottom: 10px;">
                             <p style="text-align: center; color: #ffffff; font-size: 10px;
-                            font-family: Verdana, Geneva, Tahoma, sans-serif;">© {{ date('Y') }} Invoice Ninja, All Rights Reserved
+                            font-family: Verdana, Geneva, Tahoma, sans-serif;">© {{ date('Y') }} BISAVUNMA. {{ ctrans('texts.bis_all_rights_reserved') }}
                             </p>
 
                             <!-- <a href="{{ $email_preferences }}">

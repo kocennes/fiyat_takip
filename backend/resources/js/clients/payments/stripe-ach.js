@@ -109,7 +109,7 @@ class AuthorizeACH {
 
         if (!document.getElementById('accept-terms').checked) {
             this.errors.textContent =
-                'You must accept the mandate terms prior to adding this payment method.';
+                (window.BIS_I18N?.bis_accept_mandate_terms_add ?? 'You must accept the mandate terms prior to adding this payment method.');
             this.errors.hidden = false;
             return;
         }
@@ -151,14 +151,14 @@ class AuthorizeACH {
             }
 
             if (!setupIntent) {
-                return this.handleError('An unexpected error occurred.');
+                return this.handleError((window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.'));
             }
 
             // Check the SetupIntent status
             if (setupIntent.status === 'requires_payment_method') {
                 // Customer closed the modal without completing - show error
                 return this.handleError(
-                    'Please complete the bank account verification process.'
+                    (window.BIS_I18N?.bis_complete_bank_verification ?? 'Please complete the bank account verification process.')
                 );
             }
 
@@ -192,7 +192,7 @@ class AuthorizeACH {
             return this.handleSuccess(setupIntent);
         } catch (err) {
             return this.handleError(
-                err.message || 'An unexpected error occurred.'
+                err.message || (window.BIS_I18N?.bis_unexpected_error ?? 'An unexpected error occurred.')
             );
         }
     };

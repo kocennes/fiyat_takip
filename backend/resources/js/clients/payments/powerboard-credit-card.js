@@ -77,7 +77,7 @@ function pay() {
         payNow.querySelector('span').classList.add('hidden');
         document.getElementById(
             'errors'
-        ).textContent = 'Gateway not found or verified';
+        ).textContent = (window.BIS_I18N?.bis_gateway_not_found_or_verified ?? 'Gateway not found or verified');
         document.getElementById('errors').hidden = false;
         
     }
@@ -190,7 +190,7 @@ async function process3ds() {
             pay();
 
             throw new Error(
-                'There was an issue authenticating this payment method.'
+                (window.BIS_I18N?.bis_payment_method_auth_issue ?? 'There was an issue authenticating this payment method.')
             );
         }
 
@@ -242,7 +242,7 @@ async function process3ds() {
         canvas.on('chargeAuthReject', function (data) {
             document.getElementById(
                 'errors'
-            ).textContent = `Sorry, your transaction could not be processed...`;
+            ).textContent = (window.BIS_I18N?.bis_transaction_not_processed ?? 'Sorry, your transaction could not be processed...');
             document.getElementById('errors').hidden = false;
 
             focusCreditCard = true;
@@ -253,11 +253,11 @@ async function process3ds() {
         canvas.load();
     } catch (error) {
 
-        const msg = error.message ?? 'Unknown error.';
+        const msg = error.message ?? (window.BIS_I18N?.bis_unknown_error ?? 'Unknown error.');
 
         document.getElementById(
             'errors'
-        ).textContent = `Sorry, your transaction could not be processed...\n\n${msg}`;
+        ).textContent = (window.BIS_I18N?.bis_transaction_not_processed ?? 'Sorry, your transaction could not be processed...') + `\n\n${msg}`;
         document.getElementById('errors').hidden = false;
         
         focusCreditCard = true;
@@ -305,7 +305,7 @@ async function get3dsToken() {
 
         if (!response.ok) {
             return await response.json().then((errorData) => {
-                throw new Error(errorData.message ?? 'Unknown error.');
+                throw new Error(errorData.message ?? (window.BIS_I18N?.bis_unknown_error ?? 'Unknown error.'));
             });
 
         }
@@ -315,7 +315,7 @@ async function get3dsToken() {
 
         document.getElementById(
             'errors'
-        ).textContent = `Sorry, your transaction could not be processed...\n\n${error.message}`;
+        ).textContent = (window.BIS_I18N?.bis_transaction_not_processed ?? 'Sorry, your transaction could not be processed...') + `\n\n${error.message}`;
         document.getElementById('errors').hidden = false;
 
         focusCreditCard = true;

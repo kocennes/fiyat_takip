@@ -238,7 +238,7 @@ class RotessaPaymentDriver extends BaseDriver
             $payment_method_id = GatewayType::ACSS;
 
             $gateway_token = $this->storeGatewayToken([
-                'payment_meta' => ['brand' => 'Bank Transfer', 'last4' => substr($data['account_number'], -4), 'type' => GatewayType::ACSS ],
+                'payment_meta' => ['brand' => ctrans('texts.bank_transfer'), 'last4' => substr($data['account_number'], -4), 'type' => GatewayType::ACSS ],
                 'token' => join(".", Arr::only($data, ['id','custom_identifier'])),
                 'payment_method_id' => $payment_method_id,
             ], [
@@ -265,7 +265,7 @@ class RotessaPaymentDriver extends BaseDriver
                     ? $th->response->body()
                     : explode("422:", $th->getMessage())[1];
             } catch (\Throwable) {
-                $errors = 'Unknown error occured';
+                $errors = ctrans('texts.bis_pd_unknown_error_occurred');
             }
 
             throw new \Exception($errors, $th->getCode());

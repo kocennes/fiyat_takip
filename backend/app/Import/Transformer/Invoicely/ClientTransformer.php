@@ -29,7 +29,7 @@ class ClientTransformer extends BaseTransformer
     public function transform($data)
     {
         if (isset($data['Client Name']) && $this->hasClient($data['Client Name'])) {
-            throw new ImportException('Client already exists');
+            throw new ImportException(ctrans('texts.bis_import_client_exists'));
         }
 
         $transformed = [

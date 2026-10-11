@@ -85,7 +85,7 @@ class NewAccountCreated extends Notification
         return (new SlackMessage())
                 ->success()
                 ->from(ctrans('texts.notification_bot'))
-                ->image('https://app.invoiceninja.com/favicon.png')
-                ->content("A new account has been created by {$user_name} - {$email} - from IP: {$ip}");
+                ->image(asset('brand/bisavunma-icon-192.png'))
+                ->content(ctrans('texts.bis_new_account_created_by', ['user' => $user_name, 'email' => $email, 'ip' => $ip]));
     }
 }

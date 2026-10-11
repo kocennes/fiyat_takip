@@ -47,6 +47,6 @@ class ValidCompanyGatewayFeesAndLimitsRule implements Rule
      */
     public function message()
     {
-        return $this->return_data[0] . ' is not a valid ' . $this->return_data[1];
+        return ctrans('texts.bis_setting_invalid_type', ['key' => (string) $this->return_data[0], 'type' => (string) $this->return_data[1]]);
     }
 }

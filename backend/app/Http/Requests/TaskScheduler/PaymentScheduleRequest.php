@@ -77,11 +77,11 @@ class PaymentScheduleRequest extends Request
 
             if ($first_map['is_amount'] && !BcMath::equal($schedule_map->sum('amount'), $this->invoice->amount)) {
                 $validator = \Validator::make([], []);
-                $validator->errors()->add('schedule', 'The total amount of the schedule does not match the invoice amount.');
+                $validator->errors()->add('schedule', ctrans('texts.bis_schedule_amount_mismatch'));
                 throw new \Illuminate\Validation\ValidationException($validator);
             } elseif (!$first_map['is_amount'] && !BcMath::equal($schedule_map->sum('amount'), 100)) {
                 $validator = \Validator::make([], []);
-                $validator->errors()->add('schedule', 'The total percentage amount of the schedule does not match 100%.');
+                $validator->errors()->add('schedule', ctrans('texts.bis_schedule_percentage_mismatch'));
                 throw new \Illuminate\Validation\ValidationException($validator);
             } else {
                 $input['parameters']['schedule'] = $schedule_map->toArray();

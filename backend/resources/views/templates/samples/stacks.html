@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Examples of how to use generic invoice ninja stacks that can be configured in the UI (Settings > Invoice Design) -->
+<!-- Examples of how to use the generic stacks that can be configured in the UI (Settings > Invoice Design) -->
 <html>
 <head>
     <style>
@@ -96,24 +96,24 @@
 
 <body>
     <div style="text-align:center;">
-        <h1> Standard Invoice Ninja Blocks </h1>
+        <h1><ninja>{{ t('invoice_design') }}</ninja></h1>
         <img class="company-logo" src="$company.logo" alt="$company.name logo">
     </div>
 
     <div style="display:flex; padding:2rem;">
 
         <div style="padding:1rem; border:1px solid #000;">
-            <p>Client Details</p>
+            <p><ninja>{{ t('client_details') }}</ninja></p>
             <div id="client-details"></div>
         </div>
 
         <div style="padding:1rem; border:1px solid #000;">
-            <p>Company Details</p>
+            <p><ninja>{{ t('company_details') }}</ninja></p>
             <div id="company-details"></div>
         </div>
 
         <div style="padding:1rem; border:1px solid #000;">
-            <p>Company Address</p>
+            <p><ninja>{{ t('company_address') }}</ninja></p>
             <div id="company-address"></div>
         </div>
 
@@ -122,12 +122,12 @@
     <div style="display:flex; padding:2rem;">
 
         <div style="padding:1rem; border:1px solid #000;">
-            <p>Vendor Details</p>
+            <p><ninja>{{ t('vendor_details') }}</ninja></p>
             <div id="vendor-details"></div>
         </div>
 
         <div style="padding:1rem; border:1px solid #000;">
-            <p>Shipping Address</p>
+            <p><ninja>{{ t('shipping_address') }}</ninja></p>
             <div id="shipping-details"></div>
         </div>
 
@@ -139,9 +139,9 @@
         <table cellspacing="0" data-ref="table">
             <thead>
                 <tr>
-                    <th>Item</th>
-                    <th>Notes</th>
-                    <th>Cost</th>
+                    <th>{{ t('item') }}</th>
+                    <th>{{ t('notes') }}</th>
+                    <th>{{ t('cost') }}</th>
                 </tr>
 
             </thead>
@@ -158,7 +158,7 @@
 
                 <tr>
                     <td></td>
-                    <td>Total</td>
+                    <td>{{ t('total') }}</td>
                     <td>{{ total|format_currency(currency_code) }}</td>
                 </tr>
             </tbody>

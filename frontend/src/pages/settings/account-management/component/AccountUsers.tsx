@@ -223,9 +223,9 @@ export function AccountUsers() {
                     </div>
                     <Badge>
                       {company.is_owner
-                        ? 'owner'
+                        ? t('owner')
                         : company.is_admin
-                          ? 'admin'
+                          ? t('admin')
                           : company.permissions.trim() || noAccessLabel}
                     </Badge>
                   </div>

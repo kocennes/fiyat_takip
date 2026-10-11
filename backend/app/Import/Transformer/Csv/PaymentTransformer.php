@@ -34,7 +34,7 @@ class PaymentTransformer extends BaseTransformer
         );
 
         if (empty($client_id)) {
-            throw new ImportException('Could not find client.');
+            throw new ImportException(ctrans('texts.bis_import_client_not_found'));
         }
 
         $transformed = [

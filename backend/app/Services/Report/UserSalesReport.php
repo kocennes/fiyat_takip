@@ -74,7 +74,7 @@ class UserSalesReport extends BaseExport
 
         // $query = $this->filterByUserPermissions($query);
 
-        $this->csv->insertOne([ctrans('texts.user_sales_report_header', ['client' => $this->client_description, 'start_date' => $this->start_date, 'end_date' => $this->end_date])]);
+        $this->csv->insertOne([ctrans('texts.user_sales_report_header', ['client' => $this->client_description ?: ctrans('texts.all_clients'), 'start_date' => $this->start_date, 'end_date' => $this->end_date])]);
 
         if (count($this->input['report_keys']) == 0) {
             $this->input['report_keys'] = $this->report_keys;

@@ -76,7 +76,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
                 $this->helcim_driver->client->company
             );
 
-            throw new PaymentFailed('Failed to initialize ACH form: ' . $e->getMessage(), 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_failed_to_initialize_form', ['error' => $e->getMessage()]), 400);
         }
 
         return render('gateways.helcim.ach.authorize', $data);
@@ -95,7 +95,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         $secretToken     = $request->input('secret_token');
 
         if (empty($transactionData) || empty($secretToken)) {
-            throw new PaymentFailed('Invalid bank account authorization response', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_bank_authorization_response'), 400);
         }
 
         try {
@@ -122,7 +122,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         $rawData = json_decode($transactionData, true);
 
         if (! $rawData) {
-            throw new PaymentFailed('Invalid transaction data format', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_transaction_data'), 400);
         }
 
         $checkout = $this->validateHelcimPayHash($request, $rawData, $this->authorizationContext());
@@ -130,19 +130,19 @@ class ACH implements MethodInterface, LivewireMethodInterface
         $clientTransaction = HelcimAchTransaction::from($rawData);
 
         if ($expectedCustomerCode === '') {
-            throw new PaymentFailed('The Helcim bank authorization is not linked to this client.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_bank_authorization_not_linked', ['gateway' => 'Helcim']), 400);
         }
 
         if ($clientTransaction->isFailed()) {
             throw new PaymentFailed(
-                'Bank account verification failed: ' . $clientTransaction->statusDescription(),
+                ctrans('texts.bis_pd_bank_verification_failed', ['reason' => $clientTransaction->statusDescription()]),
                 400
             );
         }
 
         $transactionId = $clientTransaction->transactionId;
         if (empty($transactionId)) {
-            throw new PaymentFailed('No transactionId returned by HelcimPay.js — cannot verify bank account authorization.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_no_transaction_id', ['gateway' => 'Helcim']), 400);
         }
 
         $verifiedTransaction = Cache::lock(
@@ -255,7 +255,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
             $payment = $this->existingPaymentForHash($paymentHash);
 
             if (! $payment) {
-                throw new PaymentFailed('The existing Helcim ACH payment could not be verified.', 409);
+                throw new PaymentFailed(ctrans('texts.bis_pd_existing_payment_not_verified', ['gateway' => 'Helcim']), 409);
             }
 
             return redirect()->route('client.payments.show', [
@@ -267,13 +267,13 @@ class ACH implements MethodInterface, LivewireMethodInterface
         $secretToken     = $request->input('secret_token');
 
         if (empty($transactionData) || empty($secretToken)) {
-            throw new PaymentFailed('Invalid ACH payment response', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_gateway_response'), 400);
         }
 
         $rawData = json_decode($transactionData, true);
 
         if (! $rawData) {
-            throw new PaymentFailed('Invalid transaction data format', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_transaction_data'), 400);
         }
 
         $checkout = $this->validateHelcimPayHash($request, $rawData, $this->paymentContext($paymentHash));
@@ -284,11 +284,11 @@ class ACH implements MethodInterface, LivewireMethodInterface
         $clientTransaction = HelcimAchTransaction::from($rawData);
 
         if ($clientTransaction->isFailed()) {
-            throw new PaymentFailed('ACH payment failed: ' . $clientTransaction->statusDescription(), 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_reason', ['reason' => $clientTransaction->statusDescription()]), 400);
         }
 
         if (! $clientTransaction->transactionId) {
-            throw new PaymentFailed('No transactionId returned by HelcimPay.js; the ACH payment was not recorded.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_no_transaction_id', ['gateway' => 'Helcim']), 400);
         }
 
         $verifiedTransaction = $this->helcim_driver->verifyAchTransaction(
@@ -362,7 +362,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         if (! $transaction->bankAccountId || ! $transaction->customerId) {
             if ($required) {
                 throw new PaymentFailed(
-                    'Helcim did not return the bank account and customer references required for ACH withdrawals. Please authorize the bank account again.',
+                    ctrans('texts.bis_pd_bank_reauthorize_required', ['gateway' => 'Helcim']),
                     400
                 );
             }
@@ -382,7 +382,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         }
 
         $payment_meta        = new \stdClass();
-        $payment_meta->brand = $transaction->bankAccountType ?? 'Bank Account';
+        $payment_meta->brand = $transaction->bankAccountType ?? ctrans('texts.bank_account');
         $payment_meta->last4 = $transaction->bankAccountNumber ?? '';
         $payment_meta->type  = GatewayType::BANK_TRANSFER;
         $payment_meta->bankAccountId = $transaction->bankAccountId;
@@ -489,7 +489,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
     ): HelcimAchTransaction {
         if (! $transaction->customerCode
             || ! hash_equals($expectedCustomerCode, $transaction->customerCode)) {
-            throw new PaymentFailed('The Helcim bank authorization is not linked to this client.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_bank_authorization_not_linked', ['gateway' => 'Helcim']), 400);
         }
 
         $customer = $this->findHelcimCustomer($expectedCustomerCode);
@@ -498,7 +498,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
             : null;
 
         if (! $customerId || (! $transaction->bankAccountId && ! $transaction->bankToken)) {
-            throw new PaymentFailed('The Helcim bank authorization is not linked to this client.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_bank_authorization_not_linked', ['gateway' => 'Helcim']), 400);
         }
 
         $response = $this->helcim_driver->gatewayRequest(
@@ -526,7 +526,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
             : null;
 
         if (! $bankAccountId) {
-            throw new PaymentFailed('The Helcim bank authorization is not linked to this client.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_bank_authorization_not_linked', ['gateway' => 'Helcim']), 400);
         }
 
         return HelcimAchTransaction::from(array_merge($transaction->raw, [
@@ -544,7 +544,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
                 fn (): Payment => $this->createSavedTokenPaymentWithinLock($token, $paymentHash)
             );
         } catch (LockTimeoutException) {
-            throw new PaymentFailed('This Helcim ACH withdrawal is already being processed. Please try again shortly.', 409);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_in_progress'), 409);
         }
     }
 
@@ -558,7 +558,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
 
             if (! $payment) {
                 throw new PaymentFailed(
-                    'The existing Helcim ACH payment could not be verified. Reconcile it before retrying.',
+                    ctrans('texts.bis_pd_existing_payment_not_verified', ['gateway' => 'Helcim']),
                     409
                 );
             }
@@ -570,7 +570,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
 
         if ($this->paymentMode($paymentHash) === self::PAYMENT_MODE_BROWSER) {
             throw new PaymentFailed(
-                'This payment has already been claimed for a new Helcim bank account.',
+                ctrans('texts.bis_pd_payment_already_claimed'),
                 409
             );
         }
@@ -579,7 +579,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         if ($this->paymentMode($paymentHash) === self::PAYMENT_MODE_SAVED_TOKEN
             && $claimedTokenId !== (string) $token->id) {
             throw new PaymentFailed(
-                'This payment has already been claimed for a different saved Helcim bank account.',
+                ctrans('texts.bis_pd_payment_already_claimed'),
                 409
             );
         }
@@ -590,7 +590,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
 
         if (! $bankAccountId || ! $customerId) {
             throw new PaymentFailed(
-                'This saved Helcim bank account predates ACH withdrawals. Please remove it and authorize the bank account again.',
+                ctrans('texts.bis_pd_saved_bank_account_outdated'),
                 400
             );
         }
@@ -599,7 +599,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         $currencyId = match ($currency) {
             'CAD' => 1,
             'USD' => 2,
-            default => throw new PaymentFailed("Helcim ACH does not support {$currency} saved-token withdrawals.", 400),
+            default => throw new PaymentFailed(ctrans('texts.bis_pd_currency_not_supported', ['gateway' => 'Helcim', 'currency' => $currency]), 400),
         };
         $amount = (float) $paymentHash->data->amount_with_fee;
 
@@ -613,7 +613,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
 
             if ($outsideSafeRetryWindow) {
                 throw new PaymentFailed(
-                    'A previous Helcim ACH withdrawal has an uncertain result and is outside the safe idempotency window. Reconcile it in Helcim before retrying.',
+                    ctrans('texts.bis_pd_previous_attempt_uncertain'),
                     409
                 );
             }
@@ -764,7 +764,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
                     $this->helcim_driver->payment_hash = $paymentHash;
 
                     if ($paymentHash->payment_id) {
-                        throw new PaymentFailed('This Helcim ACH checkout has already been completed.', 409);
+                        throw new PaymentFailed(ctrans('texts.bis_pd_checkout_already_completed'), 409);
                     }
 
                     $this->assertClaimedGatewayMatches($paymentHash);
@@ -781,7 +781,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
                         && $claimedFingerprint !== ''
                         && ! hash_equals($claimedFingerprint, $prospectiveFingerprint)) {
                         throw new PaymentFailed(
-                            'The payment details cannot be changed after a Helcim ACH payment flow has been selected.',
+                            ctrans('texts.bis_pd_payment_details_locked'),
                             409
                         );
                     }
@@ -796,7 +796,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
                                 $prospectiveFingerprint
                             )) {
                             throw new PaymentFailed(
-                                'The payment details cannot be changed while a Helcim ACH checkout is active.',
+                                ctrans('texts.bis_pd_payment_details_locked'),
                                 409
                             );
                         }
@@ -811,7 +811,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
                 }
             );
         } catch (LockTimeoutException) {
-            throw new PaymentFailed('This Helcim ACH payment is already being prepared. Please try again shortly.', 409);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_in_progress'), 409);
         }
     }
 
@@ -837,14 +837,14 @@ class ACH implements MethodInterface, LivewireMethodInterface
                 $this->helcim_driver->payment_hash = $paymentHash;
 
                 if ($paymentHash->payment_id) {
-                    throw new PaymentFailed('This Helcim ACH checkout has already been completed.', 409);
+                    throw new PaymentFailed(ctrans('texts.bis_pd_checkout_already_completed'), 409);
                 }
 
                 $this->assertClaimedGatewayMatches($paymentHash);
 
                 if ($this->paymentMode($paymentHash) === self::PAYMENT_MODE_SAVED_TOKEN) {
                     throw new PaymentFailed(
-                        'This payment has already been claimed for a saved Helcim bank account.',
+                        ctrans('texts.bis_pd_payment_already_claimed'),
                         409
                     );
                 }
@@ -853,7 +853,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
                 $fingerprint = $this->paymentHashFingerprint($paymentHash);
                 if ($expectedFingerprint === '' || ! hash_equals($fingerprint, $expectedFingerprint)) {
                     throw new PaymentFailed(
-                        'The payment details changed before the Helcim ACH checkout was initialized. Refresh and try again.',
+                        ctrans('texts.bis_pd_payment_details_changed'),
                         409
                     );
                 }
@@ -876,7 +876,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
 
                 if ($existing !== null) {
                     throw new PaymentFailed(
-                        'The payment details cannot be changed while a Helcim ACH checkout is active. Wait for it to expire before retrying.',
+                        ctrans('texts.bis_pd_payment_details_locked'),
                         409
                     );
                 }
@@ -905,7 +905,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
                 return $session;
             });
         } catch (LockTimeoutException) {
-            throw new PaymentFailed('This Helcim ACH checkout is already being initialized. Please try again shortly.', 409);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_in_progress'), 409);
         }
     }
 
@@ -957,17 +957,17 @@ class ACH implements MethodInterface, LivewireMethodInterface
             || $transactionHash === ''
             || ! is_array($checkout)
             || ! hash_equals($context, (string) ($checkout['context'] ?? ''))) {
-            throw new PaymentFailed('Invalid or expired HelcimPay.js checkout response.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_or_expired_checkout'), 400);
         }
 
         $canonicalData = json_encode($transactionData);
         if ($canonicalData === false) {
-            throw new PaymentFailed('Invalid HelcimPay.js transaction data.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_transaction_data'), 400);
         }
 
         $expectedHash = hash('sha256', $canonicalData . $secretToken);
         if (! hash_equals($expectedHash, strtolower($transactionHash))) {
-            throw new PaymentFailed('HelcimPay.js transaction hash validation failed.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_transaction_validation_failed'), 400);
         }
 
         return $checkout;
@@ -981,7 +981,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
             ->first();
 
         if ($existingPayment && (int) $paymentHash->payment_id !== (int) $existingPayment->id) {
-            throw new PaymentFailed('This Helcim ACH transaction has already been recorded.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_transaction_already_recorded'), 400);
         }
     }
 
@@ -1000,14 +1000,14 @@ class ACH implements MethodInterface, LivewireMethodInterface
                         return $payment;
                     }
 
-                    throw new PaymentFailed('The existing Helcim ACH payment could not be verified.', 409);
+                    throw new PaymentFailed(ctrans('texts.bis_pd_existing_payment_not_verified', ['gateway' => 'Helcim']), 409);
                 }
 
                 $this->assertClaimedGatewayMatches($paymentHash);
 
                 if ($this->paymentMode($paymentHash) === self::PAYMENT_MODE_SAVED_TOKEN) {
                     throw new PaymentFailed(
-                        'This payment has already been claimed for a saved Helcim bank account.',
+                        ctrans('texts.bis_pd_payment_already_claimed'),
                         409
                     );
                 }
@@ -1028,11 +1028,11 @@ class ACH implements MethodInterface, LivewireMethodInterface
                         return $this->helcim_driver->createPayment($paymentData, $paymentStatus);
                     });
                 } catch (LockTimeoutException) {
-                    throw new PaymentFailed('This Helcim ACH transaction is already being processed. Please try again shortly.', 409);
+                    throw new PaymentFailed(ctrans('texts.bis_pd_payment_in_progress'), 409);
                 }
             });
         } catch (LockTimeoutException) {
-            throw new PaymentFailed('This Helcim ACH payment is already being processed. Please try again shortly.', 409);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_in_progress'), 409);
         }
     }
 
@@ -1045,7 +1045,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
             || ! $clientTransaction->invoiceNumber
             || ! hash_equals($expectedInvoiceNumber, $clientTransaction->invoiceNumber)
             || ! $verifiedTransaction->orderId) {
-            throw new PaymentFailed('The Helcim ACH transaction is not linked to this checkout.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_transaction_not_linked'), 400);
         }
 
         $response = $this->helcim_driver->gatewayRequest('/invoices', [
@@ -1061,7 +1061,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         $invoiceId = is_array($invoice) ? ($invoice['invoiceId'] ?? $invoice['id'] ?? null) : null;
 
         if (! $invoiceId || (string) $invoiceId !== $verifiedTransaction->orderId) {
-            throw new PaymentFailed('The Helcim ACH transaction is not linked to this checkout.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_transaction_not_linked'), 400);
         }
     }
 
@@ -1071,7 +1071,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
             'invoiceNumber' => $invoiceNumber,
             'lineItems' => [[
                 'sku' => 'IN-ACH',
-                'description' => 'Invoice Ninja ACH payment',
+                'description' => ctrans('texts.bis_pd_ach_payment_description'),
                 'quantity' => 1,
                 'price' => $amount,
                 'total' => $amount,
@@ -1103,7 +1103,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         if ($claimedGatewayId !== null
             && (int) $claimedGatewayId !== (int) $this->helcim_driver->company_gateway->id) {
             throw new PaymentFailed(
-                'This Helcim ACH payment has already been claimed by another gateway configuration.',
+                ctrans('texts.bis_pd_payment_already_claimed'),
                 409
             );
         }
@@ -1114,7 +1114,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         $this->assertClaimedGatewayMatches($paymentHash);
         $existingMode = $this->paymentMode($paymentHash);
         if ($existingMode !== null && $existingMode !== $mode) {
-            throw new PaymentFailed('This Helcim ACH payment has already been claimed by another payment flow.', 409);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_already_claimed'), 409);
         }
 
         $fingerprint = $this->paymentHashFingerprint($paymentHash);
@@ -1124,7 +1124,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
             ''
         );
         if ($claimedFingerprint !== '' && ! hash_equals($claimedFingerprint, $fingerprint)) {
-            throw new PaymentFailed('The details for this Helcim ACH payment claim no longer match.', 409);
+            throw new PaymentFailed(ctrans('texts.bis_pd_payment_details_changed'), 409);
         }
 
         if ($existingMode === $mode && $claimedFingerprint !== '') {
@@ -1183,7 +1183,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         }
 
         $name = trim((string) $this->helcim_driver->client->name);
-        $name = $name !== '' ? $name : "Invoice Ninja client {$this->helcim_driver->client->hashed_id}";
+        $name = $name !== '' ? $name : ctrans('texts.bis_pd_client_fallback_name', ['id' => $this->helcim_driver->client->hashed_id]);
 
         try {
             $this->helcim_driver->gatewayRequest('/customers', [
@@ -1199,7 +1199,7 @@ class ACH implements MethodInterface, LivewireMethodInterface
         }
 
         if (! $this->findHelcimCustomer($customerCode)) {
-            throw new PaymentFailed('Helcim could not create the customer required for bank authorization.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_unable_to_create_customer', ['gateway' => 'Helcim']), 400);
         }
 
         return $customerCode;

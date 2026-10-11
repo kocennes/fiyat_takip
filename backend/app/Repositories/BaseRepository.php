@@ -489,7 +489,7 @@ class BaseRepository
 
         if (! is_array($data['tags'])) {
             throw ValidationException::withMessages([
-                'tags' => ['One or more tags are invalid for this entity.'],
+                'tags' => [ctrans('texts.bis_tags_invalid_for_entity')],
             ]);
         }
 
@@ -728,7 +728,7 @@ class BaseRepository
 
             if (! $project) {
                 throw ValidationException::withMessages([
-                    'new_value' => ['The selected new value is invalid.'],
+                    'new_value' => [ctrans('texts.bis_new_value_invalid')],
                 ]);
             }
 
@@ -750,7 +750,7 @@ class BaseRepository
 
             if (! $client) {
                 throw ValidationException::withMessages([
-                    'new_value' => ['The selected new value is invalid.'],
+                    'new_value' => [ctrans('texts.bis_new_value_invalid')],
                 ]);
             }
 

@@ -57,7 +57,7 @@ class LawPayACH {
         const accountHolderName = document.getElementById('account-holder-name');
 
         if (!accountHolderName || !accountHolderName.value.trim()) {
-            this.showError('Account holder name is required.');
+            this.showError((window.BIS_I18N?.missing_account_holder_name ?? 'Account holder name is required.'));
             return;
         }
 
@@ -96,7 +96,7 @@ class LawPayACH {
     };
 
     failedResponseHandler = (error) => {
-        this.showError(error.message || 'Tokenization failed.');
+        this.showError(error.message || (window.BIS_I18N?.bis_tokenization_failed ?? 'Tokenization failed.'));
 
         let payNowButton = document.getElementById('pay-now');
         if (payNowButton) {

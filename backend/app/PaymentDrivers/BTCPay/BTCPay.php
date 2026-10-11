@@ -65,10 +65,10 @@ class BTCPay implements MethodInterface, LivewireMethodInterface
             || strlen($drv->store_id) < 1
             || strlen($drv->webhook_secret) < 1
         ) {
-            throw new PaymentFailed('BTCPay is not well configured');
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'BTCPay']));
         }
         if (!filter_var($this->driver_class->btcpay_url, FILTER_VALIDATE_URL)) {
-            throw new PaymentFailed('Wrong format for BTCPay Url');
+            throw new PaymentFailed(ctrans('texts.bis_pd_btcpay_invalid_url'));
         }
 
         try {
@@ -84,7 +84,7 @@ class BTCPay implements MethodInterface, LivewireMethodInterface
                 'buyerZip' => $cli->postal_code,
                 'buyerCountry' => $cli->country_id,
                 'buyerPhone' => $cli->phone,
-                'itemDesc' => "From InvoiceNinja",
+                'itemDesc' => $cli->company->present()->name(),
                 'InvoiceNinjaPaymentHash' => $drv->payment_hash->hash,
             ];
 
@@ -108,8 +108,8 @@ class BTCPay implements MethodInterface, LivewireMethodInterface
 
             return redirect($rep->getCheckoutLink());
         } catch (\Throwable $e) {
-            $drv->sendFailureMail('Error during BTCPay payment: ' . $e->getMessage());
-            throw new PaymentFailed('Error during BTCPay payment : ' . $e->getMessage());
+            $drv->sendFailureMail(ctrans('texts.bis_pd_gateway_payment_error', ['gateway' => 'BTCPay', 'error' => $e->getMessage()]));
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_payment_error', ['gateway' => 'BTCPay', 'error' => $e->getMessage()]));
         }
     }
 
@@ -119,13 +119,13 @@ class BTCPay implements MethodInterface, LivewireMethodInterface
             if ($amount == $payment->amount) {
                 $refundVariant = "Fiat";
                 $refundPaymentMethod = "BTC";
-                $refundDescription = "Full refund";
+                $refundDescription = ctrans('texts.bis_pd_full_refund');
                 $refundCustomCurrency = null;
                 $refundCustomAmount = null;
             } else {
                 $refundVariant = "Custom";
                 $refundPaymentMethod = "";
-                $refundDescription = "Partial refund";
+                $refundDescription = ctrans('texts.bis_pd_partial_refund');
                 $refundCustomCurrency = $payment->currency;
                 $refundCustomAmount = $amount;
             }
@@ -160,13 +160,13 @@ class BTCPay implements MethodInterface, LivewireMethodInterface
                 'transaction_reference' => $refund->getId(),
                 'transaction_response' => json_encode($refund),
                 'success' => true,
-                'description' => "Please follow this link to claim your refund: " . $refund->getViewLink(),
+                'description' => ctrans('texts.bis_pd_claim_refund_link', ['link' => $refund->getViewLink()]),
                 'code' => 202,
             ];
 
             return $data;
         } catch (\Throwable $e) {
-            throw new PaymentFailed('Error during BTCPay refund : ' . $e->getMessage());
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_refund_error', ['gateway' => 'BTCPay', 'error' => $e->getMessage()]));
         }
     }
 

@@ -43,6 +43,9 @@
 
         <!-- Title -->
         <title>@yield('meta_title', '') — {{ \App\Http\ViewComposers\PortalBranding::PRODUCT_NAME }}</title>
+        <script>
+            window.BIS_I18N = Object.assign(window.BIS_I18N || {}, {!! json_encode(array_filter(['success' => ctrans('texts.success'), 'bis_setup_check_failed' => ctrans('texts.bis_setup_check_failed')], fn ($value, $key) => $value !== 'texts.' . $key, ARRAY_FILTER_USE_BOTH), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_FORCE_OBJECT) !!});
+        </script>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">

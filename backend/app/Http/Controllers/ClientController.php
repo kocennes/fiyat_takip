@@ -341,7 +341,7 @@ class ClientController extends BaseController
         //force delete the client
         $this->client_repo->purge($client);
 
-        return response()->json(['message' => 'Success'], 200);
+        return response()->json(['message' => ctrans('texts.success')], 200);
 
         //todo add an event here using the client name as reference for purge event
     }
@@ -367,11 +367,11 @@ class ClientController extends BaseController
                             ->first();
 
         if (!$m_client) {
-            return response()->json(['message' => "Client not found"], 400);
+            return response()->json(['message' => ctrans('texts.client_not_found')], 400);
         }
 
         if ($m_client->id == $client->id) {
-            return response()->json(['message' => "Attempting to merge the same client is not possible."], 400);
+            return response()->json(['message' => ctrans('texts.bis_merge_same_client')], 400);
         }
 
         $merged_client = $client->service()->merge($m_client)->save();
@@ -418,7 +418,7 @@ class ClientController extends BaseController
                 ->first();
 
             if (!$log) 
-                return response()->json(['message' => 'Bounce ID not found'], 400);
+                return response()->json(['message' => ctrans('texts.bis_bounce_id_not_found')], 400);
 
             $resolved_bounce_id = false;
 
@@ -432,7 +432,7 @@ class ClientController extends BaseController
             }
 
             if (!$resolved_bounce_id) {
-                return response()->json(['message' => 'Bounce ID not found'], 400);
+                return response()->json(['message' => ctrans('texts.bis_bounce_id_not_found')], 400);
             }
 
             $bounce_id = $resolved_bounce_id;
@@ -467,7 +467,7 @@ class ClientController extends BaseController
             //     $email =  $response->Bounce->Email;
             // }
 
-            return response()->json(['message' => 'Success'], 200);
+            return response()->json(['message' => ctrans('texts.success')], 200);
 
         } catch (\Exception $e) {
 
@@ -528,7 +528,7 @@ class ClientController extends BaseController
 
         CheckVat::dispatch($client, $client->company);
 
-        return response()->json(['message' => 'success'], 200);
+        return response()->json(['message' => ctrans('texts.success')], 200);
     }
 
     public function vatStatus(ShowClientRequest $request, Client $client)

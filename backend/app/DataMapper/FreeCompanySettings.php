@@ -215,13 +215,14 @@ class FreeCompanySettings extends BaseSettings
         unset($data->casts);
         unset($data->protected_fields);
 
-        $data->timezone_id = (string) config('ninja.i18n.timezone_id');
+        // BISAVUNMA: Turkish regional defaults, see CompanySettings::TURKISH_REGIONAL_DEFAULTS.
+        $data->timezone_id = CompanySettings::regionalDefault('timezone_id');
         $data->currency_id = (string) config('ninja.i18n.currency_id');
-        $data->language_id = (string) config('ninja.i18n.language_id');
+        $data->language_id = CompanySettings::regionalDefault('language_id');
         $data->payment_terms = (int) config('ninja.i18n.payment_terms');
-        $data->military_time = (bool) config('ninja.i18n.military_time');
-        $data->date_format_id = (string) config('ninja.i18n.date_format_id');
-        $data->country_id = (string) config('ninja.i18n.country_id');
+        $data->military_time = CompanySettings::regionalMilitaryTime();
+        $data->date_format_id = CompanySettings::regionalDefault('date_format_id');
+        $data->country_id = CompanySettings::regionalDefault('country_id');
         $data->translations = (object) [];
         // $data->pdf_variables = (object) self::getEntityVariableDefaults();
 

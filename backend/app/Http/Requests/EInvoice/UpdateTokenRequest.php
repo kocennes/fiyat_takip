@@ -44,7 +44,7 @@ class UpdateTokenRequest extends Request
     protected function failedAuthorization(): void
     {
         throw new AuthorizationException(
-            message: ctrans('texts.peppol_not_paid_message'),
+            message: ctrans('texts.bis_feature_not_available'),
         );
     }
 }

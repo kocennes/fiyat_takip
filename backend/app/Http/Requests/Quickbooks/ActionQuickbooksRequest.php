@@ -44,11 +44,11 @@ class ActionQuickbooksRequest extends Request
             $invoice = $this->getInvoice();
 
             if (!$user->company()->quickbooks || !$user->company()->quickbooks->isConfigured()) {
-                $validator->errors()->add('id', 'QuickBooks is not configured for this company.');
+                $validator->errors()->add('id', ctrans('texts.bis_quickbooks_not_configured'));
             }
 
             if ($invoice && $user->cannot('edit', $invoice)) {
-                $validator->errors()->add('id', 'You are not authorized to edit this invoice.');
+                $validator->errors()->add('id', ctrans('texts.bis_not_authorized_edit_invoice'));
             }
 
         });

@@ -111,7 +111,7 @@ class BACS implements LivewireMethodInterface
             return $this->processSuccessfulPayment($state['payment_intent']);
         }
 
-        return $this->processUnsuccessfulPayment("An unknown error occured.");
+        return $this->processUnsuccessfulPayment(ctrans('texts.bis_pd_unknown_error_occurred'));
     }
 
     public function processSuccessfulPayment($payment_intent)
@@ -159,7 +159,7 @@ class BACS implements LivewireMethodInterface
             $this->stripe->client->company,
         ))->handle();
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
 
     private function storePaymentMethod($method, $customer)

@@ -880,7 +880,7 @@ class CsvTransformer
         }
 
         return $this->currencyIdForCode($country->currency_code)
-            ?? throw new RuntimeException("Invoice Ninja currency was not found for country code: {$country_code}");
+            ?? throw new RuntimeException("BISAVUNMA Fiyat Takip currency was not found for country code: {$country_code}");
     }
 
     private function currencyIdForCode(string $currency_code): ?string

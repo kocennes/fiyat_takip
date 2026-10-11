@@ -4185,15 +4185,15 @@ class BlackListRule implements ValidationRule
         $parts = explode("@", $value ?? '');
 
         if (isset($parts[1]) && in_array($parts[1], $this->blacklist)) {
-            $fail('This domain is blacklisted, if you think this is in error, please email contact@invoiceninja.com');
+            $fail(ctrans('texts.bis_domain_blacklisted'));
         } elseif (isset($parts[1]) && substr($parts[1], -4) === ".sbs") {
-            $fail('This domain is blacklisted, if you think this is in error, please email contact@invoiceninja.com');
+            $fail(ctrans('texts.bis_domain_blacklisted'));
         } elseif (isset($parts[1]) && substr($parts[1], -3) === ".ru") {
-            $fail('This domain is blacklisted, if you think this is in error, please email contact@invoiceninja.com');
+            $fail(ctrans('texts.bis_domain_blacklisted'));
         } elseif (isset($parts[1]) && substr($parts[1], -4) === ".lol") {
-            $fail('This domain is blacklisted, if you think this is in error, please email contact@invoiceninja.com');
+            $fail(ctrans('texts.bis_domain_blacklisted'));
         } elseif (isset($parts[1]) && in_array($parts[1], cache()->get('spam_domains', []))) {
-            $fail('This domain is blacklisted, if you think this is in error, please email contact@invoiceninja.com');
+            $fail(ctrans('texts.bis_domain_blacklisted'));
         }
     }
 

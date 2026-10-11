@@ -75,21 +75,21 @@ class ShowCalculatedFieldRequest extends Request
 
                 if (in_array($field, self::TASK_DURATION_FIELDS, true)) {
                     if (! in_array($this->input('calculation'), ['sum', 'avg'], true)) {
-                        $validator->errors()->add('calculation', 'The calculation must be sum or avg for task duration fields.');
+                        $validator->errors()->add('calculation', ctrans('texts.bis_chart_calc_sum_avg_for_duration'));
                     }
 
                     if ($this->input('format') !== 'time') {
-                        $validator->errors()->add('format', 'The format must be time for task duration fields.');
+                        $validator->errors()->add('format', ctrans('texts.bis_chart_format_time_for_duration'));
                     }
                 }
 
                 if (in_array($field, self::TASK_COUNT_FIELDS, true)) {
                     if ($this->input('calculation') !== 'count') {
-                        $validator->errors()->add('calculation', 'The calculation must be count for task count fields.');
+                        $validator->errors()->add('calculation', ctrans('texts.bis_chart_calc_count_for_count'));
                     }
 
                     if ($this->has('format')) {
-                        $validator->errors()->add('format', 'The format field is not supported for task count fields.');
+                        $validator->errors()->add('format', ctrans('texts.bis_chart_format_not_supported_for_count'));
                     }
                 }
             },

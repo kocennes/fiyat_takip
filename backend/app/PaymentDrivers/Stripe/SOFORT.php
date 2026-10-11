@@ -97,7 +97,7 @@ class SOFORT implements LivewireMethodInterface
     {
         $server_response = $this->stripe->payment_hash->data;
 
-        $this->stripe->sendFailureMail('There was an undefined error processing this payment.');
+        $this->stripe->sendFailureMail(ctrans('texts.bis_pd_undefined_error'));
 
         $message = [
             'server_response' => $server_response,
@@ -113,7 +113,7 @@ class SOFORT implements LivewireMethodInterface
             $this->stripe->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
 
     public function paymentData(array $data): array

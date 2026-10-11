@@ -105,7 +105,7 @@ class ACH implements LivewireMethodInterface
         $setup_intent_response = json_decode($request->input('gateway_response'));
 
         if (!$setup_intent_response || !isset($setup_intent_response->id)) {
-            throw new PaymentFailed('Invalid response from payment gateway.');
+            throw new PaymentFailed(ctrans('texts.bis_pd_invalid_gateway_response'));
         }
 
         try {
@@ -117,17 +117,17 @@ class ACH implements LivewireMethodInterface
                 !$setup_intent->payment_method
                 || !$setup_intent->customer
             ) {
-                throw new PaymentFailed('Invalid Stripe SetupIntent.');
+                throw new PaymentFailed(ctrans('texts.bis_pd_invalid_setup_intent'));
             }
 
             $payment_method = $this->stripe->getStripePaymentMethod($setup_intent->payment_method);
 
             if (!$payment_method || !isset($payment_method->us_bank_account)) {
-                throw new PaymentFailed('Unable to retrieve bank account details.');
+                throw new PaymentFailed(ctrans('texts.bis_pd_bank_account_details_unavailable'));
             }
 
             if ($payment_method->customer !== $setup_intent->customer) {
-                throw new PaymentFailed('Stripe customer mismatch.');
+                throw new PaymentFailed(ctrans('texts.bis_pd_customer_mismatch', ['gateway' => 'Stripe']));
             }
 
             $customer = $this->stripe->getCustomer(
@@ -643,7 +643,7 @@ class ACH implements LivewireMethodInterface
             $method = $bank_account_response->payment_method->us_bank_account ?? null;
 
             if (!$method) {
-                throw new PaymentFailed('Unable to retrieve bank account details');
+                throw new PaymentFailed(ctrans('texts.bis_pd_bank_account_details_unavailable'));
             }
 
             $method->id = $response->payment_method;
@@ -755,7 +755,7 @@ class ACH implements LivewireMethodInterface
         $state = $source->meta->state ?? null;
 
         if ($state === 'inactive' && ! $request->filled('setup_intent_id')) {
-            throw new PaymentFailed('ACH authorization is required before making this payment.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_ach_authorization_required'), 400);
         }
 
         if ($request->filled('setup_intent_id')) {
@@ -856,7 +856,7 @@ class ACH implements LivewireMethodInterface
             $this->stripe->client->company,
         );
 
-        throw new PaymentFailed('Failed to process the payment.', 500);
+        throw new PaymentFailed(ctrans('texts.bis_pd_payment_failed_to_process'), 500);
     }
 
     private function storePaymentMethod($method, $payment_method_id, $customer)
@@ -985,7 +985,7 @@ class ACH implements LivewireMethodInterface
         $expected_setup_intent_id = $request->session()->get($this->mandateSetupIntentSessionKey($token));
 
         if (! is_string($expected_setup_intent_id) || ! hash_equals($expected_setup_intent_id, $setup_intent_id)) {
-            throw new PaymentFailed('Unable to renew the ACH authorization.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_ach_renew_failed'), 400);
         }
 
         $setup_intent = $this->stripe->getSetupIntentId($setup_intent_id);
@@ -996,13 +996,13 @@ class ACH implements LivewireMethodInterface
             || $setup_intent->payment_method !== $token->token
             || ! is_string($setup_intent->mandate)
         ) {
-            throw new PaymentFailed('Unable to renew the ACH authorization.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_ach_renew_failed'), 400);
         }
 
         $mandate = $this->stripe->getMandate($setup_intent->mandate);
 
         if ($mandate->status !== 'active' || $mandate->payment_method !== $token->token) {
-            throw new PaymentFailed('Unable to renew the ACH authorization.', 400);
+            throw new PaymentFailed(ctrans('texts.bis_pd_ach_renew_failed'), 400);
         }
 
         $request->session()->forget($this->mandateSetupIntentSessionKey($token));

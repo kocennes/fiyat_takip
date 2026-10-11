@@ -24,6 +24,6 @@ trait ChecksEntityStatus
 
     public function disallowUpdate()
     {
-        return response()->json(['message' => 'Record is deleted and cannot be edited. Restore the record to enable editing'], 400);
+        return response()->json(['message' => ctrans('texts.bis_record_deleted_cannot_edit')], 400);
     }
 }

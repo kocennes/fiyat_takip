@@ -1,21 +1,21 @@
 @php
     $primary_color = isset($settings) ? $settings->primary_color : '#4caf50';
     $email_alignment = isset($settings->email_alignment) ? $settings->email_alignment : 'center';
+    // The company's own logo; without one the BISAVUNMA logo (same rule as the client portal).
+    $logo = (isset($logo) && $logo && strpos($logo, 'blank.png') === false)
+        ? $logo
+        : asset((isset($settings) && (($settings->email_style ?? '') === 'dark')) ? 'brand/bisavunma-logo-white.png' : 'brand/bisavunma-logo.png');
 @endphp
 
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="color-scheme" content="light dark">
     <meta name="supported-color-schemes" content="light dark">
-
-    <style>
-        @import url("https://use.typekit.net/zxn7pho.css");
-    </style>
 
     <style type="text/css">
         :root {
@@ -220,20 +220,9 @@
                     <td bgcolor="#242424" height="22" valign="middle" align="center"
                         style="min-height: 22px; padding: 6px 20px; mso-padding-alt: 6px 20px; background-color: #242424; vertical-align: middle;">
                         <div class="dark-bg-base">
-                            @if(isset($company))
-                                @if($company->account->isPaid())
-                                    <p style="text-align: center; color: #ffffff; font-size: 10px;
-                            font-family: Verdana, Geneva, Tahoma, sans-serif;">© {{ date('Y') }} {{ $company->present()->name() }}, All Rights Reserved</p>
-                                @else
-                                    <p style="text-align: center; color: #ffffff; font-size: 10px; font-family: Verdana, Geneva, Tahoma, sans-serif;">
-                                        © {{ date('Y') }} Invoice Ninja, All Rights Reserved
-                                    </p>
-                                @endif
-                            @else
-                                <p style="text-align: center; color: #ffffff; font-size: 10px; font-family: Verdana, Geneva, Tahoma, sans-serif;">
-                                    © {{ date('Y') }} Invoice Ninja, All Rights Reserved
-                                </p>
-                            @endif
+                            <p style="text-align: center; color: #ffffff; font-size: 10px; font-family: Verdana, Geneva, Tahoma, sans-serif;">
+                                © {{ date('Y') }} {{ (isset($company) && $company instanceof \App\Models\Company) ? $company->present()->name() : 'BISAVUNMA' }}. {{ ctrans('texts.bis_all_rights_reserved') }}
+                            </p>
                         </div>
                     </td>
                 </tr>

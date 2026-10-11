@@ -61,7 +61,7 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
 
         $session = $this->createPaymentSession(
             $amount,
-            'Card authorization',
+            ctrans('texts.bis_pd_card_authorization'),
             'authorize',
             $successUrl,
             $failureUrl,
@@ -92,7 +92,7 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
             return $this->authorizeResponseFlow($gateway_response['id']);
         }
 
-        throw new PaymentFailed('No valid Flow payment response received.', 400);
+        throw new PaymentFailed(ctrans('texts.bis_pd_no_valid_payment_response'), 400);
     }
 
     /**
@@ -104,13 +104,13 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
             $payment = $this->checkout->gateway->getPaymentsClient()->getPaymentDetails($paymentId);
 
             if (!(isset($payment['approved']) && $payment['approved'])) {
-                throw new PaymentFailed($payment['response_summary'] ?? 'Authorization was not approved.', 400);
+                throw new PaymentFailed($payment['response_summary'] ?? ctrans('texts.bis_pd_authorization_not_approved'), 400);
             }
 
             $this->checkout->gateway->getPaymentsClient()->voidPayment($paymentId);
 
             if (empty($payment['source']['id'] ?? null)) {
-                throw new PaymentFailed('Authorization succeeded but no instrument ID was returned. Card could not be saved.', 400);
+                throw new PaymentFailed(ctrans('texts.bis_pd_card_could_not_be_saved'), 400);
             }
 
             $customerRequest = $this->checkout->getCustomer();
@@ -145,7 +145,7 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
         } catch (CheckoutArgumentException $e) {
             throw new PaymentFailed($e->getMessage(), $e->getCode());
         } catch (CheckoutAuthorizationException $e) {
-            throw new PaymentFailed('There is a problem with your Checkout Gateway API keys', 401);
+            throw new PaymentFailed(ctrans('texts.bis_pd_gateway_configuration_error', ['gateway' => 'Checkout.com']), 401);
         }
     }
 
@@ -210,10 +210,10 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
             }
 
             if (in_array('no_payment_methods_available', $errorCodes)) {
-                throw new PaymentFailed('This payment method is not available for this merchant. Please select a different payment method.', 400);
+                throw new PaymentFailed(ctrans('texts.bis_pd_payment_method_not_available'), 400);
             }
 
-            throw new PaymentFailed('Unable to initialize payment. ' . $msg, $e->getCode() ?: 400);
+            throw new PaymentFailed(trim(ctrans('texts.bis_pd_unable_to_initialize_payment') . ' ' . $msg), $e->getCode() ?: 400);
         } catch (CheckoutArgumentException|CheckoutAuthorizationException $e) {
             throw new PaymentFailed($e->getMessage(), $e->getCode() ?: 400);
         } catch (\InvalidArgumentException $e) {
@@ -280,7 +280,7 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
             return $this->attemptPaymentUsingFlowResponse($request);
         }
 
-        throw new PaymentFailed('Payment could not be completed: no payment data was received. Please try again.', 400);
+        throw new PaymentFailed(ctrans('texts.bis_pd_no_payment_data'), 400);
     }
 
     private function attemptPaymentUsingToken(PaymentResponseRequest $request)
@@ -294,7 +294,7 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
         $paymentRequest->amount = $this->checkout->payment_hash->data->value;
         $paymentRequest->reference = substr($this->checkout->getDescription(), 0, 49);
         $paymentRequest->customer = $this->checkout->getCustomer();
-        $paymentRequest->metadata = ['udf1' => 'Invoice Ninja', 'udf2' => $this->checkout->payment_hash->hash];
+        $paymentRequest->metadata = ['udf1' => 'BISAVUNMA Fiyat Takip', 'udf2' => $this->checkout->payment_hash->hash];
         $paymentRequest->currency = $this->checkout->client->getCurrencyCode();
 
         $processingChannelId = $this->checkout->company_gateway->getConfigField('processingChannelId');
@@ -380,7 +380,7 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
         bool $capture = true
     ): array {
         if ($this->checkout->gateway === null) {
-            throw new \InvalidArgumentException('Checkout.com gateway is not configured. Please set the secret key.');
+            throw new \InvalidArgumentException(ctrans('texts.bis_pd_checkout_not_configured'));
         }
 
         $customer = new PaymentCustomerRequest();
@@ -415,7 +415,7 @@ class CreditCardFlow implements MethodInterface, LivewireMethodInterface
         $request->success_url = $successUrl;
         $request->failure_url = $failureUrl;
         $request->customer = $customer;
-        $request->metadata = ['udf1' => 'Invoice Ninja', 'udf2' => $paymentHash];
+        $request->metadata = ['udf1' => 'BISAVUNMA Fiyat Takip', 'udf2' => $paymentHash];
         $request->three_ds = $threeDs;
         $request->capture = $capture;
         $request->billing = $billing;

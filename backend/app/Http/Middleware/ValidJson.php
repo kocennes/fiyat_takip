@@ -43,8 +43,8 @@ class ValidJson
             // nlog($request->all());
 
             return response()->json([
-                'message' => 'Malformed JSON payload.',
-                'error' => 'Invalid JSON data provided',
+                'message' => ctrans('texts.bis_malformed_json'),
+                'error' => ctrans('texts.bis_invalid_json_data'),
             ], 400);
         }
 

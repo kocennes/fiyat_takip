@@ -74,7 +74,7 @@ class AuthorizeTransaction
             }
         }
 
-        $description = "Invoices: {$invoice_numbers} for {$amount} for client {$this->authorize->client->present()->name()}";
+        $description = ctrans('texts.gateway_payment_text', ['invoices' => $invoice_numbers, 'amount' => $amount, 'client' => $this->authorize->client->present()->name()]);
 
         $order = new OrderType();
         $order->setInvoiceNumber(substr($invoice_numbers, 0, 19));

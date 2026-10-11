@@ -262,7 +262,7 @@ class SubscriptionService
         }
 
         if (!$this->subscription->trial_enabled) {
-            return new \Exception("Trials are disabled for this product");
+            return new \Exception(ctrans('texts.bis_subscription_trials_disabled'));
         }
 
         //create recurring invoice with start date = trial_duration + 1 day
@@ -1166,7 +1166,7 @@ class SubscriptionService
         if (is_array($body)) {
             return $response;
         } else {
-            return ['message' => 'There was a problem encountered with the webhook', 'status_code' => 500];
+            return ['message' => ctrans('texts.bis_subscription_webhook_problem'), 'status_code' => 500];
         }
     }
 

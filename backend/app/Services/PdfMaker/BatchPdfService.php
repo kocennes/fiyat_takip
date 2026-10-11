@@ -70,7 +70,7 @@ class BatchPdfService
             return (string) (new PdfMerge($pdfs))->run();
                
         } catch (Throwable $exception) {
-            throw new BatchPdfException('Unable to generate the batch PDF.', previous: $exception);
+            throw new BatchPdfException(ctrans('texts.bis_pdf_generation_failed'), previous: $exception);
         } finally {
             foreach ($cache_keys as $cache_key) {
                 Cache::forget($cache_key);

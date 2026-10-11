@@ -195,26 +195,26 @@ $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buye
     <?php echo $buyercounty . " " . $buyerpostcode . " " . $buyercity; ?><br>
 </p>
 <h1 style="margin: 0; padding: 0; margin-top: 50px">
-    Invoice <?php echo $documentno; ?>
+    <?php echo e(ctrans('texts.invoice')); ?> <?php echo $documentno; ?>
 </h1>
 <p style="margin: 0; padding: 0">
-    Invoice Date <?php echo $documentdate->format("d.m.Y"); ?>
+    <?php echo e(ctrans('texts.invoice_date')); ?> <?php echo $documentdate->format("d.m.Y"); ?>
 </p>
 <p style="margin-top: 50px" class="bold">
-    Sehr geehrter Kunde,
+    <?php echo e(ctrans('texts.bis_dear_customer')); ?>
 </p>
 <p>
-    wir erlauben uns Ihnen folgende Position in Rechnung zu stellen.
+    <?php echo e(ctrans('texts.bis_invoice_positions_intro')); ?>
 </p>
 <table class="postable">
     <thead>
     <tr>
-        <th class="posno">Pos.</th>
-        <th class="posdesc">Beschreibung</th>
-        <th class="posqty">Stk.</th>
-        <th class="posunitprice">Preis</th>
-        <th class="poslineamount">Menge</th>
-        <th class="poslinevat">MwSt %</th>
+        <th class="posno"><?php echo e(ctrans('texts.bis_position_short')); ?></th>
+        <th class="posdesc"><?php echo e(ctrans('texts.description')); ?></th>
+        <th class="posqty"><?php echo e(ctrans('texts.quantity')); ?></th>
+        <th class="posunitprice"><?php echo e(ctrans('texts.unit_cost')); ?></th>
+        <th class="poslineamount"><?php echo e(ctrans('texts.line_total')); ?></th>
+        <th class="poslinevat"><?php echo e(ctrans('texts.tax')); ?> %</th>
     </tr>
     </thead>
     <tbody>
@@ -258,7 +258,7 @@ $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buye
                     <?php $document->getDocumentPositionGrossPriceAllowanceCharge($actualAmount, $isCharge, $calculationPercent, $basisAmount, $reason, $taxTypeCode, $taxCategoryCode, $rateApplicablePercent, $sequence, $basisQuantity, $basisQuantityUnitCode, $reasonCode); ?>
                     <tr>
                         <td class="posno">&nbsp;</td>
-                        <td class="posdesc bold italic"><?php echo ($isCharge ? "Charge" : "Allowance") ?></td>
+                        <td class="posdesc bold italic"><?php echo e($isCharge ? ctrans('texts.bis_charge') : ctrans('texts.bis_allowance')) ?></td>
                         <td class="posqty">&nbsp;</td>
                         <td class="posunitprice italic"><?php echo number_format($actualAmount, 2); ?> (<?php echo number_format($grossAmount, 2); ?>) <?php echo $invoiceCurrency; ?></td>
                     </tr>
@@ -278,14 +278,14 @@ $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buye
         </tr>
         <tr>
             <td colspan="3">&nbsp;</td>
-            <td colspan="3" class="bold fs-11 space">Allowance/Charge</td>
+            <td colspan="3" class="bold fs-11 space"><?php echo e(ctrans('texts.bis_allowances_charges')); ?></td>
         </tr>
         <?php $isFirstDocumentAllowanceCharge = true; ?>
         <?php do { ?>
             <?php $document->getDocumentAllowanceCharge($actualAmount, $isCharge, $taxCategoryCode, $taxTypeCode, $rateApplicablePercent, $sequence, $calculationPercent, $basisAmount, $basisQuantity, $basisQuantityUnitCode, $reasonCode, $reason); ?>
             <tr>
                 <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?>" colspan="3">&nbsp;</td>
-                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalname"><?php echo $reason ? $reason : ($isCharge ? "Charge" : "Allowance"); ?></td>
+                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalname"><?php echo $reason ? $reason : e($isCharge ? ctrans('texts.bis_charge') : ctrans('texts.bis_allowance')); ?></td>
                 <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue"><?php echo number_format($basisAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue bold"><?php echo number_format($actualAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
             </tr>
@@ -303,45 +303,45 @@ $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buye
     </tr>
     <tr>
         <td colspan="3">&nbsp;</td>
-        <td colspan="3" class="bold fs-11 space">Summe</td>
+        <td colspan="3" class="bold fs-11 space"><?php echo e(ctrans('texts.total')); ?></td>
     </tr>
     <tr>
         <td class="space" colspan="3">&nbsp;</td>
-        <td class="space totalname" colspan="2">Nettobetrag</td>
+        <td class="space totalname" colspan="2"><?php echo e(ctrans('texts.net_amount')); ?></td>
         <td class="space totalvalue"><?php echo number_format($lineTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
     </tr>
     <?php if($chargeTotalAmount != 0) { ?>
         <tr>
             <td class="" colspan="3">&nbsp;</td>
-            <td class="totalname" colspan="2">Summe Aufschläge</td>
+            <td class="totalname" colspan="2"><?php echo e(ctrans('texts.bis_total_charges')); ?></td>
             <td class="totalvalue"><?php echo number_format($chargeTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
         </tr>
     <?php } ?>
     <?php if($allowanceTotalAmount != 0) { ?>
         <tr>
             <td class="" colspan="3">&nbsp;</td>
-            <td class="totalname" colspan="2">Summe Rabatte</td>
+            <td class="totalname" colspan="2"><?php echo e(ctrans('texts.bis_total_allowances')); ?></td>
             <td class="totalvalue"><?php echo number_format($allowanceTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
         </tr>
     <?php } ?>
     <tr>
         <td class="" colspan="3">&nbsp;</td>
-        <td class="totalname" colspan="2">MwSt.</td>
+        <td class="totalname" colspan="2"><?php echo e(ctrans('texts.tax')); ?></td>
         <td class="totalvalue"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
     </tr>
     <tr>
         <td class="" colspan="3">&nbsp;</td>
-        <td class="totalname bold" colspan="2">Bruttosumme</td>
+        <td class="totalname bold" colspan="2"><?php echo e(ctrans('texts.bis_gross_total')); ?></td>
         <td class="totalvalue bold"><?php echo number_format($grandTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
     </tr>
     <tr>
         <td class="" colspan="3">&nbsp;</td>
-        <td class="totalname bold" colspan="2">Bereits gezahlt</td>
+        <td class="totalname bold" colspan="2"><?php echo e(ctrans('texts.paid_to_date')); ?></td>
         <td class="totalvalue bold"><?php echo number_format($totalPrepaidAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
     </tr>
     <tr>
         <td class="" colspan="3">&nbsp;</td>
-        <td class="totalname bold" colspan="2">Zu Zahlen</td>
+        <td class="totalname bold" colspan="2"><?php echo e(ctrans('texts.balance_due')); ?></td>
         <td class="totalvalue bold"><?php echo number_format($duePayableAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
     </tr>
 
@@ -355,7 +355,7 @@ $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buye
         </tr>
         <tr>
             <td colspan="3">&nbsp;</td>
-            <td colspan="3" class="bold fs-11">VAT Breakdown</td>
+            <td colspan="3" class="bold fs-11"><?php echo e(ctrans('texts.bis_vat_breakdown')); ?></td>
         </tr>
         <?php $isfirsttax = true ?>
         <?php $sumbasisamount = 0.0 ?>
@@ -372,7 +372,7 @@ $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buye
         <?php } while ($document->nextDocumentTax()); ?>
         <tr>
             <td class="" colspan="3">&nbsp;</td>
-            <td class="totalname">Summe</td>
+            <td class="totalname"><?php echo e(ctrans('texts.total')); ?></td>
             <td class="totalvalue"><?php echo number_format($sumbasisamount, 2); ?> <?php echo $invoiceCurrency; ?></td>
             <td class="totalvalue bold"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
         </tr>
@@ -394,7 +394,7 @@ $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buye
             <?php $isfirstpaymentterm = false ?>
         <?php } while ($document->nextDocumentPaymentTerms()); ?>
     <?php } ?>
-    <tr><td colspan="6" class=""><bold>Hinweise:</bold></td></tr>
+    <tr><td colspan="6" class=""><bold><?php echo e(ctrans('texts.notes')); ?>:</bold></td></tr>
     <?php $document->getDocumentNotes($documentNotes); ?>
     <?php foreach ($documentNotes as $documentNote) { ?>
         <tr><td colspan="6" class=""><?php echo trim(nl2br($documentNote['content'])); ?></td></tr>

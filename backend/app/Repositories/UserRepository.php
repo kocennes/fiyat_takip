@@ -92,7 +92,7 @@ class UserRepository extends BaseRepository
 
         //@18-10-2024 - ensure no cross account linkage.
         if (is_numeric($user->account_id) && $user->account_id != $account->id) {
-            throw new \Illuminate\Auth\Access\AuthorizationException("Illegal operation encountered for {$user->hashed_id}", 401);
+            throw new \Illuminate\Auth\Access\AuthorizationException(ctrans('texts.bis_illegal_operation_for_user', ['user' => $user->hashed_id]), 401);
         }
 
         $user->account_id = $account->id; //We should never change the account_id if it is set at this point.
