@@ -40,7 +40,7 @@ export function TaxRates() {
   return (
     <DataTable
       resource="tax_rate"
-      endpoint="/api/v1/tax_rates?sort=id|desc&per_page=100"
+      endpoint="/api/v1/tax_rates?sort=id|desc&per_page=20"
       bulkRoute="/api/v1/tax_rates/bulk"
       columns={columns}
       linkToCreate="/settings/tax_rates/create"

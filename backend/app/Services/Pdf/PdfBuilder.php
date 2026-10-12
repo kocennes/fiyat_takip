@@ -14,6 +14,7 @@ namespace App\Services\Pdf;
 
 use DOMDocument;
 use App\DataMapper\InvoiceItem;
+use App\Models\Product;
 use App\Models\Quote;
 use App\Models\Credit;
 use App\Utils\Helpers;
@@ -989,7 +990,9 @@ class PdfBuilder
                     // $task.cost => $task.rate
                     // $task.quantity => $task.hours
 
-                    if ($cell == '$task.rate') {
+                    if ($cell == '$product.image') {
+                        $element['elements'][] = ['element' => 'td', 'content' => $row[$cell], 'properties' => ['data-ref' => 'product_table-product.image-td', 'visi' => $this->visibilityCheck($column_visibility, $cell)]];
+                    } elseif ($cell == '$task.rate') {
                         $element['elements'][] = ['element' => 'td', 'content' => $row['$task.cost'], 'properties' => ['data-ref' => 'task_table-task.cost-td', 'visi' => $this->visibilityCheck($column_visibility, $cell)]];
                     } elseif ($cell == '$product.discount' && !$this->service->company->enable_product_discount) {
                         $element['elements'][] = ['element' => 'td', 'content' => $row['$product.discount'], 'properties' => ['data-ref' => 'product_table-product.discount-td', 'style' => 'display: none;']];
@@ -1042,6 +1045,8 @@ class PdfBuilder
     public function transformLineItems($items, $table_type = '$product'): array
     {
         $data = [];
+        $productImages = $this->productImagesByKey($items);
+        $imageFetcher = new ImageFetcher($this->service->company->company_key ?? null);
 
         $locale_info = localeconv();
 
@@ -1065,6 +1070,9 @@ class PdfBuilder
             $data[$key][$table_type . '.product_key'] = $item->product_key ?? $item->item;
             $data[$key][$table_type . '.item'] = $item->item ?? $item->product_key;
             $data[$key][$table_type . '.service'] = $item->service ?? $item->product_key;
+            $data[$key][$table_type . '.image'] = $table_type === '$product'
+                ? $this->productImageMarkup($productImages[(string) ($item->product_key ?? '')] ?? '', $imageFetcher)
+                : '';
 
             $currentDateTime = null;
             if (isset($this->service->config->entity->next_send_date)) {
@@ -1143,6 +1151,45 @@ class PdfBuilder
         }
 
         return $data;
+    }
+
+    /** @return array<string, string> */
+    private function productImagesByKey(array $items): array
+    {
+        $keys = collect($items)
+            ->filter(static fn ($item) => (string) ($item->type_id ?? '') === '1')
+            ->map(static fn ($item) => (string) ($item->product_key ?? ''))
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($keys->isEmpty()) {
+            return [];
+        }
+
+        return Product::query()
+            ->where('company_id', $this->service->company->id)
+            ->where('is_deleted', false)
+            ->whereIn('product_key', $keys)
+            ->pluck('product_image', 'product_key')
+            ->filter()
+            ->map(static fn ($image) => trim((string) $image))
+            ->all();
+    }
+
+    private function productImageMarkup(string $imageUrl, ImageFetcher $imageFetcher): string
+    {
+        if ($imageUrl === '') {
+            return '';
+        }
+
+        $dataUri = $imageFetcher->inline($imageUrl);
+
+        if (! is_string($dataUri) || $dataUri === '') {
+            return '';
+        }
+
+        return '<img src="'.htmlspecialchars($dataUri, ENT_QUOTES, 'UTF-8').'" alt="Ürün görseli" style="height:42px;max-width:64px;object-fit:contain;">';
     }
 
 
@@ -1229,7 +1276,9 @@ class PdfBuilder
 
         foreach ($this->service->config->pdf_variables[$table_type] as $column) {
 
-            if (array_key_exists($column, $aliases)) {
+            if ($column == '$product.image') {
+                $elements[] = ['element' => 'th', 'content' => 'Görsel', 'properties' => ['data-ref' => 'product_table-product.image-th', 'visi' => $this->visibilityCheck($column_visibility, $column)]];
+            } elseif (array_key_exists($column, $aliases)) {
                 $elements[] = ['element' => 'th', 'content' => $aliases[$column] . '_label', 'properties' => ['data-ref' => "{$type}_table-" . substr($aliases[$column], 1) . '-th', 'visi' => $this->visibilityCheck($column_visibility, $column)]];
             } elseif ($column == '$product.discount' && !$this->service->company->enable_product_discount) {
                 $elements[] = ['element' => 'th', 'content' => $column . '_label', 'properties' => ['data-ref' => "{$type}_table-" . substr($column, 1) . '-th', 'style' => 'display: none;']];
@@ -1455,11 +1504,7 @@ class PdfBuilder
     private function statementTableTotals(): array
     {
         return [
-            ['element' => 'div', 'properties' => ['style' => 'display: flex; flex-direction: column;'], 'elements' => [
-                ['element' => 'div', 'properties' => ['style' => 'display: block; align-items: flex-start; page-break-inside: avoid; visible !important;'], 'elements' => [
-                    ['element' => 'img', 'properties' => ['src' => '$invoiceninja.whitelabel', 'style' => 'height: 2.5rem; margin-top: 1.5rem;', 'hidden' => 'true', 'id' => 'invoiceninja-whitelabel-logo']],
-                ]],
-            ]],
+            ['element' => 'div', 'properties' => ['style' => 'display: flex; flex-direction: column;'], 'elements' => []],
         ];
     }
 
@@ -1531,9 +1576,6 @@ class PdfBuilder
                     ['element' => 'div', 'content' => strtr(str_replace("labels", "", $_variables['values']['$entity.terms']), $_variables['labels']), 'properties' => ['data-ref' => 'total_table-terms', 'style' => 'text-align: left;']],
                 ]],
                 ['element' => 'img', 'properties' => ['style' => 'max-width: 50%; height: auto;', 'src' => '$contact.signature', 'id' => 'contact-signature']],
-                ['element' => 'div', 'properties' => ['style' => 'display: flex; align-items: flex-start; page-break-inside: auto;'], 'elements' => [
-                    ['element' => 'img', 'properties' => ['src' => '$invoiceninja.whitelabel', 'style' => 'height: 2.5rem; margin-top: 1.5rem;', 'hidden' => 'true', 'id' => 'invoiceninja-whitelabel-logo']],
-                ]],
             ]],
             ['element' => 'div', 'properties' => ['class' => 'totals-table-right-side', 'dir' => '$dir'], 'elements' => []],
         ];

@@ -45,6 +45,7 @@ class StoreProductRequest extends Request
 
         $rules['cost'] = 'sometimes|numeric';
         $rules['price'] = 'sometimes|numeric';
+        $rules['purchase_exchange_rate'] = 'sometimes|numeric|min:0.000001|max:999999.999999';
         $rules['quantity'] = 'sometimes|numeric';
         $rules['in_stock_quantity'] = 'sometimes|numeric';
         $rules['stock_notification_threshold'] = 'sometimes|numeric';

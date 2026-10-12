@@ -87,7 +87,7 @@ export function Edit() {
 
   return (
     <Settings
-      title={t('tax_rates')}
+      title="KDV Oranları"
       navigationTopRight={
         data && (
           <ResourceActions
@@ -135,7 +135,7 @@ export function Edit() {
               <InputField
                 type="text"
                 id="name"
-                label={t('name')}
+                label="KDV Adı"
                 onChange={formik.handleChange}
                 errorMessage={errors?.errors?.name}
                 value={formik.values.name}
@@ -144,7 +144,7 @@ export function Edit() {
               <NumberInputField
                 disablePrecision
                 value={formik.values.rate || ''}
-                label={t('tax_rate')}
+                label="KDV Oranı (%)"
                 onValueChange={(value) => formik.setFieldValue('rate', value)}
                 errorMessage={errors?.errors?.rate}
               />

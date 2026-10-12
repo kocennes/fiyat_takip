@@ -106,7 +106,7 @@ export function Create() {
 
   return (
     <Settings
-      title={t('tax_rates')}
+      title="KDV Oranları"
       breadcrumbs={pages}
       disableSaveButton={isFormBusy}
     >
@@ -126,7 +126,7 @@ export function Create() {
             <InputField
               required
               type="text"
-              label={t('name')}
+              label="KDV Adı"
               value={taxRate?.name}
               onValueChange={(value) => handleChange('name', value)}
               errorMessage={errors?.errors.name}
@@ -135,7 +135,7 @@ export function Create() {
             <NumberInputField
               disablePrecision
               required
-              label={t('tax_rate')}
+              label="KDV Oranı (%)"
               value={taxRate?.rate || ''}
               onValueChange={(value) => handleChange('rate', Number(value))}
               errorMessage={errors?.errors.rate}

@@ -69,6 +69,7 @@ use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\PreviewPurchaseOrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProformaExcelController;
 use App\Http\Controllers\ProtectedDownloadController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\QuickbooksController;
@@ -316,6 +317,7 @@ Route::group(['middleware' => ['throttle:api', 'token_auth', 'valid_json','local
 
     Route::resource('invoices', InvoiceController::class); // name = (invoices. index / create / show / update / destroy / edit
     Route::get('invoices/{invoice}/delivery_note', [InvoiceController::class, 'deliveryNote'])->name('invoices.delivery_note');
+    Route::get('invoices/{invoice}/proforma.xlsx', [ProformaExcelController::class, 'download'])->name('invoices.proforma_excel');
     Route::get('invoices/{invoice}/{action}', [InvoiceController::class, 'action'])->name('invoices.action');
     Route::put('invoices/{invoice}/upload', [InvoiceController::class, 'upload'])->name('invoices.upload');
     Route::post('invoices/{invoice}/payment_schedule', [InvoiceController::class, 'paymentSchedule'])->name('invoices.payment_schedule');
@@ -363,6 +365,7 @@ Route::group(['middleware' => ['throttle:api', 'token_auth', 'valid_json','local
     Route::get('purchase_order/{invitation_key}/download_e_purchase_order', [PurchaseOrderController::class, 'downloadEPurchaseOrder'])->name('purchase_orders.downloadEPurchaseOrder');
 
     Route::resource('quotes', QuoteController::class); // name = (quotes. index / create / show / update / destroy / edit
+    Route::get('quotes/{quote}/proforma.xlsx', [ProformaExcelController::class, 'downloadQuote'])->name('quotes.proforma_excel');
     Route::get('quotes/{quote}/{action}', [QuoteController::class, 'action'])->name('quotes.action');
     Route::post('quotes/bulk', [QuoteController::class, 'bulk'])->name('quotes.bulk');
     Route::put('quotes/{quote}/upload', [QuoteController::class, 'upload']);

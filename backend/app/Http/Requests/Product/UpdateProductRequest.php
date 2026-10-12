@@ -48,6 +48,7 @@ class UpdateProductRequest extends Request
 
         $rules['cost'] = 'numeric';
         $rules['price'] = 'numeric';
+        $rules['purchase_exchange_rate'] = 'sometimes|numeric|min:0.000001|max:999999.999999';
         $rules['quantity'] = 'numeric';
         $rules['in_stock_quantity'] = 'sometimes|numeric';
         $rules['stock_notification_threshold'] = 'sometimes|numeric';

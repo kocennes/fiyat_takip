@@ -34,6 +34,7 @@ import { GoogleOAuth } from './components/GoogleOAuth';
 import { ReactQueryDevtoolsPanel } from './components/ReactQueryDevtoolsPanel';
 import tr from './resources/lang/tr_TR/tr_TR.json';
 import bisavunmaTurkish from './resources/lang/tr_TR/bisavunma.json';
+import coreTurkish from './resources/lang/tr_TR/core-overrides.json';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -41,6 +42,7 @@ i18n.use(initReactI18next).init({
       translation: {
         ...tr,
         ...bisavunmaTurkish,
+        ...coreTurkish,
       },
     },
   },

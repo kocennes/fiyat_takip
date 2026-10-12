@@ -54,6 +54,7 @@ import { invoiceAtom } from '$app/pages/invoices/common/atoms';
 import { openClientPortal } from '$app/pages/invoices/common/helpers/open-client-portal';
 import { useDownloadEInvoice } from '$app/pages/invoices/common/hooks/useDownloadEInvoice';
 import { useDownloadPdf } from '$app/pages/invoices/common/hooks/useDownloadPdf';
+import { useDownloadProformaExcel } from '$app/pages/invoices/common/hooks/useDownloadProformaExcel';
 import { usePrintPdf } from '$app/pages/invoices/common/hooks/usePrintPdf';
 import { useScheduleEmailRecord } from '$app/pages/invoices/common/hooks/useScheduleEmailRecord';
 import { useChangeTemplate } from '$app/pages/settings/invoice-design/pages/custom-designs/components/ChangeTemplate';
@@ -132,6 +133,7 @@ export function useActions(params?: Params) {
   const createPeppolCreditNote = useCreatePeppolCreditNote();
   // const reverseInvoice = useReverseInvoice();
   const downloadPdf = useDownloadPdf({ resource: 'invoice' });
+  const downloadProformaExcel = useDownloadProformaExcel();
   const downloadEInvoice = useDownloadEInvoice({ resource: 'invoice' });
   const printPdf = usePrintPdf({ entity: 'invoice' });
   const scheduleEmailRecord = useScheduleEmailRecord({ entity: 'invoice' });
@@ -263,6 +265,22 @@ export function useActions(params?: Params) {
         disablePreventNavigation
       >
         {t('download')}
+      </EntityActionElement>
+    ),
+    (invoice: Invoice) => (
+      <EntityActionElement
+        {...(!dropdown && {
+          key: 'download_proforma_excel',
+        })}
+        entity="invoice"
+        actionKey="download_proforma_excel"
+        isCommonActionSection={!dropdown}
+        tooltipText="Excel indir"
+        onClick={() => downloadProformaExcel(invoice)}
+        icon={MdDownload}
+        disablePreventNavigation
+      >
+        Excel indir
       </EntityActionElement>
     ),
     (invoice: Invoice) =>

@@ -20,7 +20,7 @@ export const useTaxRateColumns = () => {
   const columns: DataTableColumns<TaxRate> = [
     {
       id: 'name',
-      label: t('name'),
+      label: 'KDV Adı',
       format: (field, resource) => (
         <Link
           to={route('/settings/tax_rates/:id/edit', {
@@ -33,7 +33,7 @@ export const useTaxRateColumns = () => {
     },
     {
       id: 'rate',
-      label: t('tax_rate'),
+      label: 'KDV Oranı',
       format: (value) => <span>{value}%</span>,
     },
   ];

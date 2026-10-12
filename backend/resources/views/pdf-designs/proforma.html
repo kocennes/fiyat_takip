@@ -38,7 +38,6 @@
 
     .brand { color: var(--navy); font-size: 1.35rem; font-weight: 800; letter-spacing: .015em; text-transform: uppercase; }
     .brand-subtitle { color: var(--slate); font-size: .8rem; font-weight: 700; margin-top: .15rem; }
-    .company-logo { height: 42px; margin-bottom: .5rem; max-width: 210px; }
 
     .document-title { color: var(--blue); font-size: 1.85rem; font-weight: 800; letter-spacing: .04em; line-height: 1.04; text-align: right; }
     .document-meta { color: var(--slate); line-height: 1.55; margin-top: .65rem; text-align: right; }
@@ -53,6 +52,8 @@
     .party-card p { color: #4e5d72; font-size: .78rem; line-height: 1.32; }
 
     [data-ref="table"] { margin-top: .75rem; table-layout: fixed; }
+    [data-ref="product_table-product.image-th"], [data-ref="product_table-product.image-td"] { text-align: center; width: 72px; }
+    [data-ref="product_table-product.image-td"] img { display: block; margin: 0 auto; }
     [data-ref="table"] > thead { background: var(--navy); color: white; }
     [data-ref="table"] > thead > tr > th { border-right: 1px solid rgba(255,255,255,.22); font-size: .77rem; font-weight: 800; padding: .55rem .45rem; text-align: left; text-transform: uppercase; }
     [data-ref="table"] > thead > tr > th:last-child { border-right: 0; text-align: right; }
@@ -96,7 +97,6 @@
 <div id="body">
     <div class="document-header">
         <div>
-            <img class="company-logo" src="$app_url/brand/bisavunma-logo.png" alt="BISAVUNMA">
             <div class="brand">$company.name</div>
             <div class="brand-subtitle">FİYAT TAKİP VE TEDARİK YÖNETİMİ</div>
         </div>
@@ -127,7 +127,7 @@
 
     <table id="product-table" cellspacing="0" data-ref="table"></table>
 
-    <div id="table-totals">$status_logo</div>
+    <div id="table-totals"></div>
 
     <div class="notice">
         <p><strong>Ürün Teslimat Bilgileri:</strong> $invoice.public_notes</p>

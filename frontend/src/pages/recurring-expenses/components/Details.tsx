@@ -32,12 +32,10 @@ import {
   useCalculateExpenseExclusiveAmount,
 } from '$app/pages/expenses/common/hooks/useCalculateExpenseAmount';
 import { Icon } from '$app/components/icons/Icon';
-import { MdLaunch, MdWarning } from 'react-icons/md';
+import { MdLaunch } from 'react-icons/md';
 import { route } from '$app/common/helpers/route';
-import { Link as LinkBase } from '$app/components/forms';
 import { ClientActionButtons } from '$app/pages/invoices/common/components/ClientActionButtons';
 import { NumberInputField } from '$app/components/forms/NumberInputField';
-import reactStringReplace from 'react-string-replace';
 import { getTaxRateComboValue } from '$app/common/helpers/tax-rates/tax-rates-combo';
 import { useColorScheme } from '$app/common/colors';
 import { TagPillSelector } from '$app/components/tags/TagPillSelector';
@@ -70,19 +68,6 @@ export function Details(props: Props) {
   const formatMoney = useFormatMoney();
   const calculateExpenseAmount = useCalculateExpenseAmount();
   const calculateExpenseExclusiveAmount = useCalculateExpenseExclusiveAmount();
-
-  const isAnyTaxHidden = () => {
-    if (
-      company.enabled_expense_tax_rates === 0 &&
-      (recurringExpense?.tax_name1 ||
-        recurringExpense?.tax_name2 ||
-        recurringExpense?.tax_name3)
-    ) {
-      return true;
-    }
-
-    return false;
-  };
 
   return (
     <div className="flex flex-col space-y-4">
@@ -238,26 +223,6 @@ export function Details(props: Props) {
               errorMessage={errors?.errors.tags}
             />
           </Element>
-        )}
-
-        {isAnyTaxHidden() && (
-          <div className="flex items-center space-x-3 px-6">
-            <div>
-              <Icon element={MdWarning} size={20} color="orange" />
-            </div>
-
-            <div className="text-sm font-medium">
-              {reactStringReplace(
-                t('hidden_taxes_warning') as string,
-                ':link',
-                () => (
-                  <LinkBase to="/settings/tax_settings">
-                    {t('settings')}
-                  </LinkBase>
-                )
-              )}
-            </div>
-          </div>
         )}
 
         {/* Tax 1 */}

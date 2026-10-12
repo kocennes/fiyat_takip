@@ -27,23 +27,16 @@ class PortalBranding
     }
 
     /**
-     * The company's own logo when one is uploaded, otherwise the BISAVUNMA logo.
+     * Always use the product brand in client and vendor portals.
+     *
+     * Existing company-logo uploads can contain legacy third-party artwork;
+     * portal pages must not expose those images.
      *
      * @param  mixed $company  \App\Models\Company|null
      * @param  mixed $settings merged settings object (optional)
      */
     public static function logo($company = null, $settings = null): string
     {
-        if (! $company) {
-            return self::defaultLogo();
-        }
-
-        $settings = $settings ?: $company->settings;
-
-        if ($settings && strlen((string) ($settings->company_logo ?? '')) >= 1) {
-            return $company->present()->logo($settings);
-        }
-
         return self::defaultLogo();
     }
 

@@ -1109,6 +1109,7 @@ class CompanySettings extends BaseSettings
                 '$credit.total',
             ],
             'product_columns' => [
+                '$product.image',
                 '$product.item',
                 '$product.description',
                 '$product.unit_cost',
@@ -1118,6 +1119,7 @@ class CompanySettings extends BaseSettings
                 '$product.line_total',
             ],
             'product_quote_columns' => [
+                '$product.image',
                 '$product.item',
                 '$product.description',
                 '$product.unit_cost',

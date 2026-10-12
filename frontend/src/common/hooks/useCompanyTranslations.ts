@@ -11,6 +11,7 @@
 import { isEqual } from 'lodash';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import coreTurkish from '$app/resources/lang/tr_TR/core-overrides.json';
 import { useCurrentCompany } from './useCurrentCompany';
 
 export function useCompanyTranslations() {
@@ -34,5 +35,9 @@ export function useCompanyTranslations() {
     const currentLang = i18n.language || 'en';
 
     i18n.addResources(currentLang, 'translation', translations);
+
+    if (currentLang === 'tr_TR') {
+      i18n.addResources(currentLang, 'translation', coreTurkish);
+    }
   }, [company?.settings?.translations, i18n.language]);
 }
