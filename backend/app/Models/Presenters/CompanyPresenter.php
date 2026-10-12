@@ -167,7 +167,7 @@ class CompanyPresenter extends EntityPresenter
             $str .= e($cityState) . '<br/>';
         }
         if ($country = Country::find($settings->country_id)) {
-            $str .= e($country->name) . '<br/>';
+            $str .= e($country->getName()) . '<br/>';
         }
         if ($settings->phone) {
             $str .= ctrans('texts.phone') . ': ' . e($settings->phone) . '<br/>';

@@ -187,7 +187,8 @@ class ProformaExcelController extends BaseController
         if ((float) $calc->getTotalDiscount() > 0) {
             $totals[] = ['İndirim', -1 * (float) $calc->getTotalDiscount()];
         }
-        foreach ($calc->getTotalTaxMap() ?? [] as $tax) {
+        // Line-item KDV (per rate) first, then any document-level taxes, as the PDF lists them.
+        foreach ([...collect($calc->getTaxMap() ?? [])->all(), ...collect($calc->getTotalTaxMap() ?? [])->all()] as $tax) {
             $totals[] = [(string) ($tax['name'] ?? 'KDV'), (float) ($tax['total'] ?? 0)];
         }
         $totals[] = ['Toplam', (float) $document->amount];

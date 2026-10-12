@@ -20,6 +20,7 @@ use App\Jobs\Util\VersionCheck;
 use App\Models\Account;
 use App\Models\Company;
 use App\Models\CompanyToken;
+use App\Models\Design;
 use App\Models\User;
 use App\Utils\Traits\GeneratesCounter;
 use App\Utils\Traits\MakesHash;
@@ -70,6 +71,12 @@ class CreateAccount extends Command
         $settings->date_format_id = '11'; // d.m.Y (DD.MM.YYYY)
         $settings->country_id = '792'; // Turkey
         $settings->military_time = true; // 24-hour clock
+
+        if ($proforma = Design::proformaHashedId()) {
+            $settings->invoice_design_id = $proforma;
+            $settings->quote_design_id = $proforma;
+            $settings->credit_design_id = $proforma;
+        }
         // CompanySettings::defaults() already makes new line items default to
         // KDV %20 with prices entered KDV hariç.
 

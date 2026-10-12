@@ -91,7 +91,7 @@ class ClientPresenter extends EntityPresenter
             $str .= e($cityState) . '<br/>';
         }
         if ($country = $client->country) {
-            $str .= e($country->name) . '<br/>';
+            $str .= e($country->getName()) . '<br/>';
         }
 
         return $str;
@@ -112,7 +112,7 @@ class ClientPresenter extends EntityPresenter
             $str .= e($cityState) . '<br/>';
         }
         if ($country = $client->shipping_country ?? $client->country) {
-            $str .= e($country->name) . '<br/>';
+            $str .= e($country->getName()) . '<br/>';
         }
 
         return $str;
@@ -160,7 +160,7 @@ class ClientPresenter extends EntityPresenter
             $str .= e($cityState) . '<br/>';
         }
         if ($country = Country::find($settings->country_id)) {
-            $str .= e($country->name) . '<br/>';
+            $str .= e($country->getName()) . '<br/>';
         }
 
         return $str;

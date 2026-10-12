@@ -66,7 +66,7 @@ class VendorPresenter extends EntityPresenter
             $str .= e($cityState) . '<br/>';
         }
         if ($country = $vendor->country) {
-            $str .= e($country->name) . '<br/>';
+            $str .= e($country->getName()) . '<br/>';
         }
 
         return $str;
@@ -87,7 +87,7 @@ class VendorPresenter extends EntityPresenter
             $str .= e($cityState) . '<br/>';
         }
         if ($country = $vendor->country) {
-            $str .= e($country->name) . '<br/>';
+            $str .= e($country->getName()) . '<br/>';
         }
 
         return $str;
@@ -130,7 +130,7 @@ class VendorPresenter extends EntityPresenter
             $str .= e($cityState) . '<br/>';
         }
         if ($country = Country::find($settings->country_id)) {
-            $str .= e($country->name) . '<br/>';
+            $str .= e($country->getName()) . '<br/>';
         }
 
         return $str;

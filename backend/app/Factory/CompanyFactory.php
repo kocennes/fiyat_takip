@@ -17,6 +17,7 @@ use App\DataMapper\CompanySettings;
 use App\DataMapper\Tax\TaxModel;
 use App\Libraries\MultiDB;
 use App\Models\Company;
+use App\Models\Design;
 use App\Utils\Ninja;
 use App\Utils\Traits\MakesHash;
 
@@ -34,6 +35,13 @@ class CompanyFactory
         $company->account_id = $account_id;
         $company->company_key = $this->createHash();
         $company->settings = CompanySettings::defaults();
+
+        // BISAVUNMA: new companies print invoices, quotes and credits with the Proforma design.
+        if ($proforma = Design::proformaHashedId()) {
+            $company->settings->invoice_design_id = $proforma;
+            $company->settings->quote_design_id = $proforma;
+            $company->settings->credit_design_id = $proforma;
+        }
         $company->db = config('database.default');
         $company->custom_fields = (object) [];
         $company->client_registration_fields = ClientRegistrationFields::generate();

@@ -86,4 +86,15 @@ class Design extends BaseModel
     {
         return (new TemplateService($this))->setCompany($this->company);
     }
+
+    /**
+     * BISAVUNMA: hashed id of the built-in Proforma design, which new companies use for
+     * invoices, quotes and credits. Null when the design has not been seeded yet.
+     */
+    public static function proformaHashedId(): ?string
+    {
+        $design = self::query()->where('name', 'Proforma')->whereNull('company_id')->first();
+
+        return $design?->hashed_id;
+    }
 }

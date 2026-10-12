@@ -45,14 +45,14 @@ export function Users() {
   const columns: DataTableColumns<User> = [
     {
       id: 'name',
-      label: 'name',
+      label: t('name'),
       format: (_, resource) => (
         <Link to={route('/settings/users/:id/edit', { id: resource.id })}>
           {resource.first_name} {resource.last_name}
         </Link>
       ),
     },
-    { id: 'email', label: 'email' },
+    { id: 'email', label: t('email') },
   ];
 
   return (
