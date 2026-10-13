@@ -9,6 +9,7 @@ use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Quote;
 use App\Services\Pdf\ImageFetcher;
+use App\Utils\BrandLogo;
 use App\Utils\Helpers;
 use App\Utils\Number;
 use App\Utils\HtmlEngine;
@@ -16,6 +17,7 @@ use App\Utils\TurkishKdv;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -102,14 +104,27 @@ class ProformaExcelController extends BaseController
         $money = $this->moneyFormat($client);
         $publicNotes = $text('$entity.public_notes', $this->plain((string) $document->public_notes));
 
-        // Header: company name on the left, document title and meta on the right.
-        $this->put($sheet, 'A1:C1', $companyName, ['bold' => true, 'size' => 16, 'color' => self::NAVY]);
-        $this->put($sheet, 'A2:C2', 'FİYAT TAKİP VE TEDARİK YÖNETİMİ', ['bold' => true, 'size' => 9, 'color' => self::SLATE]);
+        // Header: BISAVUNMA logo, company name and subtitle on the left, document title and meta
+        // on the right.
+        if ($logo = BrandLogo::path()) {
+            (new Drawing())
+                ->setName('BISAVUNMA')
+                ->setDescription('BISAVUNMA')
+                ->setPath($logo)
+                ->setHeight(36)
+                ->setOffsetX(2)
+                ->setOffsetY(6)
+                ->setCoordinates('A1')
+                ->setWorksheet($sheet);
+        }
+        $this->put($sheet, 'A2:C2', $companyName, ['bold' => true, 'size' => 16, 'color' => self::NAVY]);
+        $this->put($sheet, 'A3:C3', 'FİYAT TAKİP VE TEDARİK YÖNETİMİ', ['bold' => true, 'size' => 9, 'color' => self::SLATE]);
         $this->put($sheet, 'D1:G1', 'PROFORMA FATURA', ['bold' => true, 'size' => 18, 'color' => self::BLUE, 'align' => Alignment::HORIZONTAL_RIGHT]);
         $this->putLabeled($sheet, 'D2:G2', 'Proforma No: ', $text('$number', (string) $document->number), Alignment::HORIZONTAL_RIGHT);
         $this->putLabeled($sheet, 'D3:G3', 'Tarih: ', $text('$date', (string) $document->date), Alignment::HORIZONTAL_RIGHT);
         $this->putLabeled($sheet, 'D4:G4', 'Geçerlilik: ', $text('$due_date', (string) $document->due_date), Alignment::HORIZONTAL_RIGHT);
-        $sheet->getRowDimension(1)->setRowHeight(28);
+        $sheet->getRowDimension(1)->setRowHeight(40);
+        $sheet->getRowDimension(2)->setRowHeight(24);
         $sheet->getStyle('A4:G4')->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB(self::NAVY);
 
         // Parties: seller (left) and customer (right) cards. The seller card keeps the PDF's
@@ -362,160 +377,267 @@ class ProformaExcelController extends BaseController
 
     /**
      * Profit per line item (Ürün, Satılan adet, Birim alış, Birim satış, Toplam alış, Toplam satış,
-     * Kâr / Zarar, Kâr oranı) with a total row, in the currency chosen for the download.
+     * Kâr / Zarar, Kâr oranı) in the currency chosen for the download, followed by the totals and
+     * the profit in the second currency (TL next to a foreign currency, USD next to TL).
+     *
+     * An editable rate cell ("1 USD = … TL") sits above the table. The document's own amounts are
+     * written as fixed values; every amount in the other currency is an Excel formula on that cell,
+     * so changing the rate in Excel converts the table again. An empty rate leaves those cells blank.
      * All amounts are KDV hariç; the margin is profit / sale, as on the product card.
      *
      * @param array<int, array{name: string, quantity: float, purchase_unit: float, sales_total: float}> $lines
      */
     private function profitTable(Worksheet $sheet, int $row, array $lines, Invoice|Quote $document, Request $request): void
     {
-        [$currency, $convert, $notes] = $this->profitCurrency($document, $request);
-        $money = $this->moneyFormatFor($currency);
+        $setup = $this->profitSetup($document, $request);
+        $primary = $setup['primary'];
+        $secondary = $setup['secondary'];
+        $primaryLabel = $this->currencyLabel($primary);
+        $secondaryLabel = $this->currencyLabel($secondary);
+        $foreignLabel = $this->currencyLabel($setup['foreign']);
+        $tlLabel = $this->currencyLabel($setup['tl']);
+        $primaryIsFixed = ($primary->code ?? '') === ($setup['base']->code ?? '');
 
-        foreach (['H' => 16, 'I' => 16, 'J' => 16, 'K' => 12] as $column => $width) {
+        foreach (['H' => 15, 'I' => 15, 'J' => 15, 'K' => 11, 'L' => 15, 'M' => 15, 'N' => 15] as $column => $width) {
             $sheet->getColumnDimension($column)->setWidth($width);
         }
 
-        $this->put($sheet, "A{$row}:K{$row}", 'KÂR / ZARAR TABLOSU — ŞİRKET İÇİ ('.$this->currencyLabel($currency).', KDV HARİÇ)', ['bold' => true, 'size' => 11, 'color' => self::NAVY]);
-        $sheet->getStyle("A{$row}:K{$row}")->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB(self::NAVY);
+        $this->put($sheet, "A{$row}:N{$row}", 'KÂR / ZARAR TABLOSU — ŞİRKET İÇİ (KDV HARİÇ)', ['bold' => true, 'size' => 11, 'color' => self::NAVY]);
+        $sheet->getStyle("A{$row}:N{$row}")->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB(self::NAVY);
         $sheet->getRowDimension($row)->setRowHeight(22);
 
-        foreach ($notes as $note) {
+        foreach ($setup['notes'] as $note) {
             ++$row;
-            $this->put($sheet, "A{$row}:K{$row}", $note, ['size' => 9, 'color' => self::SLATE]);
+            $this->put($sheet, "A{$row}:N{$row}", $note, ['size' => 9, 'color' => self::SLATE]);
         }
+
+        // Editable exchange rate: 1 <foreign currency> = … <company currency>.
+        $row += 2;
+        $rate = '$E$'.$row;
+        $this->put($sheet, "A{$row}:D{$row}", "KUR: 1 {$foreignLabel} =", ['bold' => true, 'size' => 11, 'color' => self::NAVY, 'align' => Alignment::HORIZONTAL_RIGHT]);
+        $sheet->mergeCells("E{$row}:F{$row}");
+        if ($setup['rate'] > 0) {
+            $sheet->setCellValue("E{$row}", round($setup['rate'], 6));
+        }
+        $rateStyle = $sheet->getStyle("E{$row}:F{$row}");
+        $rateStyle->getNumberFormat()->setFormatCode('#,##0.0000');
+        $rateStyle->getFont()->setBold(true)->setSize(12)->getColor()->setRGB(self::NAVY);
+        $rateStyle->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('FFF4C2');
+        $rateStyle->getBorders()->getOutline()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB('E0A800');
+        $rateStyle->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER)->setVertical(Alignment::VERTICAL_CENTER);
+        $this->put($sheet, "G{$row}:G{$row}", $tlLabel, ['bold' => true, 'size' => 11, 'color' => self::NAVY]);
+        $converted = $primaryIsFixed ? $secondaryLabel : $primaryLabel;
+        $this->put($sheet, "H{$row}:N{$row}", "← Kuru buraya girin veya değiştirin; {$converted} tutarları otomatik hesaplanır.", ['size' => 9, 'color' => self::SLATE]);
+        $sheet->getRowDimension($row)->setRowHeight(24);
+
+        $validation = $sheet->getCell("E{$row}")->getDataValidation();
+        $validation->setType(DataValidation::TYPE_DECIMAL)
+            ->setOperator(DataValidation::OPERATOR_GREATERTHAN)
+            ->setFormula1('0')
+            ->setAllowBlank(true)
+            ->setShowErrorMessage(true)
+            ->setErrorTitle('Geçersiz kur')
+            ->setError('Kur sıfırdan büyük bir sayı olmalıdır.')
+            ->setShowInputMessage(true)
+            ->setPromptTitle('Kur')
+            ->setPrompt("1 {$foreignLabel} kaç {$tlLabel}?");
 
         $header = $row + 2;
         $this->put($sheet, "A{$header}:C{$header}", 'ÜRÜN', ['bold' => true]);
         $sheet->setCellValue("D{$header}", 'SATILAN ADET');
-        $this->put($sheet, "E{$header}:F{$header}", 'BİRİM ALIŞ', ['bold' => true]);
-        $sheet->fromArray(['BİRİM SATIŞ', 'TOPLAM ALIŞ', 'TOPLAM SATIŞ', 'KÂR / ZARAR', 'KÂR ORANI'], null, "G{$header}");
-        $headerStyle = $sheet->getStyle("A{$header}:K{$header}");
+        $this->put($sheet, "E{$header}:F{$header}", "BİRİM ALIŞ ({$primaryLabel})", ['bold' => true]);
+        $sheet->fromArray([
+            "BİRİM SATIŞ ({$primaryLabel})", "TOPLAM ALIŞ ({$primaryLabel})", "TOPLAM SATIŞ ({$primaryLabel})", "KÂR / ZARAR ({$primaryLabel})", 'KÂR ORANI',
+            "TOPLAM ALIŞ ({$secondaryLabel})", "TOPLAM SATIŞ ({$secondaryLabel})", "KÂR / ZARAR ({$secondaryLabel})",
+        ], null, "G{$header}");
+        $headerStyle = $sheet->getStyle("A{$header}:N{$header}");
         $headerStyle->getFont()->setBold(true)->setSize(9)->getColor()->setRGB('FFFFFF');
         $headerStyle->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB(self::NAVY);
         $headerStyle->getAlignment()->setVertical(Alignment::VERTICAL_CENTER)->setWrapText(true);
-        $sheet->getStyle("D{$header}:K{$header}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-        $sheet->getRowDimension($header)->setRowHeight(24);
+        $sheet->getStyle("L{$header}:N{$header}")->getFill()->getStartColor()->setRGB(self::BLUE);
+        $sheet->getStyle("D{$header}:N{$header}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+        $sheet->getRowDimension($header)->setRowHeight(30);
+
+        // Fixed amounts live in the base-currency pair (H:I when the table is in the base currency,
+        // L:M otherwise); the other pair converts them through the rate cell. A foreign base is
+        // multiplied into TL; a TL base is divided into the foreign one.
+        $convert = fn (string $cell, bool $multiply): string => '=IF(N('.$rate.')>0,'.$cell.($multiply ? '*' : '/').$rate.',"")';
+        $baseIsForeign = ($setup['base']->code ?? '') !== 'TRY';
+
+        $writeLine = function (int $row, string $name, ?float $quantity, ?float $purchaseUnit, float $purchase, float $sales) use ($sheet, $primaryIsFixed, $convert, $baseIsForeign): void {
+            $this->put($sheet, "A{$row}:C{$row}", $name, ['wrap' => true]);
+            if ($quantity !== null) {
+                $sheet->setCellValue("D{$row}", $quantity);
+            }
+            $sheet->mergeCells("E{$row}:F{$row}");
+
+            if ($primaryIsFixed) {
+                if ($purchaseUnit !== null) {
+                    $sheet->setCellValue("E{$row}", $purchaseUnit);
+                    $sheet->setCellValue("G{$row}", $quantity ? $sales / $quantity : 0);
+                }
+                $sheet->setCellValue("H{$row}", $purchase);
+                $sheet->setCellValue("I{$row}", $sales);
+                $sheet->setCellValue("L{$row}", $convert("H{$row}", $baseIsForeign));
+                $sheet->setCellValue("M{$row}", $convert("I{$row}", $baseIsForeign));
+            } else {
+                $sheet->setCellValue("L{$row}", $purchase);
+                $sheet->setCellValue("M{$row}", $sales);
+                $sheet->setCellValue("H{$row}", $convert("L{$row}", $baseIsForeign));
+                $sheet->setCellValue("I{$row}", $convert("M{$row}", $baseIsForeign));
+                if ($purchaseUnit !== null) {
+                    $sheet->setCellValue("E{$row}", "=IF(OR(H{$row}=\"\",N(D{$row})=0),\"\",H{$row}/D{$row})");
+                    $sheet->setCellValue("G{$row}", "=IF(OR(I{$row}=\"\",N(D{$row})=0),\"\",I{$row}/D{$row})");
+                }
+            }
+
+            $sheet->setCellValue("J{$row}", "=IF(OR(H{$row}=\"\",I{$row}=\"\"),\"\",I{$row}-H{$row})");
+            $sheet->setCellValue("K{$row}", "=IF(OR(J{$row}=\"\",N(I{$row})=0),\"\",J{$row}/I{$row})");
+            $sheet->setCellValue("N{$row}", "=IF(OR(L{$row}=\"\",M{$row}=\"\"),\"\",M{$row}-L{$row})");
+            $this->colourProfit($sheet, $row, $sales - $purchase);
+        };
 
         $row = $header;
-        $totals = ['quantity' => 0.0, 'purchase' => 0.0, 'sales' => 0.0];
+        $totals = ['purchase' => 0.0, 'sales' => 0.0];
 
         foreach ($lines as $index => $line) {
             ++$row;
             $quantity = $line['quantity'];
-            $purchaseUnit = $convert($line['purchase_unit']);
+            $purchaseUnit = $setup['to_base']($line['purchase_unit']);
             $purchase = round($quantity * $purchaseUnit, 2);
-            $sales = round($convert($line['sales_total']), 2);
-            $salesUnit = $quantity != 0.0 ? $sales / $quantity : 0.0;
-
-            $this->put($sheet, "A{$row}:C{$row}", $line['name'], ['wrap' => true]);
-            $sheet->setCellValue("D{$row}", $quantity);
-            $sheet->mergeCells("E{$row}:F{$row}");
-            $sheet->setCellValue("E{$row}", $purchaseUnit);
-            $sheet->fromArray([$salesUnit, $purchase, $sales, $sales - $purchase, $this->margin($sales, $purchase)], null, "G{$row}", true);
-            $this->colourProfit($sheet, $row, $sales - $purchase);
+            $sales = round($setup['to_base']($line['sales_total']), 2);
+            $writeLine($row, $line['name'], $quantity, $purchaseUnit, $purchase, $sales);
 
             if ($index % 2 === 1) {
-                $sheet->getStyle("A{$row}:K{$row}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('F8FAFC');
+                $sheet->getStyle("A{$row}:N{$row}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('F8FAFC');
             }
 
-            $totals['quantity'] += $quantity;
             $totals['purchase'] += $purchase;
             $totals['sales'] += $sales;
         }
 
         // A document-level discount lowers the sale of the whole document, not of one line.
-        $discount = round($convert($this->documentDiscount($document)), 2);
+        $discount = round($setup['to_base']($this->documentDiscount($document)), 2);
 
         if ($discount > 0) {
             ++$row;
-            $this->put($sheet, "A{$row}:C{$row}", 'Belge indirimi', ['color' => self::SLATE]);
-            $sheet->fromArray([-1 * $discount, -1 * $discount], null, "I{$row}", true);
+            $writeLine($row, 'Belge indirimi', null, null, 0.0, -1 * $discount);
+            $sheet->getStyle("A{$row}:C{$row}")->getFont()->getColor()->setRGB(self::SLATE);
             $totals['sales'] -= $discount;
         }
 
+        $first = $header + 1;
+        $last = $row;
         ++$row;
-        $profit = $totals['sales'] - $totals['purchase'];
         $this->put($sheet, "A{$row}:C{$row}", 'TOPLAM', ['bold' => true, 'color' => self::NAVY]);
-        $sheet->setCellValue("D{$row}", $totals['quantity']);
+        $sheet->setCellValue("D{$row}", "=SUM(D{$first}:D{$last})");
         $sheet->mergeCells("E{$row}:F{$row}");
-        $sheet->fromArray([$totals['purchase'], $totals['sales'], $profit, $this->margin($totals['sales'], $totals['purchase'])], null, "H{$row}", true);
-        $totalStyle = $sheet->getStyle("A{$row}:K{$row}");
+        foreach (['H', 'I', 'L', 'M'] as $column) {
+            $fixed = $primaryIsFixed === in_array($column, ['H', 'I'], true);
+            $sheet->setCellValue("{$column}{$row}", $fixed
+                ? "=SUM({$column}{$first}:{$column}{$last})"
+                : '=IF(N('.$rate.")>0,SUM({$column}{$first}:{$column}{$last}),\"\")");
+        }
+        $sheet->setCellValue("J{$row}", "=IF(OR(H{$row}=\"\",I{$row}=\"\"),\"\",I{$row}-H{$row})");
+        $sheet->setCellValue("K{$row}", "=IF(OR(J{$row}=\"\",N(I{$row})=0),\"\",J{$row}/I{$row})");
+        $sheet->setCellValue("N{$row}", "=IF(OR(L{$row}=\"\",M{$row}=\"\"),\"\",M{$row}-L{$row})");
+        $totalStyle = $sheet->getStyle("A{$row}:N{$row}");
         $totalStyle->getFont()->setBold(true);
         $totalStyle->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('E9F5FF');
         $totalStyle->getBorders()->getTop()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB(self::NAVY);
-        $this->colourProfit($sheet, $row, $profit);
+        $this->colourProfit($sheet, $row, $totals['sales'] - $totals['purchase']);
 
-        $body = 'A'.($header + 1).":K{$row}";
+        $body = "A{$first}:N{$row}";
         $sheet->getStyle($body)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         $sheet->getStyle($body)->getBorders()->getHorizontal()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB(self::LINE);
-        $sheet->getStyle("A{$header}:K{$row}")->getBorders()->getOutline()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('B8CBE0');
-        $sheet->getStyle('D'.($header + 1).":K{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-        $sheet->getStyle('E'.($header + 1).":J{$row}")->getNumberFormat()->setFormatCode($money);
-        $sheet->getStyle('K'.($header + 1).":K{$row}")->getNumberFormat()->setFormatCode('0.0%');
+        $sheet->getStyle("A{$header}:N{$row}")->getBorders()->getOutline()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('B8CBE0');
+        $sheet->getStyle("L{$header}:L{$row}")->getBorders()->getLeft()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB(self::BLUE);
+        $sheet->getStyle("D{$first}:N{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+        $sheet->getStyle("D{$first}:D{$row}")->getNumberFormat()->setFormatCode('General');
+        $sheet->getStyle("E{$first}:J{$row}")->getNumberFormat()->setFormatCode($this->moneyFormatFor($primary));
+        $sheet->getStyle("K{$first}:K{$row}")->getNumberFormat()->setFormatCode('0.0%');
+        $sheet->getStyle("L{$first}:N{$row}")->getNumberFormat()->setFormatCode($this->moneyFormatFor($secondary));
     }
 
     /**
-     * Currency of the profit table, the converter from document-currency amounts into it and the
-     * notes printed above the table (rates used, or why the document currency is used instead).
+     * Currencies, conversion and notes of the profit table.
      *
-     * @return array{0: Currency|null, 1: callable(float): float, 2: array<int, string>}
+     * - tl: Türk Lirası. The rate cell always reads "1 <foreign> = … TL", whatever currency the
+     *   company itself is set to;
+     * - base: currency of the fixed amounts: the document currency, or TL when a document in a
+     *   third currency (e.g. EUR) is converted with the document rate for a USD table;
+     * - foreign: currency of the rate cell: the base currency when it is not TL, otherwise USD;
+     * - primary / secondary: the chosen table currency and the other one of TL / foreign;
+     * - to_base: converts document-currency amounts into the base currency;
+     * - rate: initial value of the rate cell (0 = left empty for the user to fill in).
+     *
+     * @return array{tl: Currency|null, base: Currency|null, foreign: Currency|null, primary: Currency|null, secondary: Currency|null, to_base: callable(float): float, rate: float, notes: array<int, string>}
      */
-    private function profitCurrency(Invoice|Quote $document, Request $request): array
+    private function profitSetup(Invoice|Quote $document, Request $request): array
     {
         $currencies = app('currencies');
-        $documentCurrency = $document->client?->currency();
         $companyCurrency = $currencies->firstWhere('id', (string) ($document->company?->settings->currency_id ?? '')) ?? $currencies->firstWhere('code', 'TRY');
+        $documentCurrency = $document->client?->currency() ?? $companyCurrency;
         $usd = $currencies->firstWhere('code', 'USD');
+        $tl = $currencies->firstWhere('code', 'TRY');
 
-        $documentCode = $documentCurrency->code ?? ($companyCurrency->code ?? 'TRY');
         $companyCode = $companyCurrency->code ?? 'TRY';
-        $target = strtoupper((string) $request->query('currency', $documentCode));
+        $documentCode = $documentCurrency->code ?? $companyCode;
 
-        $notes = ['Yalnızca şirket içi kullanım içindir; müşteriye gönderilecek dosyada bu tablo bulunmamalıdır. Kâr oranı satış tutarı üzerinden hesaplanır.'];
-
-        if (! in_array($target, [$documentCode, $companyCode, 'USD'], true) || $target === $documentCode) {
-            return [$documentCurrency, fn (float $amount): float => $amount, $notes];
-        }
-
-        // 1 unit of the document currency in the company currency.
+        // 1 unit of the document currency in TL: entered in the download dialog, otherwise the
+        // document's own rate (document units per 1 company unit), which is a TL rate only when
+        // the company works in TL.
         $documentRate = (float) $request->query('document_rate', 0);
-        if ($documentRate <= 0 && $documentCode !== $companyCode && (float) $document->exchange_rate > 0 && abs((float) $document->exchange_rate - 1) > 0.000001) {
+        if ($documentRate <= 0 && $companyCode === 'TRY' && $documentCode !== 'TRY' && (float) $document->exchange_rate > 0 && abs((float) $document->exchange_rate - 1) > 0.000001) {
             $documentRate = 1 / (float) $document->exchange_rate;
         }
-        if ($documentCode === $companyCode) {
-            $documentRate = 1.0;
-        }
 
-        // 1 USD in the company currency.
         $usdRate = (float) $request->query('usd_rate', 0);
         if ($usdRate <= 0 && $documentCode === 'USD') {
             $usdRate = $documentRate;
         }
 
-        $needsUsd = $target === 'USD' && $companyCode !== 'USD';
+        $target = strtoupper((string) $request->query('currency', $documentCode));
+        $notes = ['Yalnızca şirket içi kullanım içindir; müşteriye gönderilecek dosyada bu tablo bulunmamalıdır. Kâr oranı satış tutarı üzerinden hesaplanır.'];
 
-        if ($documentRate <= 0 || ($needsUsd && $usdRate <= 0)) {
-            $notes[] = 'Seçilen para birimi için kur girilmediğinden tablo belge para birimiyle ('.$this->currencyLabel($documentCurrency).') gösterilmiştir.';
+        $base = $documentCurrency;
+        $toBase = fn (float $amount): float => $amount;
 
-            return [$documentCurrency, fn (float $amount): float => $amount, $notes];
+        // A third-currency document (e.g. EUR) shown in USD goes through TL with the document rate.
+        if (! in_array($documentCode, ['TRY', 'USD'], true) && $target === 'USD') {
+            if ($documentRate > 0) {
+                $notes[] = 'Belge kuru: 1 '.$documentCode.' = '.$this->rate($documentRate).' TL; belge tutarları bu kurla çevrilmiştir.';
+                $base = $tl;
+                $toBase = fn (float $amount): float => $amount * $documentRate;
+            } else {
+                $notes[] = 'Belge kuru girilmediğinden tablo belge para birimiyle ('.$documentCode.') gösterilmiştir.';
+                $target = $documentCode;
+            }
         }
 
-        $companyLabel = $this->currencyLabel($companyCurrency);
+        $foreign = ($base->code ?? 'TRY') !== 'TRY' ? $base : $usd;
+        $rate = ($foreign->code ?? 'USD') === 'USD' ? $usdRate : $documentRate;
 
-        if ($documentCode !== $companyCode && $documentCode !== 'USD') {
-            $notes[] = 'Belge kuru: 1 '.$documentCode.' = '.$this->rate($documentRate).' '.$companyLabel;
-        }
+        $primary = match ($target) {
+            'TRY' => $tl,
+            $foreign->code ?? 'USD' => $foreign,
+            default => $base,
+        };
+        $secondary = ($primary->code ?? '') === 'TRY' ? $foreign : $tl;
 
-        if ($needsUsd || $documentCode === 'USD') {
-            $notes[] = 'Kur: 1 USD = '.$this->rate($needsUsd ? $usdRate : $documentRate).' '.$companyLabel;
-        }
+        $converted = ($base->code ?? '') === ($primary->code ?? '') ? $secondary : $primary;
+        $notes[] = 'Sabit tutarlar belgedeki '.$this->currencyLabel($base).' tutarlarıdır; '.$this->currencyLabel($converted).' karşılıkları kur hücresinden formülle hesaplanır.';
 
-        $convert = $needsUsd
-            ? fn (float $amount): float => $amount * $documentRate / $usdRate
-            : fn (float $amount): float => $amount * $documentRate;
-
-        return [$needsUsd ? $usd : $companyCurrency, $convert, $notes];
+        return [
+            'tl' => $tl,
+            'base' => $base,
+            'foreign' => $foreign,
+            'primary' => $primary,
+            'secondary' => $secondary,
+            'to_base' => $toBase,
+            'rate' => max(0.0, $rate),
+            'notes' => $notes,
+        ];
     }
 
     /** Document-level discount in the document currency (line discounts are already in the lines). */
@@ -563,7 +685,9 @@ class ProformaExcelController extends BaseController
 
     private function colourProfit(Worksheet $sheet, int $row, float $profit): void
     {
-        $sheet->getStyle("J{$row}:K{$row}")->getFont()->setBold(true)->getColor()->setRGB($profit < 0 ? 'C0392B' : '26734B');
+        foreach (["J{$row}:K{$row}", "N{$row}"] as $range) {
+            $sheet->getStyle($range)->getFont()->setBold(true)->getColor()->setRGB($profit < 0 ? 'C0392B' : '26734B');
+        }
     }
 
     private function currencyLabel(?Currency $currency): string

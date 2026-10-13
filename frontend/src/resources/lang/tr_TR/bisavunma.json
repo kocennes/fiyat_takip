@@ -47,5 +47,5 @@
   "bis_turkish_lira": "Türk Lirası (TL)",
   "bis_us_dollar": "ABD Doları (USD)",
   "bis_excel_rate": "Kur: 1 :currency = ? :company",
-  "bis_excel_rate_help": "Kur elle girilir ve yalnızca bu tabloda kullanılır; proformadaki tutarlar değişmez. Girilen USD kuru bir sonraki indirmede hazır gelir."
+  "bis_excel_rate_help": "Kur, Excel'deki kâr / zarar tablosunun üstündeki sarı kur hücresine yazılır. Boş bırakırsanız kuru Excel'de girebilirsiniz; kuru değiştirdiğinizde TL ve döviz karşılıkları otomatik hesaplanır. Proformadaki tutarlar değişmez. Girilen USD kuru bir sonraki indirmede hazır gelir."
 }

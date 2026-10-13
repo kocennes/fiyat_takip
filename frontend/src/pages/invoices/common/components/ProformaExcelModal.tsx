@@ -3,8 +3,10 @@
  *
  * The Excel file mirrors the proforma PDF. Below it the internal profit table lists every line
  * item (quantity, purchase, sale, profit, margin); here the user decides whether the file gets
- * that table (not for files sent to the client), its currency (TL or USD, or the document
- * currency) and the exchange rates used for the conversion.
+ * that table (not for files sent to the client) and its currency (TL or USD, or the document
+ * currency). The rate typed here fills the editable rate cell of the Excel table, whose formulas
+ * convert the amounts between TL and the foreign currency; it may be left empty and entered in
+ * Excel instead. Only a third-currency document shown in USD needs its document rate up front.
  */
 
 import { useAtom } from 'jotai';
@@ -23,6 +25,9 @@ import {
 } from '../hooks/useDownloadProformaExcel';
 
 const USD_RATE_STORAGE_KEY = 'bisavunma.proforma_excel.usd_rate';
+
+/** The profit table converts between TL and one foreign currency, whatever the company currency. */
+const TL = 'TRY';
 
 const readStoredUsdRate = () => {
   try {
@@ -80,17 +85,22 @@ export function ProformaExcelModal() {
         const code = resolveCurrency(currencyId ?? '')?.code || companyCode;
         const rate = Number(exchangeRate);
 
-        // The document stores document-currency units per 1 TL; 1 means "no rate entered".
+        // The document stores document-currency units per 1 company unit, which is a TL rate
+        // only when the company works in TL; 1 means "no rate entered".
         const documentToCompany =
-          code !== companyCode && rate > 0 && Math.abs(rate - 1) > 0.000001
+          companyCode === TL &&
+          code !== companyCode &&
+          rate > 0 &&
+          Math.abs(rate - 1) > 0.000001
             ? 1 / rate
             : 0;
 
         setDocumentCode(code);
-        setCurrency(code === 'USD' ? 'USD' : companyCode);
+        setCurrency(code === 'USD' ? 'USD' : TL);
         setDocumentRate(formatRate(documentToCompany));
         setUsdRate(
-          code === 'USD' ? formatRate(documentToCompany) : readStoredUsdRate()
+          (code === 'USD' && formatRate(documentToCompany)) ||
+            readStoredUsdRate()
         );
         setIncludeProfit(true);
         setError('');
@@ -98,16 +108,18 @@ export function ProformaExcelModal() {
     );
   }, [excelRequest]);
 
-  const needsDocumentRate =
-    currency !== documentCode && documentCode !== companyCode;
-  const needsUsdRate = currency === 'USD' && documentCode !== 'USD';
+  const isThirdCurrency = ![TL, 'USD'].includes(documentCode);
+  // A third-currency document (e.g. EUR) shown in USD is converted to TL before the download.
+  const needsDocumentRate = isThirdCurrency && currency === 'USD';
+  const showDocumentRate = isThirdCurrency;
+  const showUsdRate = !isThirdCurrency || currency === 'USD';
 
-  const companyLabel = companyCode === 'TRY' ? 'TL' : companyCode;
+  const companyLabel = 'TL';
 
   const currencyOptions = [
-    { id: 'excel-currency-try', title: t('bis_turkish_lira'), value: companyCode },
+    { id: 'excel-currency-try', title: t('bis_turkish_lira'), value: TL },
     { id: 'excel-currency-usd', title: t('bis_us_dollar'), value: 'USD' },
-    ...(![companyCode, 'USD'].includes(documentCode)
+    ...(isThirdCurrency
       ? [
           {
             id: 'excel-currency-document',
@@ -131,20 +143,14 @@ export function ProformaExcelModal() {
     }
 
     const parsedDocumentRate = toRate(documentRate);
-    const parsedUsdRate = toRate(
-      documentCode === 'USD' ? documentRate || usdRate : usdRate
-    );
+    const parsedUsdRate = toRate(usdRate);
 
-    if (
-      includeProfit &&
-      ((needsDocumentRate && !parsedDocumentRate) ||
-        (needsUsdRate && !parsedUsdRate))
-    ) {
+    if (includeProfit && needsDocumentRate && !parsedDocumentRate) {
       setError(t('bis_exchange_rate_required'));
       return;
     }
 
-    if (includeProfit && needsUsdRate) {
+    if (includeProfit && showUsdRate && parsedUsdRate) {
       storeUsdRate(parsedUsdRate);
     }
 
@@ -153,8 +159,8 @@ export function ProformaExcelModal() {
     download(excelRequest.resource, excelRequest.entity, {
       profit: includeProfit,
       currency,
-      documentRate: needsDocumentRate ? parsedDocumentRate : undefined,
-      usdRate: needsUsdRate ? parsedUsdRate : undefined,
+      documentRate: showDocumentRate ? parsedDocumentRate : undefined,
+      usdRate: showUsdRate ? parsedUsdRate : undefined,
     }).finally(close);
   };
 
@@ -197,7 +203,7 @@ export function ProformaExcelModal() {
               />
             </div>
 
-            {needsDocumentRate && (
+            {showDocumentRate && (
               <InputField
                 label={trans('bis_excel_rate', {
                   currency: documentCode,
@@ -212,7 +218,7 @@ export function ProformaExcelModal() {
               />
             )}
 
-            {needsUsdRate && (
+            {showUsdRate && (
               <InputField
                 label={trans('bis_excel_rate', {
                   currency: 'USD',
@@ -227,7 +233,7 @@ export function ProformaExcelModal() {
               />
             )}
 
-            {(needsDocumentRate || needsUsdRate) && (
+            {(showDocumentRate || showUsdRate) && (
               <p className="text-sm text-gray-500">
                 {t('bis_excel_rate_help')}
               </p>

@@ -691,6 +691,7 @@ class HtmlEngine
         $logo_url = $this->company->present()->logo($this->settings);
 
         $data['$company.logo'] = ['value' => $logo ?: ' ', 'label' => ctrans('texts.logo')];
+        $data['$bisavunma_logo'] = ['value' => BrandLogo::dataUri(), 'label' => ''];
         $data['$company_logo'] = &$data['$company.logo'];
 
         $data['$company.logo_url'] = ['value' => $logo_url ?: ' ', 'label' => ctrans('texts.logo')];
