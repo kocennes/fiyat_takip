@@ -598,7 +598,10 @@ class ProformaExcelController extends BaseController
         }
 
         $target = strtoupper((string) $request->query('currency', $documentCode));
-        $notes = ['Yalnızca şirket içi kullanım içindir; müşteriye gönderilecek dosyada bu tablo bulunmamalıdır. Kâr oranı satış tutarı üzerinden hesaplanır.'];
+        $notes = [
+            'Yalnızca şirket içi kullanım içindir; müşteriye gönderilecek dosyada bu tablo bulunmamalıdır.',
+            'Hesap: Alış = satılan adet × kalemin alış fiyatı (ürün belgeye eklenirken ürün kartından alınır) · Satış = kalem tutarı (KDV hariç) · Kâr / Zarar = Satış − Alış · Kâr oranı = Kâr / Satış.',
+        ];
 
         $base = $documentCurrency;
         $toBase = fn (float $amount): float => $amount;
