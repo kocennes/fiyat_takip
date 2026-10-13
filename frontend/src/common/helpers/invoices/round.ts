@@ -64,5 +64,6 @@ export function taxKey(name: string, rate: number): string {
 }
 
 export function formatTaxName(name: string, rate: number): string {
-  return `${name} ${parseFloat(rate.toString())} %`;
+  // BISAVUNMA: Turkish notation, "KDV %20".
+  return `${name} %${parseFloat(rate.toString())}`;
 }

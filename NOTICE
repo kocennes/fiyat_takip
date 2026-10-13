@@ -1,0 +1,19 @@
+BISAVUNMA Fiyat Takip
+
+This software is a modified version of Invoice Ninja 5.13.47
+(https://github.com/invoiceninja/invoiceninja and https://github.com/invoiceninja/ui),
+Copyright (c) Invoice Ninja LLC, licensed under the Elastic License 2.0.
+The license terms are in backend/LICENSE and frontend/LICENSE.
+
+BISAVUNMA has modified the software: Turkish localisation, Turkish tax (KDV)
+rules, proforma PDF and Excel documents, branding and the deployment
+configuration. Modified source files are marked with "BISAVUNMA" comments; the
+full list of changes is the Git history of this repository.
+
+Third-party components keep their own license notices in their directories.
+
+---
+
+Bu yazılım, Elastic License 2.0 ile lisanslanmış Invoice Ninja 5.13.47'nin
+BISAVUNMA tarafından değiştirilmiş sürümüdür. Lisans metni backend/LICENSE ve
+frontend/LICENSE dosyalarındadır; değişiklikler bu deponun Git geçmişindedir.

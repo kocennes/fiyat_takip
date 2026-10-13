@@ -16,6 +16,7 @@ use App\DataMapper\ClientSettings;
 use App\DataMapper\CompanySettings;
 use App\Http\Requests\Request;
 use App\Http\ValidationRules\Ninja\CanStoreClientsRule;
+use App\Http\ValidationRules\Turkey\ValidTurkishTaxNumber;
 use App\Http\ValidationRules\ValidClientGroupSettingsRule;
 use App\Models\Client;
 use App\Models\GroupSetting;
@@ -76,7 +77,14 @@ class StoreClientRequest extends Request
 
         $rules['number'] = ['bail', 'nullable', Rule::unique('clients')->where('company_id', $user->company()->id)];
         $rules['size_id'] = ['bail', 'nullable', 'sometimes', 'exists:sizes,id'];
-        $rules['id_number'] = ['bail', 'nullable', Rule::unique('clients')->where('company_id', $user->company()->id)];
+        // BISAVUNMA: id_number holds the tax office (Vergi Dairesi), which many clients share;
+        // vat_number is the VKN / TCKN of clients in Turkey.
+        $rules['id_number'] = ['bail', 'nullable'];
+
+        if (ValidTurkishTaxNumber::appliesTo($this->input('country_id'), $user->company()->settings->country_id ?? null)) {
+            $rules['vat_number'] = ['bail', 'nullable', new ValidTurkishTaxNumber()];
+        }
+
         $rules['classification'] = 'bail|sometimes|nullable|in:individual,business,company,partnership,trust,charity,government,other';
         $rules['shipping_country_id'] = 'integer|nullable|exists:countries,id';
         $rules['number'] = ['sometimes', 'nullable', 'bail', Rule::unique('clients')->where('company_id', $user->company()->id)];

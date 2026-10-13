@@ -27,6 +27,8 @@ class CountryDefaults
         'tax_rates'               => [],
         'translations'            => null,
         'custom_fields'           => null,
+        'first_day_of_week'       => null,
+        'use_comma_as_decimal_place' => null,
     ];
 
     /**
@@ -422,12 +424,12 @@ class CountryDefaults
             // BISAVUNMA: KDV per line item only (no document-level taxes).
             'enabled_tax_rates' => 0,
             'enabled_item_tax_rates' => 1,
-            'tax_rates' => [
-                ['name' => 'KDV', 'rate' => 20], // genel oran
-                ['name' => 'KDV', 'rate' => 10], // indirimli oran
-                ['name' => 'KDV', 'rate' => 1],  // indirimli oran
-                ['name' => 'KDV', 'rate' => 0],  // istisna
-            ],
+            // KDV 20 / 10 / 1 / 0 and the KDV exemptions (13/f, 11/1-a).
+            'tax_rates' => TurkishDocumentDefaults::TAX_RATES,
+            // IBAN, MERSİS No and Ticaret Sicil No, printed on the proforma.
+            'custom_fields' => TurkishDocumentDefaults::COMPANY_CUSTOM_FIELDS,
+            'first_day_of_week' => TurkishDocumentDefaults::FIRST_DAY_OF_WEEK, // Monday
+            'use_comma_as_decimal_place' => TurkishDocumentDefaults::USE_COMMA_AS_DECIMAL_PLACE, // 1.234,56
         ],
 
         '826' => [ // United Kingdom — GBP, Europe/London

@@ -538,6 +538,8 @@ class PdfMock
              '$task.cost' => '',
              '$statement' => '',
              '$user_iban' => '&nbsp;',
+             '$amount_in_words' => 'On Türk Lirası',
+             '$tax_exemption_note' => '',
              '$signature' => '&nbsp;',
              '$id_number' => ctrans('texts.id_number'),
              '$credit_no' => '0029',
@@ -906,6 +908,8 @@ class PdfMock
             '$statement_label' => ctrans('texts.statement'),
             '$view_link_label' => ctrans('texts.link'),
             '$user_iban_label' => ctrans('texts.iban'),
+            '$amount_in_words_label' => ctrans('texts.bis_amount_in_words'),
+            '$tax_exemption_note_label' => ctrans('texts.bis_tax_exemption'),
             '$signature_label' => ctrans('texts.signature'),
             '$font_size_label' => ctrans('texts.font_size'),
             '$reference_label' => ctrans('texts.reference'),
@@ -1298,6 +1302,8 @@ class PdfMock
             '$refund' => ctrans('texts.refund'),
             '$refunded' => ctrans('texts.refunded'),
             '$total' => '$10,256.40',
+            '$amount_in_words' => 'On Bin İki Yüz Elli Altı Türk Lirası Kırk Kuruş',
+            '$tax_exemption_note' => '',
             '$taxes' => '$488.40',
             '$phone' => '&nbsp;',
             '$from' => '',
@@ -1322,6 +1328,8 @@ class PdfMock
     private function vendorLabels()
     {
         return [
+            '$amount_in_words_label' => ctrans('texts.bis_amount_in_words'),
+            '$tax_exemption_note_label' => ctrans('texts.bis_tax_exemption'),
             '$vendor.billing_postal_code_label' => ctrans('texts.billing_postal_code'),
             '$company.postal_city_state_label' => ctrans('texts.postal_city_state'),
             '$company.city_state_postal_label' => ctrans('texts.city_state_postal'),

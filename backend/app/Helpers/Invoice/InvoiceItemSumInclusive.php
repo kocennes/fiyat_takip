@@ -378,7 +378,7 @@ class InvoiceItemSumInclusive
         // for every rate on the line); fall back to the single-rate back-out.
         $base_amount = $base_amount ?? ($tax_rate > 0 ? round($amount / (1 + ($tax_rate / 100)), 2) : $amount);
 
-        $group_tax = ['key' => $key, 'total' => $tax_total, 'tax_name' => $tax_name . ' ' . Number::formatValueNoTrailingZeroes(floatval($tax_rate), $this->client) . '%', 'tax_id' => $tax_id, 'tax_rate' => $tax_rate, 'base_amount' => $base_amount];
+        $group_tax = ['key' => $key, 'total' => $tax_total, 'tax_name' => $tax_name . ' ' . Number::percentLabel(Number::formatValueNoTrailingZeroes(floatval($tax_rate), $this->client), $this->client), 'tax_id' => $tax_id, 'tax_rate' => $tax_rate, 'base_amount' => $base_amount];
 
         $this->tax_collection->push(collect($group_tax));
     }

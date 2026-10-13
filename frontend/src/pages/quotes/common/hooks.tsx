@@ -92,6 +92,7 @@ import { isDeleteActionTriggeredAtom } from '$app/pages/invoices/common/componen
 import { openClientPortal } from '$app/pages/invoices/common/helpers/open-client-portal';
 import { useDownloadEInvoice } from '$app/pages/invoices/common/hooks/useDownloadEInvoice';
 import { useDownloadPdf } from '$app/pages/invoices/common/hooks/useDownloadPdf';
+import { useOpenProformaExcel } from '$app/pages/invoices/common/hooks/useDownloadProformaExcel';
 import { DataTableColumnsExtended } from '$app/pages/invoices/common/hooks/useInvoiceColumns';
 import { usePrintPdf } from '$app/pages/invoices/common/hooks/usePrintPdf';
 import { useScheduleEmailRecord } from '$app/pages/invoices/common/hooks/useScheduleEmailRecord';
@@ -445,6 +446,7 @@ export function useActions(params?: Params) {
   const markSent = useMarkSent();
   const printPdf = usePrintPdf({ entity: 'quote' });
   const downloadPdf = useDownloadPdf({ resource: 'quote' });
+  const openProformaExcel = useOpenProformaExcel();
   const downloadEQuote = useDownloadEInvoice({
     resource: 'quote',
     downloadType: 'download_e_quote',
@@ -528,6 +530,22 @@ export function useActions(params?: Params) {
         disablePreventNavigation
       >
         {t('download_pdf')}
+      </EntityActionElement>
+    ),
+    (quote) => (
+      <EntityActionElement
+        {...(!dropdown && {
+          key: 'download_proforma_excel',
+        })}
+        entity="quote"
+        actionKey="download_proforma_excel"
+        isCommonActionSection={!dropdown}
+        tooltipText={t('bis_excel_download')}
+        onClick={() => openProformaExcel('quote', quote)}
+        icon={MdDownload}
+        disablePreventNavigation
+      >
+        {t('bis_excel_download')}
       </EntityActionElement>
     ),
     (quote) =>

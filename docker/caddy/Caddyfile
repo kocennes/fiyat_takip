@@ -1,0 +1,24 @@
+# BISAVUNMA Fiyat Takip - HTTPS entry point (docker-compose.prod.yml).
+# Caddy obtains and renews the Let's Encrypt certificate for APP_DOMAIN,
+# redirects HTTP to HTTPS and forwards to nginx with X-Forwarded-* headers.
+{
+	email {$ACME_EMAIL}
+}
+
+{$APP_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
+	request_body {
+		max_size 10MB
+	}
+
+	reverse_proxy nginx:80
+}

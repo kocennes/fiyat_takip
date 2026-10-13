@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!.env.production.example
 
 # Runtime and dependencies
 **/node_modules/
@@ -27,3 +28,6 @@
 .idea/
 .vscode/
 *.log
+
+# Production backups (scripts/backup.sh)
+/backups/

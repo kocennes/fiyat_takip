@@ -420,7 +420,7 @@ class InvoiceItemSum
             return;
         }
 
-        $group_tax = ['key' => $key, 'total' => $tax_total, 'tax_name' => $tax_name . ' ' . Number::formatValueNoTrailingZeroes(floatval($tax_rate), $this->client) . '%', 'tax_id' => $tax_id, 'tax_rate' => $tax_rate, 'base_amount' => $amount];
+        $group_tax = ['key' => $key, 'total' => $tax_total, 'tax_name' => $tax_name . ' ' . Number::percentLabel(Number::formatValueNoTrailingZeroes(floatval($tax_rate), $this->client), $this->client), 'tax_id' => $tax_id, 'tax_rate' => $tax_rate, 'base_amount' => $amount];
 
         $this->tax_collection->push(collect($group_tax));
     }

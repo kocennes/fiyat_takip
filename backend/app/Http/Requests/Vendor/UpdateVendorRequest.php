@@ -13,6 +13,7 @@
 namespace App\Http\Requests\Vendor;
 
 use App\Http\Requests\Request;
+use App\Http\ValidationRules\Turkey\ValidTurkishTaxNumber;
 use App\Models\Vendor;
 use App\Utils\Traits\ChecksEntityStatus;
 use App\Utils\Traits\MakesHash;
@@ -74,6 +75,11 @@ class UpdateVendorRequest extends Request
 
         $rules['language_id'] = 'bail|nullable|sometimes|exists:languages,id';
         $rules['classification'] = 'bail|sometimes|nullable|in:individual,business,company,partnership,trust,charity,government,other';
+
+        // BISAVUNMA: VKN / TCKN of vendors in Turkey.
+        if (ValidTurkishTaxNumber::appliesTo($this->has('country_id') ? $this->input('country_id') : $this->vendor->country_id, $user->company()->settings->country_id ?? null)) {
+            $rules['vat_number'] = ['sometimes', 'bail', 'nullable', new ValidTurkishTaxNumber()];
+        }
 
         return $this->globalRules($rules);
     }

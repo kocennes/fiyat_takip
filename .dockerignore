@@ -12,3 +12,5 @@ backend/public/*
 backend/public/images/*
 !backend/public/images/fiyattakip-logo.svg
 backend/openapi
+backups
+dockerfiles

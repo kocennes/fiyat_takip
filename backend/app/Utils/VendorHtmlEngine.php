@@ -222,6 +222,10 @@ class VendorHtmlEngine
 
         $data['$total'] = ['value' => Number::formatMoney($this->entity_calc->getTotal(), $this->vendor) ?: '&nbsp;', 'label' => ctrans('texts.total')];
 
+        // BISAVUNMA: the total in Turkish words ("Yalnız …") and the legal notes of the KDV exemptions used.
+        $data['$amount_in_words'] = ['value' => TurkishAmountInWords::amount((float) $this->entity_calc->getTotal(), $this->vendor->currency()->code ?? 'TRY'), 'label' => ctrans('texts.bis_amount_in_words')];
+        $data['$tax_exemption_note'] = ['value' => TurkishKdv::exemptionNotesHtml($this->entity->line_items ?? []), 'label' => ctrans('texts.bis_tax_exemption')];
+
         $data['$purchase_order.total'] = &$data['$total'];
 
         $data['$amount'] = &$data['$total'];

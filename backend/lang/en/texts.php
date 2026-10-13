@@ -7122,6 +7122,9 @@ $lang = array(
     'bis_task_being_created_for_calendar_event' => 'A task is already being created for this calendar event.',
     'bis_task_exists_for_calendar_event' => 'A task already exists for this calendar event.',
     'bis_unknown_name' => 'Unknown name',
+    'bis_amount_in_words' => 'Amount in words',
+    'bis_tax_exemption' => 'KDV exemption',
+    'bis_invalid_turkish_tax_number' => 'The tax number must be a valid 10-digit Turkish tax number (VKN) or 11-digit identity number (TCKN).',
 );
 
 return $lang;

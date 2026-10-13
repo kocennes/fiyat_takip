@@ -14,6 +14,7 @@ namespace App\DataMapper;
 
 use stdClass;
 use App\Utils\Ninja;
+use App\DataMapper\CompanyDefaults\TurkishDocumentDefaults;
 use App\Utils\Traits\MakesHash;
 
 /**
@@ -901,6 +902,7 @@ class CompanySettings extends BaseSettings
         'language_id' => ['1', '25'],     // Turkish - Turkey (tr_TR)
         'date_format_id' => ['1', '11'],  // d.m.Y (DD.MM.YYYY)
         'country_id' => ['840', '792'],   // Turkey
+        'currency_id' => ['1', '41'],     // Turkish Lira (TRY)
     ];
 
     /**
@@ -916,7 +918,7 @@ class CompanySettings extends BaseSettings
      * Returns the configured regional default for a setting, falling back to
      * the Turkish default when only the upstream fall-back is configured.
      *
-     * @param  string $key timezone_id|language_id|date_format_id|country_id
+     * @param  string $key timezone_id|language_id|date_format_id|country_id|currency_id
      * @return string
      */
     public static function regionalDefault(string $key): string
@@ -955,7 +957,7 @@ class CompanySettings extends BaseSettings
         unset($data->string_casts);
 
         $data->timezone_id = self::regionalDefault('timezone_id');
-        $data->currency_id = (string) config('ninja.i18n.currency_id');
+        $data->currency_id = self::regionalDefault('currency_id');
         $data->language_id = self::regionalDefault('language_id');
         $data->payment_terms = (string) config('ninja.i18n.payment_terms');
         $data->military_time = self::regionalMilitaryTime();
@@ -968,6 +970,12 @@ class CompanySettings extends BaseSettings
         $data->tax_name1 = self::TURKISH_DEFAULT_LINE_TAX['name'];
         $data->tax_rate1 = self::TURKISH_DEFAULT_LINE_TAX['rate'];
         $data->inclusive_taxes = false;
+
+        // BISAVUNMA: 30-day quote validity, Turkish quote / proforma terms, the KVKK
+        // notice and the client portal set up for online quote approval.
+        foreach ([...TurkishDocumentDefaults::settings(), ...TurkishDocumentDefaults::portalSettings()] as $key => $value) {
+            $data->{$key} = $value;
+        }
 
         return self::setCasts($data, self::$casts);
     }
@@ -1042,6 +1050,7 @@ class CompanySettings extends BaseSettings
                 '$client.location_name',
                 '$client.name',
                 '$client.number',
+                '$client.id_number', // BISAVUNMA: Vergi Dairesi
                 '$client.vat_number',
                 '$client.address1',
                 '$client.address2',

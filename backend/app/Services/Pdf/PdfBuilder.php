@@ -18,6 +18,7 @@ use App\Models\Product;
 use App\Models\Quote;
 use App\Models\Credit;
 use App\Utils\Helpers;
+use App\Utils\Number;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use App\Utils\Traits\MakesDates;
@@ -1126,24 +1127,24 @@ class PdfBuilder
                 if ($item->is_amount_discount) {
                     $data[$key][$table_type . '.discount'] = $this->service->config->formatMoney($item->discount);
                 } else {
-                    $data[$key][$table_type . '.discount'] = $this->service->config->formatValueNoTrailingZeroes(floatval($item->discount)) . '%';
+                    $data[$key][$table_type . '.discount'] = Number::percentLabel($this->service->config->formatValueNoTrailingZeroes(floatval($item->discount)), $this->service->config->client);
                 }
             } else {
                 $data[$key][$table_type . '.discount'] = '';
             }
 
             if (isset($item->tax_rate1)) {
-                $data[$key][$table_type . '.tax_rate1'] = $this->service->config->formatValueNoTrailingZeroes(floatval($item->tax_rate1)) . '%';
+                $data[$key][$table_type . '.tax_rate1'] = Number::percentLabel($this->service->config->formatValueNoTrailingZeroes(floatval($item->tax_rate1)), $this->service->config->client);
                 $data[$key][$table_type . '.tax1'] = &$data[$key][$table_type . '.tax_rate1'];
             }
 
             if (isset($item->tax_rate2)) {
-                $data[$key][$table_type . '.tax_rate2'] = $this->service->config->formatValueNoTrailingZeroes(floatval($item->tax_rate2)) . '%';
+                $data[$key][$table_type . '.tax_rate2'] = Number::percentLabel($this->service->config->formatValueNoTrailingZeroes(floatval($item->tax_rate2)), $this->service->config->client);
                 $data[$key][$table_type . '.tax2'] = &$data[$key][$table_type . '.tax_rate2'];
             }
 
             if (isset($item->tax_rate3)) {
-                $data[$key][$table_type . '.tax_rate3'] = $this->service->config->formatValueNoTrailingZeroes(floatval($item->tax_rate3)) . '%';
+                $data[$key][$table_type . '.tax_rate3'] = Number::percentLabel($this->service->config->formatValueNoTrailingZeroes(floatval($item->tax_rate3)), $this->service->config->client);
                 $data[$key][$table_type . '.tax3'] = &$data[$key][$table_type . '.tax_rate3'];
             }
 
@@ -1594,6 +1595,15 @@ class PdfBuilder
             if ($this->service->config->entity->partial > 0) {
                 $variables[] = '$partial_due';
             }
+
+            // BISAVUNMA: nothing is paid on a quote; leave "Ödenen Tutar" out.
+            $variables = \array_diff($variables, ['$paid_to_date']);
+        }
+
+        // BISAVUNMA: without a document discount (and with prices KDV hariç) the net subtotal
+        // equals the subtotal; print the amount once.
+        if ((float) ($this->service->config->entity->discount ?? 0) == 0 && ! $this->service->config->entity->uses_inclusive_taxes) {
+            $variables = \array_diff($variables, ['$net_subtotal']);
         }
 
         if ($this->service->config->entity instanceof Credit) {
@@ -1980,6 +1990,18 @@ class PdfBuilder
         }
 
         foreach ($variables as $variable) {
+            // BISAVUNMA: Turkish documents print "Vergi Dairesi: …" and "VKN / TCKN: …" with
+            // their labels; an empty tax office or tax number is left out.
+            if (in_array($variable, ['$client.id_number', '$client.vat_number'], true)) {
+                if (trim(strip_tags((string) ($this->service->html_variables['values'][$variable] ?? ''))) === '') {
+                    continue;
+                }
+
+                $elements[] = ['element' => 'div', 'content' => "{$variable}_label: {$variable}", 'properties' => ['data-ref' => 'client_details-' . substr($variable, 1)]];
+
+                continue;
+            }
+
             $elements[] = ['element' => 'div', 'content' => $variable, 'show_empty' => false, 'properties' => ['data-ref' => 'client_details-' . substr($variable, 1)]];
         }
 

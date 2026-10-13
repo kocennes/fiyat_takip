@@ -232,9 +232,10 @@ class VendorContact extends Authenticatable implements HasLocalePreference
 
             $language_id = $this->company->getSetting('language_id');
 
+            // BISAVUNMA: without a matching language use the installation's default locale (tr_TR).
             return $languages->first(function ($item) use ($language_id) {
                 return $item->id == $language_id;
-            })->locale ?? 'en';
+            })->locale ?? (string) config('ninja.i18n.locale', 'tr_TR');
 
         });
 

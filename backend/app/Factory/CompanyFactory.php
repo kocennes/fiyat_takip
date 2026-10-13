@@ -13,6 +13,7 @@
 namespace App\Factory;
 
 use App\DataMapper\ClientRegistrationFields;
+use App\DataMapper\CompanyDefaults\TurkishDocumentDefaults;
 use App\DataMapper\CompanySettings;
 use App\DataMapper\Tax\TaxModel;
 use App\Libraries\MultiDB;
@@ -43,7 +44,10 @@ class CompanyFactory
             $company->settings->credit_design_id = $proforma;
         }
         $company->db = config('database.default');
-        $company->custom_fields = (object) [];
+        // BISAVUNMA: IBAN, MERSİS No and Ticaret Sicil No, printed on the proforma.
+        $company->custom_fields = (object) TurkishDocumentDefaults::COMPANY_CUSTOM_FIELDS;
+        $company->first_day_of_week = TurkishDocumentDefaults::FIRST_DAY_OF_WEEK;
+        $company->use_comma_as_decimal_place = TurkishDocumentDefaults::USE_COMMA_AS_DECIMAL_PLACE;
         $company->client_registration_fields = ClientRegistrationFields::generate();
 
         if (Ninja::isHosted()) {

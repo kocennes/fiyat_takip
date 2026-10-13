@@ -13,6 +13,7 @@
 namespace App\Console\Commands;
 
 use App\DataMapper\ClientRegistrationFields;
+use App\DataMapper\CompanyDefaults\TurkishDocumentDefaults;
 use App\DataMapper\CompanySettings;
 use App\Jobs\Company\CreateCompanyPaymentTerms;
 use App\Jobs\Company\CreateCompanyTaskStatuses;
@@ -93,6 +94,10 @@ class CreateAccount extends Command
             'enabled_expense_tax_rates' => 1,
             'calculate_taxes' => false,
             'enable_product_cost' => true,
+            // IBAN, MERSİS No and Ticaret Sicil No, printed on the proforma; week starts on Monday.
+            'custom_fields' => (object) TurkishDocumentDefaults::COMPANY_CUSTOM_FIELDS,
+            'first_day_of_week' => TurkishDocumentDefaults::FIRST_DAY_OF_WEEK,
+            'use_comma_as_decimal_place' => TurkishDocumentDefaults::USE_COMMA_AS_DECIMAL_PLACE,
         ]);
 
         $company->client_registration_fields = ClientRegistrationFields::generate();
@@ -137,7 +142,7 @@ class CreateAccount extends Command
             'settings' => null,
         ]);
 
-        // Turkish KDV rates 20 / 10 / 1 / 0 (CountryDefaults for Turkey).
+        // Turkish KDV rates 20 / 10 / 1 / 0 and the KDV exemptions (CountryDefaults for Turkey).
         $company->service()->localizeCompany($user);
 
         (new CreateCompanyPaymentTerms($company, $user))->handle();

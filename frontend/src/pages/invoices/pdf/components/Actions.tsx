@@ -20,7 +20,7 @@ import { Button } from '$app/components/forms';
 import Toggle from '$app/components/forms/Toggle';
 import { Icon } from '$app/components/icons/Icon';
 import { useDownloadPdf } from '$app/pages/invoices/common/hooks/useDownloadPdf';
-import { useDownloadProformaExcel } from '$app/pages/invoices/common/hooks/useDownloadProformaExcel';
+import { useOpenProformaExcel } from '$app/pages/invoices/common/hooks/useDownloadProformaExcel';
 
 interface Props {
   blobUrl: string;
@@ -39,7 +39,7 @@ export function Actions(props: Props) {
   const { id } = useParams();
 
   const downloadPdf = useDownloadPdf({ resource: 'invoice' });
-  const downloadProformaExcel = useDownloadProformaExcel();
+  const openProformaExcel = useOpenProformaExcel();
 
   const {
     deliveryNote,
@@ -94,10 +94,10 @@ export function Actions(props: Props) {
 
       <Button
         className="flex items-center space-x-1"
-        onClick={() => downloadProformaExcel(invoice)}
+        onClick={() => openProformaExcel('invoice', invoice)}
       >
         <Icon element={MdDownload} color="white" />
-        <span>Excel indir</span>
+        <span>{t('bis_excel_download')}</span>
       </Button>
 
       <Button

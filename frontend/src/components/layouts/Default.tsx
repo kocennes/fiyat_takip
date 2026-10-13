@@ -30,6 +30,7 @@ import {
 } from '$app/components/layouts/common/hooks';
 import { QuickCreatePopover } from '$app/components/QuickCreatePopover';
 import { Search } from '$app/pages/dashboard/components/Search';
+import { ProformaExcelModal } from '$app/pages/invoices/common/components/ProformaExcelModal';
 import CommonProps from '../../common/interfaces/common-props.interface';
 import { ActivateCompany } from '../banners/ActivateCompany';
 import { EInvoiceCredits } from '../banners/EInvoiceCredits';
@@ -258,6 +259,8 @@ export function Default(props: Props) {
             className="bisavunma-surface p-4 xl:px-8 dark:text-gray-100"
           >
             {props.children}
+
+            <ProformaExcelModal />
           </div>
         </main>
       </div>

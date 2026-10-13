@@ -508,11 +508,12 @@ class Client extends BaseModel implements HasLocalePreference
 
     public function locale(): string
     {
+        // BISAVUNMA: without a matching language use the installation's default locale (tr_TR).
         if (! $this->language()) {
-            return 'en';
+            return (string) config('ninja.i18n.locale', 'tr_TR');
         }
 
-        return $this->language()->locale ?: 'en';
+        return $this->language()->locale ?: (string) config('ninja.i18n.locale', 'tr_TR');
     }
 
     public function date_format()

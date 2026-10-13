@@ -148,7 +148,7 @@ class InvoiceSum
 
             $this->total_taxes += $tax;
             $this->total_tax_map[] = [
-                'name' => $this->invoice->tax_name1 . ' ' . Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate1), $this->client) . '%',
+                'name' => $this->invoice->tax_name1 . ' ' . Number::percentLabel(Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate1), $this->client), $this->client),
                 'total' => $tax,
                 'tax_rate' => $this->invoice->tax_rate1,
                 'base_amount' => $this->total,
@@ -162,7 +162,7 @@ class InvoiceSum
 
             $this->total_taxes += $tax;
             $this->total_tax_map[] = [
-                'name' => $this->invoice->tax_name2 . ' ' . Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate2), $this->client) . '%',
+                'name' => $this->invoice->tax_name2 . ' ' . Number::percentLabel(Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate2), $this->client), $this->client),
                 'total' => $tax,
                 'tax_rate' => $this->invoice->tax_rate2,
                 'base_amount' => $this->total,
@@ -175,7 +175,7 @@ class InvoiceSum
 
             $this->total_taxes += $tax;
             $this->total_tax_map[] = [
-                'name' => $this->invoice->tax_name3 . ' ' . Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate3), $this->client) . '%',
+                'name' => $this->invoice->tax_name3 . ' ' . Number::percentLabel(Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate3), $this->client), $this->client),
                 'total' => $tax,
                 'tax_rate' => $this->invoice->tax_rate3,
                 'base_amount' => $this->total,

@@ -601,9 +601,9 @@ describe('API parity invoice sum fields', () => {
 
     expect(result.getTotalTaxMap().count()).toEqual(1);
     expect(result.getTaxMap().count()).toEqual(1);
-    expect(totalTax?.name).toEqual('GST 10 %');
+    expect(totalTax?.name).toEqual('GST %10');
     expect(totalTax?.total).toEqual(10);
-    expect(lineTax?.name).toEqual('VAT 5 %');
+    expect(lineTax?.name).toEqual('VAT %5');
     expect(lineTax?.total).toEqual(5);
     expect(result.totalTaxes).toEqual(15);
   });
@@ -877,8 +877,8 @@ describe('Issue #12072 - inclusive multi-tax reproduction', () => {
     expect(item.net_cost).toEqual(833.34);
     expect(item.tax_amount).toEqual(166.66);
     expect(taxRows.pluck('name').all()).toEqual([
-      'TEST TAX A 10 %',
-      'TEST TAX B 10 %',
+      'TEST TAX A %10',
+      'TEST TAX B %10',
     ]);
     expect(taxRows.pluck('total').all()).toEqual([83.33, 83.33]);
     expect(result.totalTaxes).toEqual(166.66);

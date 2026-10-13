@@ -134,10 +134,16 @@ class StoreQuoteRequest extends Request
         if (!isset($input['date'])) {
             $input['date'] = now()->addSeconds($user->company()->utc_offset())->format('Y-m-d');
         }
-        if (isset($input['client_id']) && isset($input['partial_due_date']) && (!isset($input['due_date']) || strlen($input['due_date']) <= 1)) {
+        if (isset($input['client_id']) && (!isset($input['due_date']) || strlen((string) $input['due_date']) <= 1)) {
             $client = \App\Models\Client::withTrashed()->find($input['client_id']);
-            $valid_days = ($client && strlen($client->getSetting('valid_until')) >= 1) ? $client->getSetting('valid_until') : 7;
-            $input['due_date'] = \Carbon\Carbon::parse($input['date'])->addDays((int) $valid_days)->format('Y-m-d');
+            $valid_until = $client ? (string) $client->getSetting('valid_until') : '';
+
+            // BISAVUNMA: a new quote is valid for the configured number of days (30 by default)
+            // from its date, so the proforma prints its validity date from the first save on.
+            if (strlen($valid_until) >= 1 || isset($input['partial_due_date'])) {
+                $valid_days = strlen($valid_until) >= 1 ? $valid_until : 7;
+                $input['due_date'] = \Carbon\Carbon::parse($input['date'])->addDays((int) $valid_days)->format('Y-m-d');
+            }
         }
 
         if (isset($input['footer']) && $this->hasHeader('X-REACT')) {

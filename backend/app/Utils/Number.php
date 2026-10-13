@@ -89,6 +89,21 @@ class Number
         return rtrim(rtrim(number_format($value, $precision, $decimal, $thousand), '0'), $decimal);
     }
 
+    /**
+     * BISAVUNMA: a percentage label, "%20" in Turkish and "20%" in other languages.
+     *
+     * @param  string $value  the formatted number
+     * @param  mixed  $entity a client or vendor whose language decides; the app locale otherwise
+     */
+    public static function percentLabel(string $value, $entity = null): string
+    {
+        $locale = is_object($entity) && method_exists($entity, 'locale')
+            ? (string) $entity->locale()
+            : (string) app()->getLocale();
+
+        return str_starts_with(strtolower($locale), 'tr') ? '%' . $value : $value . '%';
+    }
+
     public static function parseFloat($value)
     {
 

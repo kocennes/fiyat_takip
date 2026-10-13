@@ -19,6 +19,7 @@ use App\DataMapper\Tax\TaxModel;
 use App\Libraries\MultiDB;
 use App\Models\Company;
 use App\Models\Country;
+use App\Models\Design;
 use App\Utils\Ninja;
 use App\Utils\Traits\MakesHash;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -55,6 +56,13 @@ class CreateCompany
         $settings = CompanySettings::defaults();
 
         $settings->name = $this->request['name'] ?? '';
+
+        // BISAVUNMA: new companies print invoices, quotes and credits with the Proforma design.
+        if ($proforma = Design::proformaHashedId()) {
+            $settings->invoice_design_id = $proforma;
+            $settings->quote_design_id = $proforma;
+            $settings->credit_design_id = $proforma;
+        }
 
         $country_id = $this->resolveCountry();
         $settings->country_id = $country_id;
@@ -127,6 +135,14 @@ class CreateCompany
 
             if(isset($defaults['first_month_of_year'])){
                 $company->first_month_of_year = $defaults['first_month_of_year'];
+            }
+
+            if(isset($defaults['first_day_of_week'])){
+                $company->first_day_of_week = $defaults['first_day_of_week'];
+            }
+
+            if(isset($defaults['use_comma_as_decimal_place'])){
+                $company->use_comma_as_decimal_place = $defaults['use_comma_as_decimal_place'];
             }
 
             $company->enabled_tax_rates = $defaults['enabled_tax_rates'];

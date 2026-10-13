@@ -4,6 +4,39 @@ BISAVUNMA markalı fiyat takip, teklif/proforma, fatura ve tedarik yönetim
 uygulaması. Yeni teklif ve faturalarda varsayılan KDV oranı %20'dir; kurumsal
 proforma PDF tasarımı otomatik seçilir.
 
+## Türkiye için hazır gelenler
+
+- KDV %20 / %10 / %1 / %0 ve KDV istisnaları (13/f millî savunma, 11/1-a
+  ihracat). İstisnalı kalemlerde proformaya yasal not otomatik eklenir.
+- PDF ve Excel'de yazıyla tutar ("Yalnız: … Türk Lirası … Kuruş"), Vergi
+  Dairesi, VKN / TCKN, IBAN, MERSİS ve Ticaret Sicil No.
+- Türk müşteri ve tedarikçilerde VKN (10 hane) / TCKN (11 hane) kontrolü.
+- TL, 1.234,56 TL yazımı, "KDV %20" gösterimi, GG.AA.YYYY tarih, haftanın
+  pazartesi başlaması.
+- Teklifler 30 gün geçerli; Türkçe teklif ve proforma şartları hazır gelir.
+- Excel İndir: PDF ile aynı düzen; isteğe bağlı, kalem kalem kâr / zarar
+  tablosu (TL veya USD, kur elle girilir).
+
+## Müşteri portalı nedir?
+
+Müşterilerinize gönderdiğiniz teklif ve proformaları görüntüleyebildikleri ayrı
+bir ekrandır. Müşteri, e-postadaki kişiye özel bağlantıyla şifresiz girer; PDF
+indirir, teklif şartlarını kabul ederek teklifi onaylar ya da reddeder. Onay
+size bildirim olarak düşer.
+
+Ne değildir: Çalışanların kullandığı yönetim paneli değildir. Müşteri yalnızca
+kendisine gönderilen belgeleri görür. Alış fiyatlarını, kâr / zarar bilgisini,
+iç notları ve başka müşterileri göremez. Online kart ödemesi kapalıdır; menüde
+yalnızca müşterinin kaydı olan bölümler görünür. Alttaki "Gizlilik Politikası"
+bağlantısında KVKK aydınlatma metni gösterilir.
+
+Ayarlar: Sistem Ayarları > Müşteri Portalı.
+
+## Canlı kurulum (bisavunma.com)
+
+Şirket sunucusunda HTTPS ile yayına alma, yedekleme ve güncelleme adımları:
+[docs/canli-kurulum.md](docs/canli-kurulum.md).
+
 ## Yerelde Docker ile başlatma
 
 1. `.env.example` dosyasını `.env` olarak kopyalayın.
@@ -69,8 +102,8 @@ ekrandan hesabını arşivleyin; geçmiş kayıtları korunur.
 İleride hareket/banka eşleştirme modülü ele alınırsa bakılacak kısa kaynak notu:
 [İşlem hareketleri](docs/references/transactions.md).
 
-## Üçüncü taraf bileşenleri
+## Lisans
 
-Uygulamanın altyapısında açık kaynaklı üçüncü taraf bileşenleri kullanılır.
-Bu bileşenlerin lisans, telif ve kaynak bildirimleri kendi kaynak dizinlerinde
-korunur.
+Uygulama, Elastic License 2.0 ile lisanslanmış bir açık kaynak faturalama
+yazılımının değiştirilmiş sürümüdür. Lisans ve telif bildirimleri için
+[NOTICE](NOTICE) dosyasına bakın.

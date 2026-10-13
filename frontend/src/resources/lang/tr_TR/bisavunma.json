@@ -38,5 +38,14 @@
   "docuninja": "E-İmza",
   "change_docuninja_plan": "E-imza planını değiştir",
   "docuninja_change_users": "Yeni e-imza kullanıcı limiti",
-  "docuninja_disable_warning": "Bu işlem e-imza hesabına olan erişimi kaldırır."
+  "docuninja_disable_warning": "Bu işlem e-imza hesabına olan erişimi kaldırır.",
+  "bis_excel_download": "Excel İndir",
+  "bis_excel_profit_table": "Kâr / zarar tablosunu ekle",
+  "bis_excel_profit_table_help": "Excel dosyası proforma PDF'i ile aynı düzendedir. Kâr / zarar tablosu yazdırma alanının altında yer alır ve her kalem için satılan adet, alış, satış, kâr / zarar ve kâr oranını gösterir. Tablo yalnızca şirket içi kullanım içindir; müşteriye gönderilecek dosyada bu seçeneği kapatın.",
+  "bis_excel_profit_currency": "Kâr / zarar tablosunun para birimi",
+  "bis_excel_document_currency": "Belge para birimi (:currency)",
+  "bis_turkish_lira": "Türk Lirası (TL)",
+  "bis_us_dollar": "ABD Doları (USD)",
+  "bis_excel_rate": "Kur: 1 :currency = ? :company",
+  "bis_excel_rate_help": "Kur elle girilir ve yalnızca bu tabloda kullanılır; proformadaki tutarlar değişmez. Girilen USD kuru bir sonraki indirmede hazır gelir."
 }

@@ -1,0 +1,111 @@
+# BISAVUNMA Fiyat Takip - production (e.g. teklif.bisavunma.com).
+#
+#   cp .env.production.example .env.production   # then fill in every value
+#   docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+#
+# Caddy terminates HTTPS with a Let's Encrypt certificate for APP_DOMAIN and
+# forwards to nginx, which serves the static files and passes PHP to the app
+# container (php-fpm, queue workers and scheduler under supervisord).
+# MySQL and Redis are only reachable on the internal network.
+# Step-by-step guide: docs/canli-kurulum.md
+
+name: bisavunma-fiyat-takip
+
+services:
+  app:
+    build:
+      context: .
+      target: production
+    image: bisavunma/fiyat-takip:production
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    volumes:
+      - app_public:/var/www/html/public
+      - app_storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - internal
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d:ro
+      - app_public:/var/www/html/public:ro
+      - app_storage:/var/www/html/storage:ro
+    depends_on:
+      app:
+        condition: service_started
+    networks:
+      - internal
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:?APP_DOMAIN must be set in .env.production}
+      ACME_EMAIL: ${ACME_EMAIL:?ACME_EMAIL must be set in .env.production}
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - nginx
+    networks:
+      - internal
+
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:?DB_DATABASE must be set}
+      MYSQL_USER: ${DB_USERNAME:?DB_USERNAME must be set}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD must be set}
+      TZ: Europe/Istanbul
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u\"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks:
+      - internal
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    networks:
+      - internal
+
+networks:
+  internal:
+
+volumes:
+  app_public:
+  app_storage:
+  mysql_data:
+  redis_data:
+  caddy_data:
+  caddy_config:

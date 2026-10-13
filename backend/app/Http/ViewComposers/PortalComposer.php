@@ -103,8 +103,19 @@ class PortalComposer
 
     private function sidebarMenu(): array
     {
-        $enabled_modules = auth()->guard('contact')->user()->company->enabled_modules;
+        $company = auth()->guard('contact')->user()->company;
+        $enabled_modules = $company->enabled_modules;
         $data = [];
+
+        // BISAVUNMA: the portal is used to view and approve quotes and proformas. Saved
+        // payment methods and subscriptions are only listed once the company uses them;
+        // recurring invoices, payments and credits once the client has any.
+        $client = auth()->guard('contact')->user()->client;
+        $has_gateways = $company->company_gateways()->exists();
+        $has_subscriptions = $company->subscriptions()->exists();
+        $has_recurring_invoices = $client->recurring_invoices()->where('is_deleted', false)->exists();
+        $has_payments = $client->payments()->where('is_deleted', false)->exists();
+        $has_credits = $client->credits()->where('is_deleted', false)->exists();
 
         if ($this->settings->enable_client_portal_dashboard) {
             $data[] = [ 'title' => ctrans('texts.dashboard'), 'url' => 'client.dashboard', 'icon' => 'activity', 'id' => 'dashboard'];
@@ -114,21 +125,26 @@ class PortalComposer
             $data[] = ['title' => ctrans('texts.invoices'), 'url' => 'client.invoices.index', 'icon' => 'file-text', 'id' => 'invoices'];
         }
 
-        if (self::MODULE_RECURRING_INVOICES & $enabled_modules) {
+        if ((self::MODULE_RECURRING_INVOICES & $enabled_modules) && $has_recurring_invoices) {
             $data[] = ['title' => ctrans('texts.recurring_invoices'), 'url' => 'client.recurring_invoices.index', 'icon' => 'file', 'id' => 'recurring_invoices'];
         }
 
-        $data[] = ['title' => ctrans('texts.payments'), 'url' => 'client.payments.index', 'icon' => 'credit-card', 'id' => 'payments'];
+        if ($has_payments) {
+            $data[] = ['title' => ctrans('texts.payments'), 'url' => 'client.payments.index', 'icon' => 'credit-card', 'id' => 'payments'];
+        }
 
         if (self::MODULE_QUOTES & $enabled_modules) {
             $data[] = ['title' => ctrans('texts.quotes'), 'url' => 'client.quotes.index', 'icon' => 'align-left', 'id' => 'quotes'];
         }
 
-        if (self::MODULE_CREDITS & $enabled_modules) {
+        if ((self::MODULE_CREDITS & $enabled_modules) && $has_credits) {
             $data[] = ['title' => ctrans('texts.credits'), 'url' => 'client.credits.index', 'icon' => 'credit-card', 'id' => 'credits'];
         }
 
-        $data[] = ['title' => ctrans('texts.payment_methods'), 'url' => 'client.payment_methods.index', 'icon' => 'shield', 'id' => 'payment_methods'];
+        if ($has_gateways) {
+            $data[] = ['title' => ctrans('texts.payment_methods'), 'url' => 'client.payment_methods.index', 'icon' => 'shield', 'id' => 'payment_methods'];
+        }
+
         $data[] = ['title' => ctrans('texts.documents'), 'url' => 'client.documents.index', 'icon' => 'download', 'id' => 'documents'];
 
         if (auth()->guard('contact')->user()->client->getSetting('enable_client_portal_tasks')) {
@@ -140,7 +156,7 @@ class PortalComposer
 
         if (Ninja::isHosted() && auth()->guard('contact')->user() && auth()->guard('contact')->user()->company_id == config('ninja.ninja_default_company_id')) {
             $data[] = ['title' => ctrans('texts.plan'), 'url' => 'client.plan', 'icon' => 'credit-card', 'id' => 'plan'];
-        } else {
+        } elseif ($has_subscriptions) {
             $data[] = ['title' => ctrans('texts.subscriptions'), 'url' => 'client.subscriptions.index', 'icon' => 'calendar', 'id' => 'subscriptions'];
         }
 

@@ -117,5 +117,7 @@
   "required": "Bu alan zorunludur",
   "invalid": "Geçersiz değer",
   "loading": "Yükleniyor...",
-  "processing": "İşleniyor..."
+  "processing": "İşleniyor...",
+  "vat_number": "VKN / TCKN",
+  "id_number": "Vergi Dairesi"
 }

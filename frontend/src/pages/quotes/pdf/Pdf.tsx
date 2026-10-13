@@ -21,6 +21,7 @@ import { Default } from '$app/components/layouts/Default';
 import { Spinner } from '$app/components/Spinner';
 import { InvoiceViewer } from '$app/pages/invoices/common/components/InvoiceViewer';
 import { useDownloadPdf } from '$app/pages/invoices/common/hooks/useDownloadPdf';
+import { useOpenProformaExcel } from '$app/pages/invoices/common/hooks/useDownloadProformaExcel';
 import { useGeneratePdfUrl } from '$app/pages/invoices/common/hooks/useGeneratePdfUrl';
 import { useQuoteQuery } from '../common/queries';
 
@@ -38,6 +39,7 @@ export default function Pdf() {
 
   const url = useGeneratePdfUrl({ resourceType: 'quote' });
   const downloadPdf = useDownloadPdf({ resource: 'quote' });
+  const openProformaExcel = useOpenProformaExcel();
 
   const pages: Page[] = [
     { name: t('quotes'), href: '/quotes' },
@@ -73,6 +75,14 @@ export default function Pdf() {
                 <span>{t('email_quote')}</span>
               </Button>
             )}
+
+            <Button
+              className="flex items-center space-x-1"
+              onClick={() => openProformaExcel('quote', quote)}
+            >
+              <Icon element={MdDownload} color="white" />
+              <span>{t('bis_excel_download')}</span>
+            </Button>
 
             <Button
               className="flex items-center space-x-1"

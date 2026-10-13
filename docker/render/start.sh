@@ -79,6 +79,9 @@ if [ "$(runuser -u www-data -- php artisan tinker --execute='echo Schema::hasTab
     : "${IN_USER_EMAIL:?IN_USER_EMAIL must be set in Render}"
     : "${IN_PASSWORD:?IN_PASSWORD must be set in Render}"
     runuser -u www-data -- php artisan ninja:create-account --email "$IN_USER_EMAIL" --password "$IN_PASSWORD"
+    # The static lists (languages, currencies, countries) were cached while the
+    # database was still being seeded; rebuild them from the complete tables.
+    runuser -u www-data -- php artisan cache:clear
 fi
 
 php-fpm -D

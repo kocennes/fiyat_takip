@@ -39,6 +39,9 @@ if [ "$*" = 'supervisord -c /etc/supervisor/supervisord.conf' ]; then
             : "${IN_USER_EMAIL:?IN_USER_EMAIL must be set}"
             : "${IN_PASSWORD:?IN_PASSWORD must be set}"
             runuser -u www-data -- php artisan ninja:create-account --email "$IN_USER_EMAIL" --password "$IN_PASSWORD"
+            # The static lists (languages, currencies, countries) were cached while the
+            # database was still being seeded; rebuild them from the complete tables.
+            runuser -u www-data -- php artisan cache:clear
         fi
     fi
 fi

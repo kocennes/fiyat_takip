@@ -109,6 +109,10 @@ vi.mock('$app/pages/dashboard/components/Search', () => ({
   Search: () => null,
 }));
 
+vi.mock('$app/pages/invoices/common/components/ProformaExcelModal', () => ({
+  ProformaExcelModal: () => null,
+}));
+
 vi.mock('$app/components/banners/ActivateCompany', () => ({
   ActivateCompany: () => null,
 }));

@@ -68,6 +68,10 @@ FROM app AS local
 ENTRYPOINT ["/usr/local/bin/app-init.sh"]
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
+# Production (docker-compose.prod.yml): the same image as local, run behind
+# nginx and Caddy with MySQL and Redis in their own containers.
+FROM local AS production
+
 # The final stage is used by Render as an intentionally ephemeral public demo.
 FROM app AS render
 RUN apt-get update \

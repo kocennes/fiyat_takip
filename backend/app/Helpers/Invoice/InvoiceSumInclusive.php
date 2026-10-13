@@ -170,17 +170,17 @@ class InvoiceSumInclusive
         if (is_string($this->invoice->tax_name1) && strlen($this->invoice->tax_name1) > 1) {
             $this->total_taxes += $tax1;
 
-            $this->total_tax_map[] = ['name' => $this->invoice->tax_name1 . ' ' . Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate1), $this->client) . '%', 'total' => $tax1, 'tax_rate' => $this->invoice->tax_rate1];
+            $this->total_tax_map[] = ['name' => $this->invoice->tax_name1 . ' ' . Number::percentLabel(Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate1), $this->client), $this->client), 'total' => $tax1, 'tax_rate' => $this->invoice->tax_rate1];
         }
 
         if (is_string($this->invoice->tax_name2) && strlen($this->invoice->tax_name2) > 1) {
             $this->total_taxes += $tax2;
-            $this->total_tax_map[] = ['name' => $this->invoice->tax_name2 . ' ' . Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate2), $this->client) . '%', 'total' => $tax2, 'tax_rate' => $this->invoice->tax_rate2];
+            $this->total_tax_map[] = ['name' => $this->invoice->tax_name2 . ' ' . Number::percentLabel(Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate2), $this->client), $this->client), 'total' => $tax2, 'tax_rate' => $this->invoice->tax_rate2];
         }
 
         if (is_string($this->invoice->tax_name3) && strlen($this->invoice->tax_name3) > 1) {
             $this->total_taxes += $tax3;
-            $this->total_tax_map[] = ['name' => $this->invoice->tax_name3 . ' ' . Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate3), $this->client) . '%', 'total' => $tax3, 'tax_rate' => $this->invoice->tax_rate3];
+            $this->total_tax_map[] = ['name' => $this->invoice->tax_name3 . ' ' . Number::percentLabel(Number::formatValueNoTrailingZeroes(floatval($this->invoice->tax_rate3), $this->client), $this->client), 'total' => $tax3, 'tax_rate' => $this->invoice->tax_rate3];
         }
 
         return $this;

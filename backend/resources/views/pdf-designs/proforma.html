@@ -68,7 +68,12 @@
     [data-ref="totals_table-outstanding-label"], [data-ref="totals_table-outstanding"] { background: #e9f5ff; border-bottom: 2px solid var(--navy); border-top: 2px solid var(--navy); color: var(--navy); font-size: 1.02rem; font-weight: 800; }
     /* KDV breakdown per rate (line taxes), then the grand total including KDV */
     #table-totals .totals-table-right-side [data-ref^="totals-table-line_tax_"] { color: #344257; }
+    /* Terms and delivery notes have their own boxes below; leave out the copies next to the totals. */
+    [data-ref="total_table-public_notes"], [data-ref="total_table-terms-label"], [data-ref="total_table-terms"] { display: none; }
     #table-totals .totals-table-right-side [data-ref="totals_table-total-label"], #table-totals .totals-table-right-side [data-ref="totals_table-total"] { border-top: 1px solid var(--navy); color: var(--navy); font-weight: 800; }
+
+    .amount-words { background: var(--soft-blue); border: 1px solid var(--line); color: #344257; font-size: .8rem; margin-top: .55rem; padding: .42rem .7rem; }
+    .amount-words strong { color: var(--navy); }
 
     .notice { background: var(--soft-orange); border: 1px solid #f4ddb8; border-left: 3px solid #f17a23; margin-top: .9rem; padding: .55rem .7rem; }
     .notice p { font-size: .77rem; line-height: 1.5; }
@@ -87,7 +92,7 @@
     .signature-title { color: #59677d; font-size: .75rem; font-weight: 700; }
     .signature-name { color: var(--navy); font-size: .82rem; font-weight: 800; margin-top: 1.3rem; }
 
-    #footer { border-top: 1px solid var(--line); color: #74839a; font-size: .7rem; margin-top: 2rem; padding-top: .35rem; text-align: center; }
+    #footer { border-top: 1px solid var(--line); color: #74839a; font-size: .7rem; margin-top: 1rem; padding-top: .35rem; text-align: center; }
     #footer p { font-size: .7rem; }
     #task-table, #delivery-note-table, #statement-invoice-table, #statement-payment-table, #statement-credit-table, #statement-aging-table { display: none; }
 </style>
@@ -114,9 +119,9 @@
         <section class="party-card">
             <h3>Satıcı / Düzenleyen Firma</h3>
             <div class="party-name">$company.name</div>
-            <p><strong>Adres:</strong> $company.address</p>
-            <p>$company.city_state_postal</p>
-            <p><strong>Vergi No:</strong> $company.vat_number</p>
+            <p><strong>Adres:</strong> $company.address1 $company.address2</p>
+            <p>$company.city_state_postal $company.country</p>
+            <p><strong>Vergi Dairesi:</strong> $company.id_number &nbsp; <strong>VKN:</strong> $company.vat_number</p>
             <p><strong>Tel:</strong> $company.phone &nbsp; <strong>E-posta:</strong> $company.email</p>
         </section>
         <section class="party-card customer">
@@ -129,9 +134,12 @@
 
     <div id="table-totals"></div>
 
+    <div class="amount-words"><strong>$amount_in_words_label:</strong> $amount_in_words</div>
+
     <div class="notice">
         <p><strong>Ürün Teslimat Bilgileri:</strong> $invoice.public_notes</p>
         <p><strong>Açıklama / Not:</strong> Bu proforma, belirtilen geçerlilik süresi boyunca geçerlidir.</p>
+        $tax_exemption_note
     </div>
 
     <div class="bottom-grid">
@@ -159,5 +167,5 @@
 </div>
 
 <div id="footer">
-    <p>$company.name | VKN: $company.vat_number | $company.phone</p>
+    <p>$company.name | Vergi Dairesi: $company.id_number | VKN: $company.vat_number | $company2_label: $company2 | $company3_label: $company3 | $company.website | $company.phone</p>
 </div>

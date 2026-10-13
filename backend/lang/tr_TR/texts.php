@@ -381,12 +381,12 @@ $lang = array(
     'mark_sent' => 'Gönderildi Olarak İşaretle',
     'buy' => 'Satın Al',
     'sent' => 'Gönderildi',
-    'vat_number' => 'Vergi Numarası',
+    'vat_number' => 'VKN / TCKN',
     'payment_title' => 'Fatura adresinizi ve kredi kartı bilgilerinizi girin',
     'payment_cvv' => '*Bu, kartınızın arka yüzündeki 3-4 haneli numaradır',
     'payment_footer1' => '*Fatura adresi, kredi kartıyla ilişkili adresle eşleşmelidir.',
     'payment_footer2' => '*Lütfen "ŞİMDİ ÖDE" düğmesine yalnızca bir kez tıklayın - işlemin tamamlanması 1 dakika kadar sürebilir.',
-    'id_number' => 'Kimlik Numarası',
+    'id_number' => 'Vergi Dairesi',
     'white_label_link' => 'Marka lisansı',
     'white_label_header' => 'Marka Lisansı',
     'bought_white_label' => 'Marka lisansı başarıyla etkinleştirildi',
@@ -7141,6 +7141,9 @@ $lang = array(
     'bis_task_being_created_for_calendar_event' => 'Bu takvim etkinliği için şu anda zaten bir görev oluşturuluyor.',
     'bis_task_exists_for_calendar_event' => 'Bu takvim etkinliği için zaten bir görev var.',
     'bis_unknown_name' => 'Bilinmeyen Ad',
+    'bis_amount_in_words' => 'Yalnız',
+    'bis_tax_exemption' => 'KDV İstisnası',
+    'bis_invalid_turkish_tax_number' => 'Vergi numarası geçerli bir 10 haneli vergi kimlik numarası (VKN) veya 11 haneli T.C. kimlik numarası (TCKN) olmalıdır.',
 );
 
 return $lang;

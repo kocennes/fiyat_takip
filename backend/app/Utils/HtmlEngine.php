@@ -408,7 +408,7 @@ class HtmlEngine
         $data['$portal_url'] = ['value' => $this->invitation->getPortalLink(), 'label' => ''];
 
         $data['$entity_number'] = &$data['$number'];
-        $data['$invoice.discount'] = ['value' => Number::formatMoney($this->entity_calc->getTotalDiscount(), $this->client) ?: ' ', 'label' => ($this->entity->is_amount_discount) ? ctrans('texts.discount') : ctrans('texts.discount') . ' ' . (float) $this->entity->discount . '%'];
+        $data['$invoice.discount'] = ['value' => Number::formatMoney($this->entity_calc->getTotalDiscount(), $this->client) ?: ' ', 'label' => ($this->entity->is_amount_discount) ? ctrans('texts.discount') : ctrans('texts.discount') . ' ' . Number::percentLabel((string) (float) $this->entity->discount, $this->client)];
         $data['$discount'] = &$data['$invoice.discount'];
         $data['$subtotal'] = ['value' => Number::formatMoney($this->entity_calc->getSubTotal(), $this->client) ?: ' ', 'label' => ctrans('texts.subtotal')];
         $data['$gross_subtotal'] = ['value' => Number::formatMoney($this->entity_calc->getGrossSubTotal(), $this->client) ?: ' ', 'label' => ctrans('texts.subtotal')];
@@ -515,6 +515,10 @@ class HtmlEngine
         $data['$assigned_user.last_name'] = ['value' => $this->entity->assigned_user ? $this->entity->assigned_user->last_name : '', 'label' => ctrans('texts.last_name')];
 
         $data['$user_iban'] = ['value' => $this->helpers->formatCustomFieldValue($this->company->custom_fields, 'company1', $this->settings->custom_value1, $this->client) ?: ' ', 'label' => $this->helpers->makeCustomField($this->company->custom_fields, 'company1')];
+
+        // BISAVUNMA: the total in Turkish words ("Yalnız …") and the legal notes of the KDV exemptions used.
+        $data['$amount_in_words'] = ['value' => TurkishAmountInWords::amount((float) $this->entity_calc->getTotal(), $this->client->currency()->code ?? 'TRY'), 'label' => ctrans('texts.bis_amount_in_words')];
+        $data['$tax_exemption_note'] = ['value' => TurkishKdv::exemptionNotesHtml($this->entity->line_items ?? []), 'label' => ctrans('texts.bis_tax_exemption')];
 
         $data['$invoice.public_notes'] = ['value' => Helpers::processReservedKeywords(\nl2br($this->entity->public_notes ?? ''), $this->client) ?: '', 'label' => ctrans('texts.public_notes')];
         $data['$entity.public_notes'] = &$data['$invoice.public_notes'];
