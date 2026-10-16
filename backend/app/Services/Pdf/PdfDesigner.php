@@ -39,6 +39,9 @@ class PdfDesigner
         /*If the design is custom*/
         if ($this->service->config->design->is_custom) {
             $this->template = $this->composeFromPartials(json_decode(json_encode($this->service->config->design->design), true));
+        } elseif ($this->service->document_type === PdfService::DELIVERY_NOTE) {
+            // BISAVUNMA: delivery notes of the built-in designs print as the Turkish "Sevk İrsaliyesi".
+            $this->template = file_get_contents(config('ninja.designs.base_path') . 'irsaliye.html');
         } else {
             $this->template = file_get_contents(config('ninja.designs.base_path') . strtolower($this->service->config->design->name) . '.html');
         }

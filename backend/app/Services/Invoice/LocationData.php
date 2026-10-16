@@ -146,7 +146,7 @@ class LocationData extends AbstractService
             $str .= e($cityState) . '<br/>';
         }
         if ($country = $this->getBusinessCountryName()) {
-            $str .= e($country) . '<br/>';
+            $str .= e(ctrans('texts.country_' . $country)) . '<br/>';
         }
 
         return $str;
@@ -184,8 +184,9 @@ class LocationData extends AbstractService
         if ($cityState = $this->getShippingCityState()) {
             $str .= e($cityState) . '<br/>';
         }
-        if ($country = $this->getShippingCountryName()) {
-            $str .= e($country) . '<br/>';
+        // BISAVUNMA: no shipping address entered means none, not "<company country>" on its own.
+        if (trim($str) !== '' && $country = $this->getShippingCountryName()) {
+            $str .= e(ctrans('texts.country_' . $country)) . '<br/>';
         }
 
         return $str;
